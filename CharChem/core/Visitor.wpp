@@ -1,0 +1,24 @@
+class Visitor
+	method optional agentPost: bool = false
+		param obj: ChemAgent
+	method optional agentPre: bool
+		param obj: ChemAgent
+	method optional atom: bool
+		param obj: ChemAtom
+	method optional bond: bool
+		param obj: ChemBond
+	method optional operation: bool
+		param obj: ChemOp
+	method optional nodePost: bool
+		param obj: ChemNode
+	method optional nodePre: bool
+		param obj: ChemNode
+	method optional bracketBegin: bool
+	method optional bracketEnd: bool
+	method optional mul: bool
+	method optional mulEnd: bool
+	method optional itemPre: bool
+	method optional itemPost: bool
+	method optional custom: bool
+	method optional radical: bool
+	method optional comment: bool

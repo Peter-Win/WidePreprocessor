@@ -1,0 +1,17 @@
+class ChemAtom
+	# Immutal object for chemical atom
+	extends ChemSubObj
+	property get N: unsigned int
+		# atomic number in periodic table
+	property get id: String
+		# Symbol of a chemical element: H, He, Li, Be...
+	property get mass: double
+		# atomic mass in Daltons
+	constructor
+		param init atomicNumber
+		param init id
+		param init mass
+	method override walk
+		# Call 'atom' method of visitor
+		param visitor: Visitor
+		visitor.atom(this)

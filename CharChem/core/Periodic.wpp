@@ -1,0 +1,16 @@
+class static Periodic
+	# Periodic table utilities
+	method findElem: ChemAtom
+		param id: String
+		map.get(id)
+	property get map: const Map String, ChemAtom
+		init
+			table.reduce(-> lambda
+				param acc: ref auto
+				param item
+				acc[item.id] = item
+				acc
+			, auto())
+	property get table: const fixed Array ChemAtom
+		[ChemAtom(1, "H" ,1.008), ChemAtom(2, "He" ,4.003)]
+
