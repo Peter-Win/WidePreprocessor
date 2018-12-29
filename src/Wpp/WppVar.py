@@ -1,4 +1,4 @@
-from core.TaxonVar import TaxonCommonVar, TaxonVar, TaxonField
+from core.TaxonVar import TaxonCommonVar, TaxonVar, TaxonField, TaxonParam
 from Wpp.WppTaxon import WppTaxon
 from Wpp.WppType import WppType
 from Wpp.WppExpression import WppExpression
@@ -30,7 +30,7 @@ class WppCommonVar(TaxonCommonVar, WppTaxon):
 		s = ' '.join(chunks) + ': ' + self.getLocalType().exportString()
 		v = self.getValueTaxon()
 		if v:
-			s += v.exportString()
+			s += ' = ' + v.exportString()
 		outContext.writeln(s)
 		outContext.level += 1
 		self.exportComment(outContext)
@@ -44,3 +44,6 @@ class WppField(TaxonField, WppCommonVar):
 	def onUpdate(self):
 		if not self.getAccessLevel():
 			self.attrs.add('private')	# Если не указан квалификатор доступа, значит это private
+
+class WppParam(TaxonParam, WppCommonVar):
+	keyWord = 'param'

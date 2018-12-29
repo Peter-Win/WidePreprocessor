@@ -23,27 +23,23 @@ class Node:
 		return self.type == 'unop' and self.value == '-' and lexemType == 'const' and constType in {'int', 'fixed', 'float'}
 
 	def makeTaxon(self):
-		from Wpp.expr.Taxons import WppConst
-		# from core.expression.TaxonIdExpr import TaxonIdExpr
-		# from core.expression.TaxonFieldExpr import TaxonFieldExpr
-		# from core.expression.TaxonBinOp import TaxonBinOp
-		# from core.expression.TaxonThis import TaxonThis
-		# from core.expression.TaxonCall import TaxonCall
-		# from core.expression.TaxonTernaryOp import TaxonTernaryOp
-		# from core.expression.TaxonArrayIndex import TaxonArrayIndex
+		from Wpp.expr.Taxons import WppConst, WppBinOp, WppIdExpr
 
 		if self.lexemType == 'const':
 			return WppConst(self.constType, self.value)
 		if self.lexemType == 'id':
 			if self.value == 'this':
-				return TaxonThis(owner)
-			return TaxonIdExpr(owner, self.value)
+				return WppThis()
+			taxon = WppIdExpr()
+			taxon.id = self.value
+			return taxon
 		if self.lexemType == 'field':
 			return TaxonFieldExpr(owner, self.value)
 		if self.type == 'binop':
-			taxon = TaxonBinOp(owner, self.value, self.prior)
-			taxon.left = self.args[0].makeTaxon(taxon)
-			taxon.right = self.args[1].makeTaxon(taxon)
+			taxon = WppBinOp()
+			taxon.opCode = self.value
+			taxon.addItem(self.args[0].makeTaxon())
+			taxon.addItem(self.args[1].makeTaxon())
 			return taxon
 		if self.type == 'ternar':
 			taxon = TaxonTernaryOp(owner, self.prior)

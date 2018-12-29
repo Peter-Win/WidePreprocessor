@@ -7,6 +7,7 @@ class WppModule(TaxonModule, WppDictionary):
 	def __init__(self, name):
 		super().__init__()
 		self.name = name
+		self._accessTest = False
 
 	def read(self, context):
 		readWpp(context, self)
@@ -14,14 +15,23 @@ class WppModule(TaxonModule, WppDictionary):
 	def readBody(self, context):
 		from Wpp.WppClass import WppClass
 		from Wpp.WppVar import WppVar
+		from Wpp.WppFunc import WppFunc
+
 		word = context.getFirstWord()
 		if word == 'class':
 			return WppClass()
 		if word == 'var':
 			return WppVar()
+		if word == 'func':
+			return WppFunc()
 		return super().readBody(context)
 
-	_accessTest = False
+	def addTaxon(self, taxon):
+		if taxon.type == 'Func':
+			taxon.addFuncToOwner(self)
+			return taxon
+		return super().addTaxon(taxon)
+
 	def onUpdate(self):
 		if not self._accessTest:
 			self._accessTest = True

@@ -18,12 +18,27 @@ class TaxonConst(TaxonExpression):
 
 class TaxonIdExpr(TaxonExpression):
 	type = 'IdExpr'
+	__slots__ = ('id') # Идентификатор хранится не в name, чтобы при поиске findUp не происходило ложное срабатывание
+	def getDeclaration(self):
+		return self.refs['decl']
+	def clone(self, newCore):
+		result = super().clone(newCore)
+		result.id = self.id
 
 class TaxonFieldExpr(TaxonExpression):
 	type = 'FieldExpr'
 
 class TaxonBinOp(TaxonExpression):
 	type = 'BinOp'
+	__slots__ = ('opCode')
+	def getLeft(self):
+		return self.items[0]
+	def getRight(self):
+		return self.items[1]
+	def clone(self, newCore):
+		result = super().clone(newCore)
+		result.opCode = self.opCode
+		return result
 
 class TaxonThis(TaxonExpression):
 	type = 'This'

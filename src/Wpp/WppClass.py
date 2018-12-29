@@ -24,6 +24,7 @@ class WppClass(TaxonClass, WppDictionary):
 
 	def readBody(self, context):
 		from Wpp.WppVar import WppField
+		from Wpp.WppFunc import WppMethod
 		word = context.getFirstWord()
 		line = context.currentLine
 		if word == 'extends':
@@ -34,7 +35,15 @@ class WppClass(TaxonClass, WppDictionary):
 			return None
 		if word == 'field':
 			return WppField()
+		if word == 'method':
+			return WppMethod()
 		return super().readBody(context)
+
+	def addTaxon(self, taxon):
+		if taxon.type == 'Method':
+			taxon.addFuncToOwner(self)
+			return taxon
+		return super().addTaxon(taxon)
 
 	def onUpdate(self):
 		if self._extends:

@@ -1,5 +1,6 @@
 from Wpp.WppTaxon import WppTaxon
 from core.TaxonModule import TaxonModule
+from Wpp.Context import Context
 
 class WppCore(TaxonModule):
 	taxonMap = {}
@@ -7,6 +8,7 @@ class WppCore(TaxonModule):
 	def __init__(self):
 		super().__init__()
 		self.addNamedItem(WppInt())
+		self.addNamedItem(WppDouble())
 
 	def createRootModule(self, context):
 		""" Создать корневой модуль
@@ -23,7 +25,17 @@ class WppCore(TaxonModule):
 		module.fullUpdate()
 		return module
 
+	@staticmethod
+	def createMemModule(source, fakeName):
+		core = WppCore()
+		return core.createRootModule(Context.createFromMemory(source, fakeName))
+
 class WppInt(WppTaxon):
 	def __init__(self):
 		super().__init__()
 		self.name = 'int'
+
+class WppDouble(WppTaxon):
+	def __init__(self):
+		super().__init__()
+		self.name = 'double'

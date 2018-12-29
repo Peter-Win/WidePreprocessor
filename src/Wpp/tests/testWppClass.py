@@ -104,3 +104,33 @@ class public MyClass
 		outCtx = OutContextMemory()
 		myClass.export(outCtx)
 		self.assertEqual(str(outCtx), 'class public MyClass\n\t# This is comment')
+
+	def testMethod(self):
+		source = """
+class A
+	method static first
+	method const second: int
+		param a: A
+		param x: double
+		"""
+		core = WppCore()
+		module = core.createRootModule(Context.createFromMemory(source, 'A.memory'))
+		a = module.dictionary['A']
+		self.assertIn('first', a.dictionary)
+		over1 = a.dictionary['first']
+		self.assertEqual(over1.name, 'first')
+		self.assertIn('static', over1.attrs)
+
+		self.assertIn('second', a.dictionary)
+		over2 = a.dictionary['second']
+		self.assertEqual(over2.name, 'second')
+		self.assertEqual(over2.attrs, set())
+		fn2 = over2.items[0]
+		self.assertEqual(fn2.name, 'second')
+		self.assertIn('const', fn2.attrs)
+		self.assertIn('a', fn2.dictionary)
+		self.assertIn('x', fn2.dictionary)
+		paramA = fn2.getParams()[0]
+		self.assertEqual(paramA.name, 'a')
+		self.assertEqual(paramA.getLocalType().type, 'TypeName')
+		self.assertEqual(paramA.getLocalType().getTypeTaxon(), a)
