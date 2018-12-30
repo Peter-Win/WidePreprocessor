@@ -20,6 +20,8 @@ class Taxon:
 		self.attrs = set()
 		self.comment = ''
 
+	def getName(self, user):
+		return self.name
 
 	def addItem(self, item):
 		item.owner = self
@@ -37,6 +39,10 @@ class Taxon:
 		self.comment += line
 	def getComment(self):
 		return self.comment
+	def getCommentLines(self):
+		if not self.comment:
+			return []
+		return [s for s in self.comment.split('\n')]
 
 	def isRoot(self):
 		return not self.owner or self.owner == self.core
@@ -69,6 +75,18 @@ class Taxon:
 		newTaxon.attrs |= self.attrs
 		newTaxon.comment = self.comment
 		return newTaxon
+
+	def updateRefs(self):
+		""" Рекурсивное обновление ссылок, необходимое для клонированного объекта
+		Типичный сценарий клонирования: сначала dst = src.clone(newCore), затем dst.updateRefs()
+		"""
+		for key, relatedAlienTaxon in self.sourceTaxon.refs.items():
+			relatedFriendlyTaxon = relatedAlienTaxon.derivedTaxon
+			self.refs[key] = relatedFriendlyTaxon
+
+		# рекурсивный вызов для подчиненных элементов
+		for i in self.items:
+			i.updateRefs()
 
 	def fullUpdate(self):
 		""" Выполнение необходимого количества проходов """

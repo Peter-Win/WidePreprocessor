@@ -6,6 +6,10 @@ class TaxonClass (TaxonDictionary):
 	def getParent(self):
 		return self.refs.get('ext')
 
+	def getMembers(self):
+		""" Члены класса в виде списка """
+		return self.items
+
 	def findUp(self, name, fromWho, source):
 		""" Переопределенная фунция класса Taxon
 		Позволяет искать среди членов класса, но не спускаясь в них

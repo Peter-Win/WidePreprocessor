@@ -9,8 +9,12 @@ class TaxonPackage(TaxonDictionary):
 
 	def export(self, outContext):
 		newContext = outContext.createFolder(self.name)
+		self.onNewFolder(newContext)
 		for item in self.items:
 			item.export(newContext)
+
+	def onNewFolder(self, outContext):
+		pass
 
 	def findUp(self, name, fromWho, source):
 		""" Поиск внутри пакета предполагает, что надо искать во вложенных пакетах и модулях

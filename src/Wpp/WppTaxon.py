@@ -18,7 +18,5 @@ class WppTaxon(Taxon):
 		return self.addItem(taxon)
 
 	def exportComment(self, outContext):
-		comment = self.getComment()
-		if comment:
-			for line in comment.split('\n'):
-				outContext.writeln('#' + line)
+		for line in self.getCommentLines():
+			outContext.writeln('#' + line)

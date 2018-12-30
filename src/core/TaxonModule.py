@@ -24,3 +24,12 @@ class TaxonModule(TaxonDictionary):
 		if possible and 'public' in possible.attrs:
 			return [possible]
 		return []
+
+	def export(self, outContext):
+		writeContext = outContext.createFile(self.name + self.extension)
+		self.exportComment(outContext)
+		for item in self.items:
+			item.export(writeContext)
+			# Между компонентами модуля вставляется пустая строка
+			writeContext.eol()
+		writeContext.close()

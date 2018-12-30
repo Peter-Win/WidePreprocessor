@@ -4,6 +4,7 @@ from Wpp.readWpp import readWpp
 from Wpp.WppDictionary import WppDictionary
 
 class WppModule(TaxonModule, WppDictionary):
+	extension = '.wpp'
 	def __init__(self, name):
 		super().__init__()
 		self.name = name
@@ -50,10 +51,10 @@ class WppModule(TaxonModule, WppDictionary):
 					self.throwError('Not found public items in module "'+self.name+'"')
 
 
-	def export(self, outContext):
-		""" outContext типа OutContextFolder """
-		writeContext = outContext.createFile(self.name + '.wpp')
-		self.exportComment(outContext)
-		for item in self.items:
-			item.export(writeContext)
-		writeContext.close()
+	# def export(self, outContext):
+	# 	""" outContext типа OutContextFolder """
+	# 	writeContext = outContext.createFile(self.name + '.wpp')
+	# 	self.exportComment(outContext)
+	# 	for item in self.items:
+	# 		item.export(writeContext)
+	# 	writeContext.close()
