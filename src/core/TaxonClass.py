@@ -22,3 +22,18 @@ class TaxonClass (TaxonDictionary):
 					return i
 		if self.owner:
 			return self.owner.findUp(name, self, source)
+
+	def findConstructor(self):
+		from core.TaxonFunc import TaxonConstructor
+		return self.dictionary.get(TaxonConstructor.key)
+
+	def createEmptyConstructor(self):
+		taxonMap = self.core.taxonMap
+		con = taxonMap['Constructor']()
+		con.addItem(taxonMap['Block']())
+		over = taxonMap['Overloads']()
+		over.addItem(con)
+		over.name = con.name
+		self.addNamedItem(over)
+		return con
+

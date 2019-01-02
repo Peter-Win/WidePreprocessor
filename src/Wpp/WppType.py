@@ -14,7 +14,7 @@ class WppType(TaxonType):
 			attrs.add(word)
 
 class WppTypeName(TaxonTypeName):
-	def __init__(self, typeName, attrs=None):
+	def __init__(self, typeName=None, attrs=None):
 		super().__init__()
 		self._typeName = typeName
 		if attrs:

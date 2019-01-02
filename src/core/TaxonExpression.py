@@ -1,7 +1,13 @@
 from Taxon import Taxon
 
 class TaxonExpression(Taxon):
-	pass
+	__slots__ = ('prior')
+	def __init__(self):
+		super().__init__()
+		self.prior = 0
+	def export(self, outContext):
+		""" Используется в блоках. Например this.a = a """
+		outContext.writeln(self.exportString())
 
 class TaxonConst(TaxonExpression):
 	type = 'Const'
@@ -16,16 +22,22 @@ class TaxonConst(TaxonExpression):
 		result.value = self.value
 		return result
 
-class TaxonIdExpr(TaxonExpression):
-	type = 'IdExpr'
+class TaxonNull(TaxonExpression):
+	type = 'Null'
+
+class TaxonId(TaxonExpression):
 	__slots__ = ('id') # Идентификатор хранится не в name, чтобы при поиске findUp не происходило ложное срабатывание
-	def getDeclaration(self):
-		return self.refs['decl']
 	def clone(self, newCore):
 		result = super().clone(newCore)
 		result.id = self.id
+		return result
 
-class TaxonFieldExpr(TaxonExpression):
+class TaxonIdExpr(TaxonId):
+	type = 'IdExpr'
+	def getDeclaration(self):
+		return self.refs['decl']
+
+class TaxonFieldExpr(TaxonId):
 	type = 'FieldExpr'
 
 class TaxonBinOp(TaxonExpression):

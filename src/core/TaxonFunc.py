@@ -28,8 +28,19 @@ class TaxonCommonFunc(TaxonDictionary):
 		start = 2 if self.getResultType() else 1
 		return self.items[start:]
 
+	def getAutoInits(self):
+		""" Список параметров с автоинициализацией """
+		return [param for param in self.getParams() if 'init' in param.attrs]
+
 class TaxonFunc(TaxonCommonFunc):
 	type = 'Func'
 
 class TaxonMethod(TaxonCommonFunc):
 	type = 'Method'
+
+class TaxonConstructor(TaxonMethod):
+	type = 'Constructor'
+	key = '@constructor'
+	def __init__(self):
+		super().__init__()
+		self.name = self.key

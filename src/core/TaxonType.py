@@ -9,3 +9,5 @@ class TaxonTypeName(TaxonType):
 	type = 'TypeName'
 	def getTypeTaxon(self):
 		return self.refs['type']
+	def getDefaultValue(self):
+		return self.getTypeTaxon().getDefaultValue()

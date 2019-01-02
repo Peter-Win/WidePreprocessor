@@ -3,10 +3,13 @@ from core.TaxonModule import TaxonModule
 from Wpp.Context import Context
 
 class WppCore(TaxonModule):
-	taxonMap = {}
 
 	def __init__(self):
 		super().__init__()
+		from Wpp.core.WppTaxonMap import WppTaxonMap
+		self.taxonMap = WppTaxonMap
+		self.name = 'WppCore'
+
 		self.addNamedItem(WppInt())
 		self.addNamedItem(WppDouble())
 

@@ -1,4 +1,4 @@
-from core.TaxonFunc import TaxonOverloads, TaxonFunc, TaxonMethod
+from core.TaxonFunc import TaxonOverloads, TaxonFunc, TaxonMethod, TaxonConstructor
 from Wpp.WppBlock import WppBlock
 from Wpp.WppTaxon import WppTaxon
 from core.ErrorTaxon import ErrorTaxon
@@ -10,6 +10,9 @@ class WppOverloads(TaxonOverloads):
 			func.export(outContext)
 
 class WppCommonFunc(WppTaxon):
+	def __init__(self):
+		super().__init__()
+
 	def addFuncToOwner(self, owner):
 		""" Функция добавляется не к указанному владельцу, а в соответствующий объект Overloads """
 		over = owner.dictionary.get(self.name)
@@ -97,7 +100,7 @@ class WppCommonFunc(WppTaxon):
 				self.getBody().addItem(WppReturn.createAuto(lastCmd))
 
 	def export(self, outContext):
-		s = ' '.join([self.keyWord] + list(self.attrs) + [self.name])
+		s = (' '.join([self.keyWord] + list(self.attrs) + [self.getName(self)])).strip()
 		t = self.getResultType()
 		if t:
 			s += ': ' + t.exportString()
@@ -115,3 +118,13 @@ class WppFunc(TaxonFunc, WppCommonFunc):
 class WppMethod(TaxonMethod, WppCommonFunc):
 	keyWord = 'method'
 	attrsUp = ('static', 'virtual')
+
+class WppConstructor(TaxonConstructor, WppCommonFunc):
+	keyWord = 'constructor'
+	def getName(self, user):
+		return ''
+	def readHead(self, context):
+		self._phase = 'header'
+		self.name = self.key
+		# Создать пустой блок
+		self.addItem(WppBlock())

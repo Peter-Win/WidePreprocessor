@@ -16,4 +16,4 @@ class Simple
 		dstModule = srcModule.clone(PyCore())
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext).strip(), '\"\"\"  First\n Second\n Third \"\"\"\nclass Simple:\n\tpass')
+		self.assertEqual(str(outContext).strip(), '\"\"\" First\n Second\n Third \"\"\"\nclass Simple:\n\tpass')

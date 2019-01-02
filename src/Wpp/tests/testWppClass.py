@@ -134,3 +134,57 @@ class A
 		self.assertEqual(paramA.name, 'a')
 		self.assertEqual(paramA.getLocalType().type, 'TypeName')
 		self.assertEqual(paramA.getLocalType().getTypeTaxon(), a)
+
+	def testConstructor(self):
+		from Wpp.WppFunc import WppConstructor
+		source = """
+class public Test
+	field private a: int
+	field private b: double = 0
+	constructor
+		param a: int
+		param b: double
+		this.a = a
+		this.b = b
+		"""
+		module = WppCore.createMemModule(source, 'Test.fake')
+		classTest = module.dictionary['Test']
+		over = classTest.findConstructor()
+		self.assertIsNotNone(over)
+		self.assertEqual(over.type, 'Overloads')
+		c = over.items[0]
+		self.assertEqual(c.type, 'Constructor')
+		self.assertEqual(c.name, WppConstructor.key)
+		self.assertIn('a', c.dictionary)
+		self.assertIn('b', c.dictionary)
+		a = c.dictionary['a']
+		self.assertEqual(a.type, 'Param')
+		self.assertEqual(a.getLocalType().exportString(), 'int')
+
+		outCtx = OutContextMemory()
+		classTest.export(outCtx)
+		self.assertEqual(str(outCtx), source.strip())
+
+	def testAutoInit(self):
+		source = """
+class public A
+	field private a: int
+	field private b: double
+	constructor
+		param init a
+		param init b = 1.0
+		"""
+		module = WppCore.createMemModule(source, 'A.fake')
+		classA = module.dictionary['A']
+		over = classA.findConstructor()
+		self.assertIsNotNone(over)
+		c = over.items[0]
+		a = c.dictionary['a']
+		self.assertIn('init', a.attrs)
+		self.assertEqual(classA.dictionary['a'], a.refs['field'])
+		autoInits = c.getAutoInits()
+		self.assertEqual(len(autoInits), 2)
+
+		outCtx = OutContextMemory()
+		classA.export(outCtx)
+		self.assertEqual(str(outCtx), source.strip())

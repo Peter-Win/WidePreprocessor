@@ -50,10 +50,11 @@ class Taxon:
 	def getPath(self):
 		""" Путь от корня в виде строки, разделенной точками """
 		taxon = self
-		path = [taxon.name]
-		while not taxon.isRoot():
-			taxon = taxon.owner
+		path = []
+		while taxon:
 			path.append(taxon.name)
+			if taxon.isRoot(): break
+			taxon = taxon.owner
 		path.reverse()
 		return '.'.join(path)
 
@@ -66,12 +67,17 @@ class Taxon:
 		"""
 		Constructor = newCore.taxonMap[self.type]
 		newTaxon = Constructor()
+		newTaxon.core = newCore
 		newTaxon.sourceTaxon = self
 		newTaxon.type = self.type
 		newTaxon.name = self.name
 		newTaxon.location = self.location
 		self.derivedTaxon = newTaxon
-		newTaxon.items = [i.clone(newCore) for i in self.items]
+		for i in self.items:
+			n = i.clone(newCore)
+			if not n:
+				self.throwError('Invalid clone for '+self.getPath())
+			newTaxon.addItem(n)
 		newTaxon.attrs |= self.attrs
 		newTaxon.comment = self.comment
 		return newTaxon
@@ -82,11 +88,25 @@ class Taxon:
 		"""
 		for key, relatedAlienTaxon in self.sourceTaxon.refs.items():
 			relatedFriendlyTaxon = relatedAlienTaxon.derivedTaxon
+			if not relatedFriendlyTaxon:
+				# Если у исходного таксона нет соответствия в новом сообществе, значит он находится в ядре...
+				relatedFriendlyTaxon = self.core.findUp(relatedAlienTaxon.name, self.core, self.core)
+				if not relatedFriendlyTaxon:
+					self.throwError('Not found "'+relatedAlienTaxon.name+'" in "'+self.core.name+'"')
+				relatedAlienTaxon.derivedTaxon = relatedFriendlyTaxon
 			self.refs[key] = relatedFriendlyTaxon
 
 		# рекурсивный вызов для подчиненных элементов
 		for i in self.items:
+			if not i:
+				self.throwError('Empty item')
 			i.updateRefs()
+
+	def cloneRoot(self, newCore):
+		newRoot = self.clone(newCore)
+		newRoot.updateRefs()
+		newRoot.fullUpdate()
+		return newRoot
 
 	def fullUpdate(self):
 		""" Выполнение необходимого количества проходов """

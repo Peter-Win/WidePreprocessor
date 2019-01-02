@@ -23,7 +23,7 @@ class Node:
 		return self.type == 'unop' and self.value == '-' and lexemType == 'const' and constType in {'int', 'fixed', 'float'}
 
 	def makeTaxon(self):
-		from Wpp.expr.Taxons import WppConst, WppBinOp, WppIdExpr
+		from Wpp.expr.Taxons import WppBinOp, WppConst, WppIdExpr, WppThis
 
 		if self.lexemType == 'const':
 			return WppConst(self.constType, self.value)
