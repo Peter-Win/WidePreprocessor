@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonConst, TaxonIdExpr, TaxonFieldExpr, TaxonBinOp, TaxonThis, TaxonCall, TaxonTernaryOp, TaxonArrayIndex
+from core.TaxonExpression import TaxonConst, TaxonIdExpr, TaxonFieldExpr, TaxonBinOp, TaxonThis, TaxonCall, TaxonTernaryOp, TaxonArrayIndex, TaxonSuper
 from Wpp.expr.parseExpr import slash
 from Wpp.WppExpression import WppExpression
 
@@ -27,6 +27,16 @@ class WppIdExpr(TaxonIdExpr, WppExpression):
 class WppThis(TaxonThis, WppExpression):
 	def exportString(self):
 		return 'this'
+
+class WppSuper(TaxonSuper, WppExpression):
+	def exportString(self):
+		return 'super'
+
+class WppCall(TaxonCall, WppExpression):
+	def exportString(self):
+		s = self.priorExportString(self.getCaller()) + '('
+		s += ', '.join([arg.exportString() for arg in self.getArguments()]) + ')'
+		return s
 
 nearBinOps = {'.'}
 class WppBinOp(TaxonBinOp, WppExpression):

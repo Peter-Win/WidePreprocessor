@@ -114,10 +114,11 @@ class WppCommonFunc(WppTaxon):
 
 class WppFunc(TaxonFunc, WppCommonFunc):
 	keyWord = 'func'
+	attrsUp = ('public', 'private')
 
 class WppMethod(TaxonMethod, WppCommonFunc):
 	keyWord = 'method'
-	attrsUp = ('static', 'virtual')
+	attrsUp = ('static', 'virtual', 'public', 'protected', 'private')
 
 class WppConstructor(TaxonConstructor, WppCommonFunc):
 	keyWord = 'constructor'

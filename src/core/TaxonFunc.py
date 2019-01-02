@@ -36,6 +36,9 @@ class TaxonFunc(TaxonCommonFunc):
 	type = 'Func'
 
 class TaxonMethod(TaxonCommonFunc):
+	"""
+	Attributes: const, static|virtual|override, public|pritected|private
+	"""
 	type = 'Method'
 
 class TaxonConstructor(TaxonMethod):

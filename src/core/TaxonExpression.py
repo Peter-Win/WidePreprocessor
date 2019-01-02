@@ -5,6 +5,10 @@ class TaxonExpression(Taxon):
 	def __init__(self):
 		super().__init__()
 		self.prior = 0
+
+	def priorExportString(self, expr):
+		return expr.exportString() #TODO: ...
+
 	def export(self, outContext):
 		""" Используется в блоках. Например this.a = a """
 		outContext.writeln(self.exportString())
@@ -55,8 +59,15 @@ class TaxonBinOp(TaxonExpression):
 class TaxonThis(TaxonExpression):
 	type = 'This'
 
+class TaxonSuper(TaxonExpression):
+	type = 'Super'
+
 class TaxonCall(TaxonExpression):
 	type = 'Call'
+	def getCaller(self):
+		return self.items[0]
+	def getArguments(self):
+		return self.items[1:]
 
 class TaxonTernaryOp(TaxonExpression):
 	type = 'TernaryOp'
