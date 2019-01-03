@@ -1,5 +1,6 @@
 import unittest
 from Wpp.WppCore import WppCore
+from out.OutContextMemoryStream import OutContextMemoryStream
 
 #@unittest.skip('First need test TaxonCall')
 class TestWppSuper(unittest.TestCase):
@@ -9,6 +10,7 @@ class public First
 	method virtual calc: double
 		param x: double
 		x * 10
+
 class public Second
 	extends First
 	method override calc: double
@@ -16,3 +18,27 @@ class public Second
 		super.calc(x) + 22
 		"""
 		module = WppCore.createMemModule(source, 'superMethod.fake')
+		outContext = OutContextMemoryStream()
+		module.export(outContext)
+		self.assertEqual(str(outContext), source.strip())
+
+
+	def testSuperConstructor(self):
+		source = """
+class public A
+	field private count: int
+	constructor public
+		param init count
+
+class public B
+	extends A
+	field private year: int
+	constructor public
+		param count: int
+		param init year
+		super(count)
+		"""
+		module = WppCore.createMemModule(source, 'testSuperConstructor.fake')
+		outContext = OutContextMemoryStream()
+		module.export(outContext)
+		self.assertEqual(str(outContext), source.strip())

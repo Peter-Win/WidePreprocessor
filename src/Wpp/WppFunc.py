@@ -125,6 +125,8 @@ class WppConstructor(TaxonConstructor, WppCommonFunc):
 	def getName(self, user):
 		return ''
 	def readHead(self, context):
+		words = context.currentLine.split()
+		self.attrs |= set(words[1:])
 		self._phase = 'header'
 		self.name = self.key
 		# Создать пустой блок
