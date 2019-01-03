@@ -9,6 +9,10 @@ class PyOverloads(TaxonOverloads):
 		self.items[0].export(outContext)
 
 class PyCommonFunc(PyTaxon):
+	def __init__(self):
+		super().__init__()
+		self._initsAdded = False
+
 	def export(self, outContext):
 		s = 'def ' + self.getName(self) + '('
 		sparams = [param.exportString() for param in self.getParams()]
@@ -17,6 +21,29 @@ class PyCommonFunc(PyTaxon):
 		s += ', '.join(sparams) + '):'
 		outContext.writeln(s)
 		self.getBody().export(outContext)
+
+	def onUpdate(self):
+		if not self._initsAdded:
+			self._initsAdded = True
+			if not self.core:
+				self.throwError('Empty core')
+			taxonMap = self.core.taxonMap
+			for param in self.getAutoInits():
+				eq = taxonMap['BinOp']()
+				eq.opCode = '='
+				self.getBody().addItem(eq)
+				pt = taxonMap['BinOp']()
+				pt.opCode = '.'
+				eq.addItem(pt)
+				pt.addItem(taxonMap['This']())
+				f = taxonMap['FieldExpr']()
+				f.id = param.name
+				pt.addItem(f)
+				v = taxonMap['IdExpr']()
+				v.id = param.name
+				v.refs['decl'] = param
+				eq.addItem(v)
+		return super().onUpdate()
 
 class PyFunc(TaxonFunc, PyCommonFunc):
 	pass

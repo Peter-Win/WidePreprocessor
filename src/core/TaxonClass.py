@@ -30,10 +30,10 @@ class TaxonClass (TaxonDictionary):
 	def createEmptyConstructor(self):
 		taxonMap = self.core.taxonMap
 		con = taxonMap['Constructor']()
-		con.addItem(taxonMap['Block']())
 		over = taxonMap['Overloads']()
-		over.addItem(con)
 		over.name = con.name
 		self.addNamedItem(over)
+		over.addItem(con)
+		con.addItem(taxonMap['Block']())
 		return con
 

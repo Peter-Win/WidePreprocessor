@@ -68,6 +68,10 @@ class TaxonCall(TaxonExpression):
 		return self.items[0]
 	def getArguments(self):
 		return self.items[1:]
+	def exportString(self):
+		s = self.priorExportString(self.getCaller()) + '('
+		s += ', '.join([arg.exportString() for arg in self.getArguments()]) + ')'
+		return s
 
 class TaxonTernaryOp(TaxonExpression):
 	type = 'TernaryOp'

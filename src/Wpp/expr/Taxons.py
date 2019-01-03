@@ -33,10 +33,7 @@ class WppSuper(TaxonSuper, WppExpression):
 		return 'super'
 
 class WppCall(TaxonCall, WppExpression):
-	def exportString(self):
-		s = self.priorExportString(self.getCaller()) + '('
-		s += ', '.join([arg.exportString() for arg in self.getArguments()]) + ')'
-		return s
+	pass
 
 nearBinOps = {'.'}
 class WppBinOp(TaxonBinOp, WppExpression):

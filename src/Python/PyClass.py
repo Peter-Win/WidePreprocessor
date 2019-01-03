@@ -20,7 +20,6 @@ class PyClass(TaxonClass, PyTaxon):
 			block = con.getBody()
 			taxonMap = self.core.taxonMap
 			for slot in self.slots:
-				# block.addItem(eq)
 				f = taxonMap['FieldExpr']()
 				f.id = slot.getName(self)
 				pt = taxonMap['BinOp']()

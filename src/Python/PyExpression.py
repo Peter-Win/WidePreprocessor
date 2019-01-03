@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNull, TaxonThis
+from core.TaxonExpression import TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNull, TaxonSuper, TaxonThis
 
 class PyConst(TaxonConst):
 	def exportString(self):
@@ -17,9 +17,23 @@ class PyThis(TaxonThis):
 	def exportString(self):
 		return 'self'
 
+class PySuper(TaxonSuper):
+	def exportString(self):
+		return 'super()'
+
 class PyNull(TaxonNull):
 	def exportString(self):
 		return 'None'
+
+class PyCall(TaxonCall):
+	def exportString(self):
+		caller = self.getCaller()
+		if caller.type == 'Super':
+			s = caller.exportString()+'.__init__('
+			s += ', '.join([arg.exportString() for arg in self.getArguments()]) + ')'
+			return s
+		else:
+			return super().exportString()
 
 binOpPrior = {
 	'.': 1,
