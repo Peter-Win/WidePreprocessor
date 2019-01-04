@@ -35,5 +35,11 @@ class TaxonClass (TaxonDictionary):
 		self.addNamedItem(over)
 		over.addItem(con)
 		con.addItem(taxonMap['Block']())
+		# Переместить конструктор на первое место...
+		for pos, item in enumerate(self.items):
+			if item.type == over.type: break
+		if item != over:
+			self.items.pop()
+			self.items.insert(pos, over)
 		return con
 

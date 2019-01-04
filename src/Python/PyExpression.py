@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNull, TaxonSuper, TaxonThis, TaxonTernaryOp
+from core.TaxonExpression import TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNull, TaxonSuper, TaxonThis, TaxonTernaryOp, TaxonUnOp
 
 class PyConst(TaxonConst):
 	def exportString(self):
@@ -7,7 +7,10 @@ class PyConst(TaxonConst):
 class PyIdExpr(TaxonIdExpr):
 	def exportString(self):
 		decl = self.getDeclaration()
-		return decl.getName(self)
+		s = decl.getName(self)
+		if decl.type == 'Field':
+			s = 'self.'+s
+		return s
 
 class PyFieldExpr(TaxonFieldExpr):
 	def exportString(self):
@@ -51,6 +54,7 @@ binOpPrior = {
 	'or': 130, 'and': 130,
 }
 unOpPrior = {'~': 20, '-': 20, 'not': 130}
+ternaryOpPrior = 140
 
 def checkPrior(owner, slave):
 	s = slave.exportString()
@@ -74,10 +78,21 @@ class PyBinOp(TaxonBinOp):
 class PyTernaryOp(TaxonTernaryOp):
 	def __init__(self):
 		super().__init__()
-		self.prior = 1
-		
+		self.prior = ternaryOpPrior
+
 	def exportString(self):
 		s = self.priorExportString(self.getPositive())
 		s += ' if ' + self.priorExportString(self.getCondition())
 		s += ' else ' + self.priorExportString(self.getNegative())
+		return s
+
+class PyUnOp(TaxonUnOp):
+	def onUpdate(self):
+		if not self.prior and self.opCode in unOpPrior:
+			self.prior = unOpPrior[self.opCode]
+	def exportString(self):
+		s = self.opCode
+		if s[-1].isalpha():
+			s += ' '
+		s += self.priorExportString(self.getArgument())
 		return s

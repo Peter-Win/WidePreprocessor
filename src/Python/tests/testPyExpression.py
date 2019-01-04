@@ -17,6 +17,43 @@ curYear = 2019
 		"""
 		self.assertEqual(str(outStream), expected.strip())
 
+	def testField(self):
+		source = """
+class public Field
+	field public abcd: int
+	method public copy
+		param source: Field
+		abcd = source.abcd
+		"""
+		expected = """
+class Field:
+	__slots__ = ('abcd')
+	def __init__(self):
+		self.abcd = 0
+	def copy(self, source):
+		self.abcd = source.abcd
+		"""
+		srcModule = WppCore.createMemModule(source, 'field.fake')
+		dstModule = srcModule.cloneRoot(PyCore())
+		cls = dstModule.dictionary['Field']
+		over = cls.dictionary['copy']
+		method = over.items[0]
+		eq = method.getBody().items[0]
+		self.assertEqual(eq.type, 'BinOp')
+		self.assertEqual(eq.getLeft().type, 'IdExpr')
+		r = eq.getRight()
+		self.assertEqual(r.type, 'BinOp')
+		self.assertEqual(r.opCode, '.')
+		self.assertEqual(r.getLeft().type, 'IdExpr')
+		self.assertEqual(r.getLeft().id, 'source')
+		f = r.getRight()
+		self.assertEqual(f.id, 'abcd')
+		self.assertEqual(f.type, 'FieldExpr')
+
+		outStream = OutContextMemoryStream()
+		dstModule.export(outStream)
+		self.assertEqual(str(outStream), expected.strip())
+
 	def testBinOp(self):
 		source = """
 var first: double = 2.2
@@ -98,7 +135,42 @@ func public isGood: int
 def isGood(value):
 	return 0 if value < 1.0 else 1
 		"""
-		srcModule = WppCore.createMemModule(source, 'binOp.fake')
+		srcModule = WppCore.createMemModule(source, 'ternary.fake')
+		dstModule = srcModule.cloneRoot(PyCore())
+		outStream = OutContextMemoryStream()
+		dstModule.export(outStream)
+		self.assertEqual(str(outStream), expected.strip())
+
+	#@unittest.skip('Need fields')
+	def testUnary(self):
+		source = """
+class public Unary
+	field public first: int
+	field public second: int
+	method public init
+		param value: int
+		first = -value * -10
+		second = -first
+	method public cloneNeg
+		param src: Unary
+		first = -src.first + 1
+		second = -(src.second + 1)
+		"""
+		expected0 = ''
+		expected = """
+class Unary:
+	__slots__ = ('first', 'second')
+	def __init__(self):
+		self.first = 0
+		self.second = 0
+	def init(self, value):
+		self.first = -value * -10
+		self.second = -self.first
+	def cloneNeg(self, src):
+		self.first = -src.first + 1
+		self.second = -(src.second + 1)
+		"""
+		srcModule = WppCore.createMemModule(source, 'unary.fake')
 		dstModule = srcModule.cloneRoot(PyCore())
 		outStream = OutContextMemoryStream()
 		dstModule.export(outStream)

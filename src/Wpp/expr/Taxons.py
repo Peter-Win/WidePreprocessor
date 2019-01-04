@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonConst, TaxonIdExpr, TaxonFieldExpr, TaxonBinOp, TaxonThis, TaxonCall, TaxonTernaryOp, TaxonArrayIndex, TaxonSuper
+from core.TaxonExpression import TaxonConst, TaxonIdExpr, TaxonFieldExpr, TaxonBinOp, TaxonThis, TaxonCall, TaxonTernaryOp, TaxonArrayIndex, TaxonSuper, TaxonUnOp
 from Wpp.expr.parseExpr import slash
 from Wpp.WppExpression import WppExpression
 
@@ -24,6 +24,10 @@ class WppIdExpr(TaxonIdExpr, WppExpression):
 				self.throwError('Not found declaration for "'+self.id+'"')
 			self.refs['decl'] = decl
 
+class WppFieldExpr(TaxonFieldExpr, WppExpression):
+	def exportString(self):
+		return self.id
+
 class WppThis(TaxonThis, WppExpression):
 	def exportString(self):
 		return 'this'
@@ -34,6 +38,10 @@ class WppSuper(TaxonSuper, WppExpression):
 
 class WppCall(TaxonCall, WppExpression):
 	pass
+
+class WppUnOp(TaxonUnOp, WppExpression):
+	def exportString(self):
+		return self.opCode + self.priorExportString(self.getArgument())
 
 nearBinOps = {'.'}
 class WppBinOp(TaxonBinOp, WppExpression):

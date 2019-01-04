@@ -7,7 +7,10 @@ class TaxonExpression(Taxon):
 		self.prior = 0
 
 	def priorExportString(self, expr):
-		return expr.exportString() #TODO: ...
+		s = expr.exportString()
+		if self.prior < expr.prior:
+			s = '(' + s + ')'
+		return s
 
 	def export(self, outContext):
 		""" Используется в блоках. Например this.a = a """
@@ -44,17 +47,24 @@ class TaxonIdExpr(TaxonId):
 class TaxonFieldExpr(TaxonId):
 	type = 'FieldExpr'
 
-class TaxonBinOp(TaxonExpression):
-	type = 'BinOp'
+class TaxonOpCode(TaxonExpression):
 	__slots__ = ('opCode')
-	def getLeft(self):
-		return self.items[0]
-	def getRight(self):
-		return self.items[1]
 	def clone(self, newCore):
 		result = super().clone(newCore)
 		result.opCode = self.opCode
 		return result
+
+class TaxonUnOp(TaxonOpCode):
+	type = 'UnOp'
+	def getArgument(self):
+		return self.items[0]
+
+class TaxonBinOp(TaxonOpCode):
+	type = 'BinOp'
+	def getLeft(self):
+		return self.items[0]
+	def getRight(self):
+		return self.items[1]
 
 class TaxonThis(TaxonExpression):
 	type = 'This'

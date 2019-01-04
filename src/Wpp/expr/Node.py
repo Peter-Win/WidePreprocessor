@@ -23,7 +23,7 @@ class Node:
 		return self.type == 'unop' and self.value == '-' and lexemType == 'const' and constType in {'int', 'fixed', 'float'}
 
 	def makeTaxon(self):
-		from Wpp.expr.Taxons import WppBinOp, WppCall, WppConst, WppIdExpr, WppTernaryOp, WppThis, WppSuper
+		from Wpp.expr.Taxons import WppBinOp, WppCall, WppConst, WppFieldExpr, WppIdExpr, WppTernaryOp, WppThis, WppSuper, WppUnOp
 
 		if self.lexemType == 'const':
 			return WppConst(self.constType, self.value)
@@ -36,7 +36,15 @@ class Node:
 			taxon.id = self.value
 			return taxon
 		if self.lexemType == 'field':
-			return TaxonFieldExpr(owner, self.value)
+			taxon = WppFieldExpr()
+			taxon.id = self.value
+			return taxon
+		if self.type == 'unop':
+			taxon = WppUnOp()
+			taxon.opCode = self.value
+			taxon.prior = self.prior
+			taxon.addItem(self.args[0].makeTaxon())
+			return taxon
 		if self.type == 'binop':
 			taxon = WppBinOp()
 			taxon.opCode = self.value

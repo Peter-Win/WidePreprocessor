@@ -7,6 +7,7 @@ class WppExpression(Taxon):
 	def create(string, context):
 		lexems = parseExpr(string, context)
 		node, pos = scanLexems(lexems, 0, {'end'}, context)
+		node.update()
 		return node.makeTaxon()
 
 	def readHead(self, context):
