@@ -41,4 +41,13 @@ class WppBinOp(TaxonBinOp, WppExpression):
 		op = self.opCode
 		if op not in nearBinOps:
 			op = ' ' + op + ' '
-		return self.getLeft().exportString() + op + self.getRight().exportString()
+		return self.priorExportString(self.getLeft()) + op + self.priorExportString(self.getRight())
+
+class WppTernaryOp(TaxonTernaryOp, WppExpression):
+	def exportString(self):
+		div = [' ? ', ' : ', '']
+		res = ''
+		for j, item in enumerate(self.items):
+			res += self.priorExportString(item)
+			res += div[j]
+		return res

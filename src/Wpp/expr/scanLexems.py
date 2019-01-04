@@ -11,13 +11,13 @@ def scanLexems(lexems, pos, terminators, context):
 		if lexemType == 'cmd' and value in terminators:
 			break
 		pos += 1
-		if len(stack) > 0 and stack[-1].isSpecMinus(lexemType, constType):
+		if stack and stack[-1].isSpecMinus(lexemType, constType):
 			# Специальный случай - замена унарного минуса к числовой константе на отрицательное число 
 			stack[-1] = Node('arg', lexemType, '-'+value, constType, True)
 		elif lexemType == 'const' or lexemType == 'id':
 			stack.append(Node('arg', lexemType, value, constType, True))
 		elif lexemType == 'cmd':
-			if len(stack) > 0 and stack[-1].bArgument:
+			if stack and stack[-1].bArgument:
 				if value == '?':
 					prior = ternaryPrior
 					optimizeStack(stack, prior, context)
@@ -74,14 +74,14 @@ def scanLexems(lexems, pos, terminators, context):
 				stack.append(opNode)
 	if pos == len(lexems):
 		context.throwError('No end of expression found')
-	optimizeStack(stack, 0, context)
+	optimizeStack(stack, 100, context)
 	if len(stack) != 1:
 		# Если узлы не сошлись в один, то это неправильное выражение. Типа x 1
 		context.throwError('Invalid expression')
 	return (stack[0], pos)
 
 def optimizeStack(stack, prior, context):
-	if len(stack) == 0:
+	if not stack:
 		return
 
 	while True:
@@ -89,13 +89,13 @@ def optimizeStack(stack, prior, context):
 		if not last.bArgument:
 			stack.append(last)
 			return
-		if len(stack) == 0:
+		if not stack:
 			stack.append(last)
 			return
 		op = stack.pop()
 		if op.bArgument:
 			context.throwError('Expected operation instead of '+str(op))
-		if op.prior < prior:
+		if op.prior > prior:
 			stack.append(op)
 			stack.append(last)
 			return

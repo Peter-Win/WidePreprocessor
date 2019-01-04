@@ -75,6 +75,12 @@ class TaxonCall(TaxonExpression):
 
 class TaxonTernaryOp(TaxonExpression):
 	type = 'TernaryOp'
+	def getCondition(self):
+		return self.items[0]
+	def getPositive(self):
+		return self.items[1]
+	def getNegative(self):
+		return self.items[2]
 
 class TaxonArrayIndex(TaxonExpression):
 	type = 'ArrayIndex'

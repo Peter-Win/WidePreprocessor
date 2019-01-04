@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNull, TaxonSuper, TaxonThis
+from core.TaxonExpression import TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNull, TaxonSuper, TaxonThis, TaxonTernaryOp
 
 class PyConst(TaxonConst):
 	def exportString(self):
@@ -70,3 +70,14 @@ class PyBinOp(TaxonBinOp):
 		if op != '.':
 			op = ' ' + op + ' '
 		return checkPrior(self, left) + op + checkPrior(self, right)
+
+class PyTernaryOp(TaxonTernaryOp):
+	def __init__(self):
+		super().__init__()
+		self.prior = 1
+		
+	def exportString(self):
+		s = self.priorExportString(self.getPositive())
+		s += ' if ' + self.priorExportString(self.getCondition())
+		s += ' else ' + self.priorExportString(self.getNegative())
+		return s

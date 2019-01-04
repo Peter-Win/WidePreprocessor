@@ -87,3 +87,19 @@ class B(A):
 		self.mass = mass
 		"""
 		self.assertEqual(str(outStream), expected.strip())
+
+	def testTernary(self):
+		source = """
+func public isGood: int
+	param value: double
+	value < 1.0 ? 0 : 1
+		"""
+		expected = """
+def isGood(value):
+	return 0 if value < 1.0 else 1
+		"""
+		srcModule = WppCore.createMemModule(source, 'binOp.fake')
+		dstModule = srcModule.cloneRoot(PyCore())
+		outStream = OutContextMemoryStream()
+		dstModule.export(outStream)
+		self.assertEqual(str(outStream), expected.strip())

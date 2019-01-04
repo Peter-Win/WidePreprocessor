@@ -2,7 +2,7 @@ class Node:
 	""" Внутренний класс.
 	Используется только для анализа лексем выражения
 	"""
-	def __init__(self, type, lexemType, value=None, constType=None, bArgument=False, prior=0):
+	def __init__(self, type, lexemType, value=None, constType=None, bArgument=False, prior=100):
 		self.type = type
 		self.lexemType = lexemType
 		self.constType = constType
@@ -23,7 +23,7 @@ class Node:
 		return self.type == 'unop' and self.value == '-' and lexemType == 'const' and constType in {'int', 'fixed', 'float'}
 
 	def makeTaxon(self):
-		from Wpp.expr.Taxons import WppBinOp, WppCall, WppConst, WppIdExpr, WppThis, WppSuper
+		from Wpp.expr.Taxons import WppBinOp, WppCall, WppConst, WppIdExpr, WppTernaryOp, WppThis, WppSuper
 
 		if self.lexemType == 'const':
 			return WppConst(self.constType, self.value)
@@ -40,15 +40,18 @@ class Node:
 		if self.type == 'binop':
 			taxon = WppBinOp()
 			taxon.opCode = self.value
+			taxon.prior = self.prior
 			taxon.addItem(self.args[0].makeTaxon())
 			taxon.addItem(self.args[1].makeTaxon())
 			return taxon
 		if self.type == 'ternar':
-			taxon = TaxonTernaryOp(owner, self.prior)
-			taxon.args = [arg.makeTaxon(taxon) for arg in self.args]
+			taxon = WppTernaryOp()
+			taxon.prior = self.prior
+			[taxon.addItem(arg.makeTaxon()) for arg in self.args]
 			return taxon
 		if self.type == 'call':
 			taxon = WppCall()
+			taxon.prior = self.prior
 			for arg in self.args:
 				taxon.addItem(arg.makeTaxon())
 			return taxon
@@ -76,7 +79,7 @@ class Node:
 	def export(self):
 		def checkBrackets(node, prior):
 			s = node.export()
-			if node.type == 'arg' or prior <= node.prior:
+			if node.type == 'arg' or prior > node.prior:
 				return s
 			return '(' + s + ')'
 		if self.type == 'arg':
