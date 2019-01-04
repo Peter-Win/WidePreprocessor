@@ -124,7 +124,7 @@ class A
 		self.assertIn('second', a.dictionary)
 		over2 = a.dictionary['second']
 		self.assertEqual(over2.name, 'second')
-		self.assertEqual(over2.attrs, set())
+		self.assertEqual(over2.attrs, {'public'})
 		fn2 = over2.items[0]
 		self.assertEqual(fn2.name, 'second')
 		self.assertIn('const', fn2.attrs)

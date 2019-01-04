@@ -40,6 +40,7 @@ class TaxonMethod(TaxonCommonFunc):
 	Attributes: const, static|virtual|override, public|pritected|private
 	"""
 	type = 'Method'
+	canBeStatic = True
 
 class TaxonConstructor(TaxonMethod):
 	type = 'Constructor'

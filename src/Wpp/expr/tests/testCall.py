@@ -37,15 +37,40 @@ func public second: double
 	def testCallMethod(self):
 		source = """
 class public CallMethod
-	method public square: double
+	method square: double
 		param x: double
 		x * x
-	method public lengthSqr: double
+	method lengthSqr: double
 		param x: double
 		param y: double
 		square(x) + square(y)
 		"""
 		module = WppCore.createMemModule(source, 'CallMetod.fake')
+
+		outContext = OutContextMemoryStream()
+		module.export(outContext)
+		self.assertEqual(str(outContext), source.strip())
+
+	def testCallMethodStatic(self):
+		source = """
+class static MyMath
+	method abs: double
+		param value: double
+		value < 0.0 ? -value : value
+
+func public main
+	var x: double = MyMath.abs(-3.14)
+		"""
+		module = WppCore.createMemModule(source, 'CallMetod.fake')
+		classMyMath = module.dictionary['MyMath']
+		self.assertIn('static', classMyMath.attrs)
+		absOver = classMyMath.dictionary['abs']
+		absMethod = absOver.items[0]
+		self.assertEqual(absOver.type, 'Overloads')
+		self.assertEqual(absMethod.type, 'Method')
+		self.assertTrue(absMethod.canBeStatic)
+		self.assertIn('static', absMethod.attrs)
+		self.assertIn('static', absOver.attrs)
 
 		outContext = OutContextMemoryStream()
 		module.export(outContext)

@@ -26,9 +26,57 @@ class B(A):
 		classA = dstModule.dictionary['A']
 		classB = dstModule.dictionary['B']
 		self.assertEqual(classB.type, 'Class')
+		self.assertTrue(classB.canBeStatic)
 		self.assertEqual(classB.name, 'B')
 		self.assertEqual(classB.core, pyCore)
 		self.assertEqual(classB.getParent(), classA)
+		outContext = OutContextMemoryStream()
+		dstModule.export(outContext)
+		self.assertEqual(str(outContext).strip(), expected.strip())
+
+	def testMethod(self):
+		source = """
+class Norm
+	method mul: double
+		param coeff: double
+		coeff * 10.0
+		"""
+		expected = """
+class Norm:
+	def mul(self, coeff):
+		return coeff * 10.0
+		"""
+		srcModule = WppCore.createMemModule(source, 'method.fake')
+		dstModule = srcModule.cloneRoot(PyCore())
+		outContext = OutContextMemoryStream()
+		dstModule.export(outContext)
+		self.assertEqual(str(outContext).strip(), expected.strip())
+
+	def testMethodStatic(self):
+		source = """
+class static MyMath
+	method abs: double
+		param value: double
+		value < 0.0 ? -value : value
+func public main
+	var x: double = MyMath.abs(-3.14)
+		"""
+		expected = """
+class __MyMath:
+	@staticmethod
+	def abs(value):
+		return -value if value < 0.0 else value
+
+def main():
+	x = __MyMath.abs(-3.14)
+		"""
+		srcModule = WppCore.createMemModule(source, 'methodStatic.fake')
+		dstModule = srcModule.cloneRoot(PyCore())
+		cls = dstModule.dictionary['MyMath']
+		absOver = cls.dictionary['abs']
+		absMethod = absOver.items[0]
+		self.assertIn('static', absMethod.attrs)
+
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
 		self.assertEqual(str(outContext).strip(), expected.strip())
@@ -55,6 +103,9 @@ class public Test
 		"""
 		srcModule = WppCore.createMemModule(source, 'fields.fake')
 		dstModule = srcModule.cloneRoot(PyCore())
+		classTest = dstModule.dictionary['Test']
+		first = classTest.dictionary['first']
+		self.assertTrue(first.canBeStatic)
 
 		expected = """
 class Parent:

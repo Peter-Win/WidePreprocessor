@@ -2,6 +2,7 @@ from TaxonDictionary import TaxonDictionary
 
 class TaxonClass (TaxonDictionary):
 	type = 'Class'
+	canBeStatic = True
 
 	def getParent(self):
 		return self.refs.get('ext')

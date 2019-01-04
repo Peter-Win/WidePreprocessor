@@ -11,7 +11,10 @@ class PyCommonVar(PyTaxon):
 		outContext.writeln(self.getName(self) + ' = ' + val)
 
 class PyVar(TaxonVar, PyCommonVar):
-	pass
+	def getName(self, user):
+		if self.owner.type != 'Module':
+			return self.name
+		return super().getName(user)
 
 class PyField(TaxonField, PyCommonVar):
 	def export(self, outContext):

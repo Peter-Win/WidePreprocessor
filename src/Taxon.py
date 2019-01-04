@@ -5,6 +5,7 @@ class Taxon:
 	Каждый таксон знает своего владельца (owner) и имеет подчиненных (items)
 	"""
 	type = ''
+	canBeStatic = False
 	def __init__(self):
 		self.owner = None
 		self.items = []		# Непосредственно подчиненные элементы

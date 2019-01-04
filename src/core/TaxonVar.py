@@ -18,6 +18,7 @@ class TaxonVar(TaxonCommonVar):
 class TaxonField(TaxonCommonVar):
 	""" Поле - переменная класса """
 	type = 'Field'
+	canBeStatic = True
 
 class TaxonParam(TaxonCommonVar):
 	""" Формальный параметр функции """

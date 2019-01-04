@@ -4,6 +4,8 @@ class WppType(TaxonType):
 	@staticmethod
 	def create(description, context):
 		"Создать тип из строкового описания"
+		if not description:
+			context.throwError("Can't create type from empty definition")
 		chunks = description.split() if isinstance(description, str) else description
 		N = len(chunks)
 		attrs = set()

@@ -29,6 +29,9 @@ class PyNull(TaxonNull):
 		return 'None'
 
 class PyCall(TaxonCall):
+	def __init__(self):
+		super().__init__()
+		self.prior = binOpPrior['.']
 	def exportString(self):
 		caller = self.getCaller()
 		if caller.type == 'Super':
@@ -56,12 +59,6 @@ binOpPrior = {
 unOpPrior = {'~': 20, '-': 20, 'not': 130}
 ternaryOpPrior = 140
 
-def checkPrior(owner, slave):
-	s = slave.exportString()
-	if owner.prior < slave.prior:
-		s = '(' + s + ')'
-	return s
-
 class PyBinOp(TaxonBinOp):
 	def onUpdate(self):
 		if not self.prior and self.opCode in binOpPrior:
@@ -73,7 +70,7 @@ class PyBinOp(TaxonBinOp):
 		op = self.opCode
 		if op != '.':
 			op = ' ' + op + ' '
-		return checkPrior(self, left) + op + checkPrior(self, right)
+		return self.priorExportString(left) + op + self.priorExportString(right)
 
 class PyTernaryOp(TaxonTernaryOp):
 	def __init__(self):

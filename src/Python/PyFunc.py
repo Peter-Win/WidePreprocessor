@@ -49,7 +49,10 @@ class PyFunc(TaxonFunc, PyCommonFunc):
 	pass
 
 class PyMethod(TaxonMethod, PyCommonFunc):
-	pass
+	def export(self, outContext):
+		if 'static' in self.attrs:
+			outContext.writeln('@staticmethod')
+		super().export(outContext)
 
 class PyConstructor(TaxonConstructor, PyCommonFunc):
 	def getName(self, user):

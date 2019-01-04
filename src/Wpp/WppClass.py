@@ -2,7 +2,10 @@ from core.TaxonClass import TaxonClass
 from Wpp.WppDictionary import WppDictionary
 
 class WppClass(TaxonClass, WppDictionary):
-	_extends = None
+	__slots__ = ('_extends')
+	def __init__(self):
+		super().__init__()
+		self._extends = None
 
 	def getNameFor(self, user):
 		""" Получить имя класса для указанного пользователя """
@@ -42,6 +45,9 @@ class WppClass(TaxonClass, WppDictionary):
 		return super().readBody(context)
 
 	def addTaxon(self, taxon):
+		if 'static' in self.attrs and taxon.canBeStatic:
+			# Если класс статическмй, то элементы автоматически получают атрибут static
+			taxon.attrs.add('static')
 		if taxon.type == 'Method' or taxon.type == 'Constructor':
 			taxon.addFuncToOwner(self)
 			return taxon
@@ -55,6 +61,7 @@ class WppClass(TaxonClass, WppDictionary):
 				self.throwError("Can't extends itself")
 			self.refs['ext'] = classDecl
 			self._extends = None
+			# Для статического класса нужно добавить соответствующий атрибут во все подчиненные таксоны
 
 	def export(self, outContext):
 		# head of class

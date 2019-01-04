@@ -100,7 +100,7 @@ class WppCommonFunc(WppTaxon):
 				self.getBody().addItem(WppReturn.createAuto(lastCmd))
 
 	def export(self, outContext):
-		s = (' '.join([self.keyWord] + list(self.attrs) + [self.getName(self)])).strip()
+		s = (' '.join([self.keyWord] + self.exportAttrs() + [self.getName(self)])).strip()
 		t = self.getResultType()
 		if t:
 			s += ': ' + t.exportString()
@@ -112,6 +112,9 @@ class WppCommonFunc(WppTaxon):
 		self.getBody().export(outContext)
 		outContext.level -= 1
 
+	def exportAttrs(self):
+		return list(self.attrs)
+
 class WppFunc(TaxonFunc, WppCommonFunc):
 	keyWord = 'func'
 	attrsUp = ('public', 'private')
@@ -119,6 +122,21 @@ class WppFunc(TaxonFunc, WppCommonFunc):
 class WppMethod(TaxonMethod, WppCommonFunc):
 	keyWord = 'method'
 	attrsUp = ('static', 'virtual', 'public', 'protected', 'private')
+	def readHead(self, context):
+		super().readHead(context)
+		if not self.getAccessLevel(): # Если квалификатор доступа не указан, используется public
+			self.attrs.add('public')
+
+	def exportAttrs(self):
+		res = super().exportAttrs()
+		if 'public' in res:
+			# Если используется public, то он не указывается
+			res.remove('public')
+		ownerClass = self.findOwner('Class', True)
+		if 'static' in ownerClass.attrs:
+			# Если класс статический, то не указывать static для членов
+			res.remove('static')
+		return res
 
 class WppConstructor(TaxonConstructor, WppCommonFunc):
 	keyWord = 'constructor'
