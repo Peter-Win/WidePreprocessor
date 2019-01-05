@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonConst, TaxonIdExpr, TaxonFieldExpr, TaxonBinOp, TaxonThis, TaxonCall, TaxonTernaryOp, TaxonArrayIndex, TaxonSuper, TaxonUnOp
+from core.TaxonExpression import TaxonArrayIndex, TaxonBinOp, TaxonCall, TaxonConst, TaxonIdExpr, TaxonFieldExpr, TaxonNew, TaxonTernaryOp, TaxonThis, TaxonSuper, TaxonUnOp
 from Wpp.expr.parseExpr import slash
 from Wpp.WppExpression import WppExpression
 
@@ -37,6 +37,26 @@ class WppSuper(TaxonSuper, WppExpression):
 		return 'super'
 
 class WppCall(TaxonCall, WppExpression):
+	def __init__(self):
+		super().__init__()
+		self._newPhase = False
+	def onUpdate(self):
+		result = super().onUpdate()
+		# Возможная замена на new
+		caller = self.getCaller()
+		if not self._newPhase:
+			self._newPhase = True
+			result = True
+		elif caller.type == 'IdExpr' and caller.getDeclaration().type == 'Class':
+			self.replaceByNew()
+		return result
+	def replaceByNew(self):
+		taxonNew = WppNew()
+		for i in self.items:
+			taxonNew.addItem(i)
+		self.replace(taxonNew)
+
+class WppNew(TaxonNew, WppExpression):
 	pass
 
 class WppUnOp(TaxonUnOp, WppExpression):

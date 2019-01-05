@@ -93,6 +93,25 @@ def func2(a, b):
 		"""
 		self.assertEqual(str(outStream), expected.strip())
 
+	def testNew(self):
+		source = """
+class public Uno
+func public createUno: Uno
+	Uno()
+		"""
+		expected = """
+class Uno:
+	pass
+
+def createUno():
+	return Uno()
+		"""
+		srcModule = WppCore.createMemModule(source, 'new.fake')
+		dstModule = srcModule.cloneRoot(PyCore())
+		outStream = OutContextMemoryStream()
+		dstModule.export(outStream)
+		self.assertEqual(str(outStream), expected.strip())
+
 	def testSuper(self):
 		source = """
 class public A

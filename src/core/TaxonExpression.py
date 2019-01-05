@@ -83,6 +83,10 @@ class TaxonCall(TaxonExpression):
 		s += ', '.join([arg.exportString() for arg in self.getArguments()]) + ')'
 		return s
 
+class TaxonNew(TaxonCall):
+	""" new Classname() """
+	type = 'New'
+
 class TaxonTernaryOp(TaxonExpression):
 	type = 'TernaryOp'
 	def getCondition(self):

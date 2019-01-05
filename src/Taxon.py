@@ -34,6 +34,15 @@ class Taxon:
 		for i in items:
 			self.addItem(i)
 
+	def replace(self, newTaxon):
+		""" Замена текущего таксона на новый """
+		self.owner.addItem(newTaxon)
+		items = self.owner.items
+		items.pop()
+		i = items.index(self)
+		items.pop(i)
+		items.insert(i, newTaxon)
+
 	def addComment(self, line):
 		if self.comment:
 			self.comment += '\n'

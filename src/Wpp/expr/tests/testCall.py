@@ -75,3 +75,27 @@ func public main
 		outContext = OutContextMemoryStream()
 		module.export(outContext)
 		self.assertEqual(str(outContext), source.strip())
+
+	def testNew(self):
+		source = """
+class Hello
+	field count: int
+	constructor
+		param init count
+	method static create22: Hello
+		Hello(22)
+		"""
+		module = WppCore.createMemModule(source, 'testNew.fake')
+		classHello = module.dictionary['Hello']
+		overCreate22 = classHello.dictionary['create22']
+		create22 = overCreate22.items[0]
+		self.assertEqual(create22.type, 'Method')
+		self.assertEqual(create22.name, 'create22')
+		cmd = create22.getBody().items[-1]
+		self.assertEqual(cmd.type, 'Return')
+		expr = cmd.getExpression()
+		caller = expr.getCaller()
+		self.assertEqual(caller.type, 'IdExpr')
+		callerDecl = caller.getDeclaration()
+		self.assertEqual(callerDecl, classHello)
+		self.assertEqual(expr.type, 'New')

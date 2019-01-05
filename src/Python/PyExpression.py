@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNull, TaxonSuper, TaxonThis, TaxonTernaryOp, TaxonUnOp
+from core.TaxonExpression import TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNew, TaxonNull, TaxonSuper, TaxonThis, TaxonTernaryOp, TaxonUnOp
 
 class PyConst(TaxonConst):
 	def exportString(self):
@@ -40,6 +40,11 @@ class PyCall(TaxonCall):
 			return s
 		else:
 			return super().exportString()
+
+class PyNew(TaxonNew):
+	def __init__(self):
+		super().__init__()
+		self.prior = binOpPrior['.']
 
 binOpPrior = {
 	'.': 1,
