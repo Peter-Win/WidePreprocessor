@@ -1,4 +1,4 @@
-from core.TaxonType import TaxonType, TaxonTypeName
+from core.TaxonType import TaxonType, TaxonTypeName, TaxonTypeArray
 
 class WppType(TaxonType):
 	@staticmethod
@@ -10,6 +10,8 @@ class WppType(TaxonType):
 		N = len(chunks)
 		attrs = set()
 		for i, word in enumerate(chunks):
+			if word == 'Array':
+				return WppTypeArray(WppType.create(chunks[i+1:], context), attrs)
 			if i == N - 1:
 				# Type with reference by name
 				return WppTypeName(word, attrs)
@@ -34,3 +36,15 @@ class WppTypeName(TaxonTypeName):
 	def exportString(self):
 		chunks = list(self.attrs) + [self.getTypeTaxon().name]
 		return ' '.join(chunks)
+
+class WppTypeArray(TaxonTypeArray):
+	def __init__(self, itemType=None, attrs=None):
+		super().__init__()
+		if attrs:
+			self.attrs = attrs
+		if itemType:
+			self.addItem(itemType)
+
+	def exportString(self):
+		chunks = list(self.attrs) + ['Array']
+		return ' '.join(chunks) + ' ' + self.getItemType().exportString()

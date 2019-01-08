@@ -1,4 +1,4 @@
-from core.TaxonVar import TaxonVar, TaxonField, TaxonParam
+from core.TaxonVar import TaxonVar, TaxonField, TaxonReadonly, TaxonParam
 from Python.PyTaxon import PyTaxon
 
 class PyCommonVar(PyTaxon):		
@@ -21,6 +21,23 @@ class PyField(TaxonField, PyCommonVar):
 		if 'static' not in self.attrs:
 			return
 		super().export(outContext)
+
+class PyReadonly(TaxonReadonly, PyCommonVar):
+	def getPrivateFieldName(self):
+		return '_' + self.getName(self)
+
+	def getName(self, user):
+		if user == self.owner or user.type == 'Constructor':
+			return self.getPrivateFieldName()
+		return super().getName(user)
+
+	def export(self, outContext):
+		outContext.writeln('@property')
+		outContext.writeln('def ' + self.getName(self) + '(self):')
+		outContext.level += 1
+		self.exportComment(outContext)
+		outContext.writeln('return self.'+self.getPrivateFieldName())
+		outContext.level -= 1
 
 class PyParam(TaxonParam, PyCommonVar):
 	def getName(self, user):

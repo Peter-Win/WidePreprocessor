@@ -65,6 +65,9 @@ def scanLexems(lexems, pos, terminators, context):
 					# Скобки для группировки операций
 					opNode, pos = scanLexems(lexems, pos, {')'}, context)
 					pos += 1
+				elif value == '[':
+					# Значение типа массива
+					opNode, pos = createArray(lexems, pos, context)
 				else:
 					prior = unOps.get(value)
 					if not prior:
@@ -77,8 +80,18 @@ def scanLexems(lexems, pos, terminators, context):
 	optimizeStack(stack, 100, context)
 	if len(stack) != 1:
 		# Если узлы не сошлись в один, то это неправильное выражение. Типа x 1
-		context.throwError('Invalid expression')
+		context.throwError('Invalid expression: [' + ', '.join([str(i) for i in stack])+']')
 	return (stack[0], pos)
+
+def createArray(lexems, pos, context):
+	value = Node('array', 'array', bArgument = True)
+	divider = ''
+	while divider != ']':
+		node, pos = scanLexems(lexems, pos, {',', ']'}, context)
+		divider, t, x = lexems[pos]
+		value.args.append(node)
+		pos += 1
+	return value, pos
 
 def optimizeStack(stack, prior, context):
 	if not stack:

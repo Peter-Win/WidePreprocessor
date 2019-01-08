@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonArrayIndex, TaxonBinOp, TaxonCall, TaxonConst, TaxonIdExpr, TaxonFieldExpr, TaxonNew, TaxonTernaryOp, TaxonThis, TaxonSuper, TaxonUnOp
+from core.TaxonExpression import TaxonArrayIndex, TaxonArrayValue, TaxonBinOp, TaxonCall, TaxonConst, TaxonIdExpr, TaxonFieldExpr, TaxonNew, TaxonTernaryOp, TaxonThis, TaxonSuper, TaxonUnOp
 from Wpp.expr.parseExpr import slash
 from Wpp.WppExpression import WppExpression
 
@@ -79,3 +79,6 @@ class WppTernaryOp(TaxonTernaryOp, WppExpression):
 			res += self.priorExportString(item)
 			res += div[j]
 		return res
+
+class WppArrayValue(TaxonArrayValue, WppExpression):
+	pass

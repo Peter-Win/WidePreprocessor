@@ -1,4 +1,4 @@
-from core.TaxonVar import TaxonCommonVar, TaxonVar, TaxonField, TaxonParam
+from core.TaxonVar import TaxonCommonVar, TaxonVar, TaxonField, TaxonReadonly, TaxonParam
 from Wpp.WppTaxon import WppTaxon
 from Wpp.WppType import WppType
 from Wpp.WppExpression import WppExpression
@@ -32,7 +32,7 @@ class WppCommonVar(TaxonCommonVar, WppTaxon):
 			self.addItem(WppExpression.create(valueDescr, context))
 
 	def export(self, outContext):
-		chunks = [self.keyWord] + list(self.attrs) + [self.name]
+		chunks = [self.keyWord] + self.filteredAttrs() + [self.name]
 		s = ' '.join(chunks) + ': ' + self.getLocalType().exportString()
 		v = self.getValueTaxon()
 		if v:
@@ -42,14 +42,26 @@ class WppCommonVar(TaxonCommonVar, WppTaxon):
 		self.exportComment(outContext)
 		outContext.level -= 1
 
+	defaultAccessLevel = ''
+	def onUpdate(self):
+		if self.defaultAccessLevel and not self.getAccessLevel():
+			self.attrs.add(self.defaultAccessLevel)	# Если не указан квалификатор доступа, значит установить указанный по-умолчаеию
+	def filteredAttrs(self):
+		res = list(self.attrs)
+		if self.defaultAccessLevel in self.attrs:
+			res.remove(self.defaultAccessLevel)
+		return res
+
 class WppVar(TaxonVar, WppCommonVar):
 	keyWord = 'var'
 
 class WppField(TaxonField, WppCommonVar):
 	keyWord = 'field'
-	def onUpdate(self):
-		if not self.getAccessLevel():
-			self.attrs.add('private')	# Если не указан квалификатор доступа, значит это private
+	defaultAccessLevel = 'private'
+
+class WppReadonly(TaxonReadonly, WppCommonVar):
+	keyWord = 'readonly'
+	defaultAccessLevel = 'public'
 
 class WppParam(TaxonParam, WppCommonVar):
 	keyWord = 'param'

@@ -8,7 +8,7 @@ class PyClass(TaxonClass, PyTaxon):
 
 	def onUpdate(self):
 		if self.slots == None:
-			self.slots = [i for i in self.items if i.type == 'Field' and 'static' not in i.attrs]
+			self.slots = [i for i in self.items if (i.type == 'Field' and 'static' not in i.attrs) or i.type == 'Readonly']
 			if self.slots:
 				self.updateConstructor()
 

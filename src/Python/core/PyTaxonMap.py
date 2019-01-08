@@ -6,7 +6,7 @@ from Python.PyModule import PyModule
 from Python.PyPackage import PyPackage
 from Python.PyReturn import PyReturn
 from Python.PyType import PyTypeName
-from Python.PyVar import PyField, PyParam, PyVar
+from Python.PyVar import PyField, PyParam, PyReadonly, PyVar
 
 PyTaxonMap = {
 	'BinOp': PyBinOp,
@@ -26,6 +26,7 @@ PyTaxonMap = {
 	'Overloads': PyOverloads,
 	'Package': PyPackage,
 	'Param': PyParam,
+	'Readonly': PyReadonly,
 	'Return': PyReturn,
 	'Super': PySuper,
 	'This': PyThis,

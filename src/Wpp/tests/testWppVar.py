@@ -3,6 +3,7 @@ from Wpp.WppVar import WppVar
 from Wpp.Context import Context
 from Wpp.WppCore import WppCore
 from out.OutContextMemory import OutContextMemory
+from out.OutContextMemoryStream import OutContextMemoryStream
 
 class TestWppVar(unittest.TestCase):
 	def testVarInModule(self):
@@ -54,7 +55,7 @@ class public Rect
 		self.assertEqual(b.getAccessLevel(), 'private')
 		outContext = OutContextMemory()
 		b.export(outContext)
-		self.assertEqual(str(outContext), 'field private b: Point\n\t# this is b')
+		self.assertEqual(str(outContext), 'field b: Point\n\t# this is b')
 
 
 	def testInitValue(self):
@@ -70,3 +71,28 @@ class A
 		v = counter.getValueTaxon()
 		self.assertIsNotNone(v)
 		self.assertEqual(v.exportString(), '-1')
+
+
+	def testReadonly(self):
+		source = """
+class public Atom
+	readonly N: int
+	readonly mass: double
+	constructor
+		param init N
+		param init mass
+
+func public main
+	var H: Atom = Atom(1, 1.008)
+	var O: Atom = Atom(8, 15.999)
+	var waterMass: double = H.mass * 2 + O.mass
+		"""
+		module = WppCore.createMemModule(source, 'readonly.fake')
+		Atom = module.dictionary['Atom']
+		mass = Atom.dictionary['mass']
+		self.assertEqual(mass.type, 'Readonly')
+		self.assertIn('public', mass.attrs)
+		self.assertEqual(mass.getLocalType().exportString(), 'double')
+		outContext = OutContextMemoryStream()
+		module.export(outContext)
+		self.assertEqual(str(outContext), source.strip())

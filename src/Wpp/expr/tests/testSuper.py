@@ -26,13 +26,13 @@ class public Second
 	def testSuperConstructor(self):
 		source = """
 class public A
-	field private count: int
+	field count: int
 	constructor public
 		param init count
 
 class public B
 	extends A
-	field private year: int
+	field year: int
 	constructor public
 		param count: int
 		param init year

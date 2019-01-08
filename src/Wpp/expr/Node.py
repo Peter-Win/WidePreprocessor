@@ -23,8 +23,13 @@ class Node:
 		return self.type == 'unop' and self.value == '-' and lexemType == 'const' and constType in {'int', 'fixed', 'float'}
 
 	def makeTaxon(self):
-		from Wpp.expr.Taxons import WppBinOp, WppCall, WppConst, WppFieldExpr, WppIdExpr, WppTernaryOp, WppThis, WppSuper, WppUnOp
+		from Wpp.expr.Taxons import WppBinOp, WppCall, WppConst, WppFieldExpr, WppIdExpr, WppTernaryOp, WppThis, WppSuper, WppUnOp, WppArrayValue
 
+		if self.type == 'array':
+			taxon = WppArrayValue()
+			for arg in self.args:
+				taxon.addItem(arg.makeTaxon())
+			return taxon
 		if self.lexemType == 'const':
 			return WppConst(self.constType, self.value)
 		if self.lexemType == 'id':
@@ -110,4 +115,6 @@ class Node:
 			return s + ')'
 		if self.type == 'index':
 			return checkBrackets(self.args[0], self.prior) + '[' + self.args[1].export() + ']'
+		if self.type == 'array':
+			return '[' + ', '.join([i.export() for i in self.args]) + ']'
 

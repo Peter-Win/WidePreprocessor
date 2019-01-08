@@ -20,6 +20,10 @@ class TaxonField(TaxonCommonVar):
 	type = 'Field'
 	canBeStatic = True
 
+class TaxonReadonly(TaxonCommonVar):
+	""" Поле, доступное только для чтения """
+	type = 'Readonly'
+
 class TaxonParam(TaxonCommonVar):
 	""" Формальный параметр функции """
 	type = 'Param'

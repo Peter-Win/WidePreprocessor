@@ -26,9 +26,17 @@ class Taxon:
 
 	def addItem(self, item):
 		item.owner = self
-		item.core = self.core
 		self.items.append(item)
+		if self.core:
+			item.core = self.core
+			item._setCore()
 		return item
+
+	def _setCore(self):
+		for i in self.items:
+			if i and i.core != self.core:
+				i.core = self.core
+				i._setCore()
 
 	def addItems(self, items):
 		for i in items:

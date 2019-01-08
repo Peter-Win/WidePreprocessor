@@ -26,7 +26,7 @@ class WppClass(TaxonClass, WppDictionary):
 			context.throwError('Access level "private" cannot be applied to a class.')
 
 	def readBody(self, context):
-		from Wpp.WppVar import WppField
+		from Wpp.WppVar import WppField, WppReadonly
 		from Wpp.WppFunc import WppMethod, WppConstructor
 		word = context.getFirstWord()
 		line = context.currentLine
@@ -38,6 +38,8 @@ class WppClass(TaxonClass, WppDictionary):
 			return None
 		if word == 'field':
 			return WppField()
+		if word == 'readonly':
+			return WppReadonly()
 		if word == WppMethod.keyWord:
 			return WppMethod()
 		if word == WppConstructor.keyWord:

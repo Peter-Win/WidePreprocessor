@@ -11,3 +11,8 @@ class TaxonTypeName(TaxonType):
 		return self.refs['type']
 	def getDefaultValue(self):
 		return self.getTypeTaxon().getDefaultValue()
+
+class TaxonTypeArray(TaxonType):
+	type = 'TypeArray'
+	def getItemType(self):
+		return self.items[0]

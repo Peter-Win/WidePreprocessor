@@ -139,8 +139,8 @@ class A
 		from Wpp.WppFunc import WppConstructor
 		source = """
 class public Test
-	field private a: int
-	field private b: double = 0
+	field a: int
+	field b: double = 0
 	constructor
 		param a: int
 		param b: double
@@ -168,8 +168,8 @@ class public Test
 	def testAutoInit(self):
 		source = """
 class public A
-	field private a: int
-	field private b: double
+	field a: int
+	field b: double
 	constructor
 		param init a
 		param init b = 1.0

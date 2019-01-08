@@ -8,11 +8,18 @@ class WppCore(TaxonModule):
 	def __init__(self):
 		super().__init__()
 		from Wpp.core.WppTaxonMap import WppTaxonMap
+		from Wpp.core.WppString import WppString
 		self.taxonMap = WppTaxonMap
 		self.name = 'WppCore'
 
 		for name in Scalars:
 			self.addNamedItem(WppTypeScalar(name))
+
+		classString = WppString()
+		classString.name = 'String'
+		self.addNamedItem(classString)
+		classString.init()
+
 
 	def createRootModule(self, context):
 		""" Создать корневой модуль
@@ -37,6 +44,7 @@ class WppCore(TaxonModule):
 
 Scalars = [
 	'int',
+	'long',
 	'float',
 	'double'
 ]

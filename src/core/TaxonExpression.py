@@ -98,3 +98,9 @@ class TaxonTernaryOp(TaxonExpression):
 
 class TaxonArrayIndex(TaxonExpression):
 	type = 'ArrayIndex'
+
+class TaxonArrayValue(TaxonExpression):
+	""" example: [1, 2, 3] """
+	type = 'ArrayValue'
+	def exportString(self):
+		return '[' + ', '.join([i.exportString() for i in self.items]) + ']'
