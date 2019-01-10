@@ -1,5 +1,10 @@
-from core.TaxonExpression import TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNew, TaxonNull, TaxonSuper, TaxonThis, TaxonTernaryOp, TaxonUnOp
+from core.TaxonExpression import TaxonArrayValue, TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNew, TaxonNull, TaxonSuper, TaxonThis, TaxonTernaryOp, TaxonUnOp
 from Python.core.PyString import PyString
+
+class PyArrayValue(TaxonArrayValue):
+	def exportString(self):
+		s = '[' + ', '.join([i.exportString() for i in self.items]) + ']'
+		return s
 
 class PyConst(TaxonConst):
 	def exportString(self):
