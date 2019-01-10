@@ -38,11 +38,14 @@ class TaxonId(TaxonExpression):
 		result = super().clone(newCore)
 		result.id = self.id
 		return result
+	def getDeclaration(self):
+		return self.refs['decl']
+	def getFieldDeclaration(self, name):
+		decl = self.getDeclaration()
+		return decl.getFieldDeclaration(name)
 
 class TaxonIdExpr(TaxonId):
 	type = 'IdExpr'
-	def getDeclaration(self):
-		return self.refs['decl']
 
 class TaxonFieldExpr(TaxonId):
 	type = 'FieldExpr'
@@ -66,10 +69,17 @@ class TaxonBinOp(TaxonOpCode):
 	def getRight(self):
 		return self.items[1]
 
-class TaxonThis(TaxonExpression):
+class TaxonClassRef(TaxonExpression):
+	def getClass(self):
+		return self.findOwner('Class', True)
+	def getFieldDeclaration(self, name):
+		myClass = self.getClass()
+		return myClass.getFieldDeclaration(name)
+
+class TaxonThis(TaxonClassRef):
 	type = 'This'
 
-class TaxonSuper(TaxonExpression):
+class TaxonSuper(TaxonClassRef):
 	type = 'Super'
 
 class TaxonCall(TaxonExpression):

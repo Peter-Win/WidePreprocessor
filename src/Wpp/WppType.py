@@ -30,7 +30,7 @@ class WppTypeName(TaxonTypeName):
 			decl = self.findUp(self._typeName, self, self)
 			if not decl:
 				self.throwError('Not found type "'+self._typeName+'"')
-			self.refs['type'] = decl
+			self.setRef('type', decl)
 			self._typeName = None
 
 	def exportString(self):

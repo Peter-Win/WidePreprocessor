@@ -1,7 +1,10 @@
 from core.TaxonExpression import TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNew, TaxonNull, TaxonSuper, TaxonThis, TaxonTernaryOp, TaxonUnOp
+from Python.core.PyString import PyString
 
 class PyConst(TaxonConst):
 	def exportString(self):
+		if self.constType == 'string':
+			return PyString.exportConst(self.value)
 		return self.value
 
 class PyIdExpr(TaxonIdExpr):

@@ -11,6 +11,12 @@ class TaxonClass (TaxonDictionary):
 		""" Члены класса в виде списка """
 		return self.items
 
+	def getFieldDeclaration(self, name):
+		field = self.dictionary.get(name)
+		if not field:
+			self.throwError('Not found field "'+name+'" in '+self.getPath())
+		return field
+
 	def findUp(self, name, fromWho, source):
 		""" Переопределенная фунция класса Taxon
 		Позволяет искать среди членов класса, но не спускаясь в них

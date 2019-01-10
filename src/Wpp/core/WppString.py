@@ -9,3 +9,5 @@ field length: unsigned long
 		"""
 		ctx = Context.createFromMemory(content)
 		readWpp(ctx, self)
+		length = self.dictionary['length']
+		length.cloneScheme = 'Owner'

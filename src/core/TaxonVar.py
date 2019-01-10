@@ -7,6 +7,9 @@ class TaxonCommonVar(Taxon):
 	def getValueTaxon(self):
 		return self.items[1] if len(self.items) > 1 else None
 
+	def getFieldDeclaration(self, name):
+		return self.getLocalType().getFieldDeclaration(name)
+
 class TaxonVar(TaxonCommonVar):
 	""" Классическая переменная.
 	Обычно объявляется в блоке.

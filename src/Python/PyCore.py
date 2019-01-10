@@ -7,15 +7,21 @@ class PyCore(TaxonModule):
 		self.name = 'Python'
 		self.core = self
 		from Python.core.PyTaxonMap import PyTaxonMap
+		from Python.core.PyCoreFunctions import initFunctions
 		self.taxonMap = PyTaxonMap
 
 		# Scalar types
 		for name, value in Scalars:
 			self.addNamedItem(PyTypeScalar(name, value))
 
+		from Python.core.PyString import PyString
+		self.addNamedItem(PyString())
+
+		initFunctions(self)
 
 Scalars = [
 	('int', '0'),
+	('long', '0'),
 	('float', '0.0'),
 	('double', '0.0')
 ]

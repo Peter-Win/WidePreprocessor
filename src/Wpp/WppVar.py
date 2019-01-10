@@ -91,7 +91,7 @@ class WppParam(TaxonParam, WppCommonVar):
 		self.items = []
 		self.addItem(dstType)
 		self.items += goodItems
-		self.refs['field'] = field
+		self.setRef('field', field)
 
 	def export(self, outContext):
 		if 'init' not in self.attrs:

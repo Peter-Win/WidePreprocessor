@@ -22,11 +22,23 @@ class WppIdExpr(TaxonIdExpr, WppExpression):
 			decl = self.findUp(self.id, self, self)
 			if not decl:
 				self.throwError('Not found declaration for "'+self.id+'"')
-			self.refs['decl'] = decl
+			self.setRef('decl', decl)
 
 class WppFieldExpr(TaxonFieldExpr, WppExpression):
+	def __init__(self):
+		super().__init__()
+		self.step = 0
 	def exportString(self):
 		return self.id
+	def onUpdate(self):
+		self.step += 1
+		# Привязка полей к их владельцам происходит на втором шаге, т.к. требуется декларация для владельцев, а она заполняется на 1м шаге
+		if self.step == 1:
+			return True
+		if self.step == 2:
+			binOp = self.owner
+			left = binOp.getLeft()
+			self.setRef('decl', left.getFieldDeclaration(self.id))
 
 class WppThis(TaxonThis, WppExpression):
 	def exportString(self):

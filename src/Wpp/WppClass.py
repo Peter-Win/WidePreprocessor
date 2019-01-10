@@ -61,7 +61,7 @@ class WppClass(TaxonClass, WppDictionary):
 			classDecl = self.findClassDeclaration(self._extends, True)
 			if classDecl == self:
 				self.throwError("Can't extends itself")
-			self.refs['ext'] = classDecl
+			self.setRef('ext', classDecl)
 			self._extends = None
 			# Для статического класса нужно добавить соответствующий атрибут во все подчиненные таксоны
 

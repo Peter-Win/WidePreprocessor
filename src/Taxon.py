@@ -6,11 +6,12 @@ class Taxon:
 	"""
 	type = ''
 	canBeStatic = False
-	def __init__(self):
+	cloneScheme = None
+	def __init__(self, name = ''):
 		self.owner = None
 		self.items = []		# Непосредственно подчиненные элементы
 		self.refs = {}		# Ссылки на неподчиненные элементы
-		self.name = ''
+		self.name = name
 		self.core = None
 		# Информация об исходном и полученном таксонах помогают построить перекрестные ссылки
 		self.sourceTaxon = None # Когда происходит клонирование, новый таксон сохраняет ссылку на исходный
@@ -41,6 +42,14 @@ class Taxon:
 	def addItems(self, items):
 		for i in items:
 			self.addItem(i)
+
+	def setRef(self, key, item):
+		self.refs[key] = item
+		item.onRef(self, key)
+
+	def onRef(self, user, key):
+		""" Уведомление о том, что некий таксон user ссылается на этот таксон """
+		pass
 
 	def replace(self, newTaxon):
 		""" Замена текущего таксона на новый """
@@ -83,8 +92,7 @@ class Taxon:
 		""" Клонирование таксона и всех его подчиненных в другое сообщество 
 		Кроме ссылок, которые могут быть склонированы только после полного копирования всей структуры
 		"""
-		Constructor = newCore.taxonMap[self.type]
-		newTaxon = Constructor()
+		newTaxon = newCore.taxonMap[self.type]()
 		newTaxon.core = newCore
 		newTaxon.sourceTaxon = self
 		newTaxon.type = self.type
@@ -100,6 +108,18 @@ class Taxon:
 		newTaxon.comment = self.comment
 		return newTaxon
 
+	def _findCoreTaxon(self, alienCoreTaxon):
+		scheme = alienCoreTaxon.cloneScheme
+		if not scheme:
+			# Если схема не указана, значит поиск глобального объекта по имени
+			taxon = self.core.findUp(alienCoreTaxon.name, self.core, self.core)
+		elif scheme == 'Owner':
+			taxonOwner = self.core.findUp(alienCoreTaxon.owner.name, self.core, self.core)
+			taxon = taxonOwner.dictionary[alienCoreTaxon.name]
+		if not taxon:
+			self.throwError('Not found "'+alienCoreTaxon.name+'" in "'+self.core.name+'"')
+		return taxon
+
 	def updateRefs(self):
 		""" Рекурсивное обновление ссылок, необходимое для клонированного объекта
 		Типичный сценарий клонирования: сначала dst = src.clone(newCore), затем dst.updateRefs()
@@ -108,11 +128,9 @@ class Taxon:
 			relatedFriendlyTaxon = relatedAlienTaxon.derivedTaxon
 			if not relatedFriendlyTaxon:
 				# Если у исходного таксона нет соответствия в новом сообществе, значит он находится в ядре...
-				relatedFriendlyTaxon = self.core.findUp(relatedAlienTaxon.name, self.core, self.core)
-				if not relatedFriendlyTaxon:
-					self.throwError('Not found "'+relatedAlienTaxon.name+'" in "'+self.core.name+'"')
+				relatedFriendlyTaxon = self._findCoreTaxon(relatedAlienTaxon)
 				relatedAlienTaxon.derivedTaxon = relatedFriendlyTaxon
-			self.refs[key] = relatedFriendlyTaxon
+			self.setRef(key, relatedFriendlyTaxon)
 
 		# рекурсивный вызов для подчиненных элементов
 		for i in self.items:
