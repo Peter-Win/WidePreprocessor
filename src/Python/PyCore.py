@@ -20,6 +20,7 @@ class PyCore(TaxonModule):
 		initFunctions(self)
 
 Scalars = [
+	('bool', 'False'),
 	('int', '0'),
 	('long', '0'),
 	('float', '0.0'),
@@ -33,4 +34,6 @@ class PyTypeScalar(Taxon):
 		self.defaultValue = defaultValue
 
 	def getDefaultValue(self):
+		if self.name == 'bool':
+			return self.core.taxonMap[self.defaultValue]()
 		return self.core.taxonMap['Const'](self.name, self.defaultValue)

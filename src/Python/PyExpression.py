@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonArrayValue, TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNew, TaxonNull, TaxonSuper, TaxonThis, TaxonTernaryOp, TaxonUnOp
+from core.TaxonExpression import TaxonArrayValue, TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNew, TaxonNull, TaxonSuper, TaxonThis, TaxonTernaryOp, TaxonUnOp, TaxonTrue, TaxonFalse
 from Python.core.PyString import PyString
 
 class PyArrayValue(TaxonArrayValue):
@@ -35,6 +35,14 @@ class PySuper(TaxonSuper):
 class PyNull(TaxonNull):
 	def exportString(self):
 		return 'None'
+
+class PyTrue(TaxonTrue):
+	def exportString(self):
+		return 'True'
+
+class PyFalse(TaxonFalse):
+	def exportString(self):
+		return 'False'
 
 class PyCall(TaxonCall):
 	def __init__(self):

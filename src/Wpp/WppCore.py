@@ -43,6 +43,7 @@ class WppCore(TaxonModule):
 
 
 Scalars = [
+	'bool',
 	'int',
 	'long',
 	'float',

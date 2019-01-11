@@ -32,6 +32,12 @@ class TaxonConst(TaxonExpression):
 class TaxonNull(TaxonExpression):
 	type = 'Null'
 
+class TaxonTrue(TaxonExpression):
+	type = 'True'
+
+class TaxonFalse(TaxonExpression):
+	type = 'False'
+
 class TaxonId(TaxonExpression):
 	__slots__ = ('id') # Идентификатор хранится не в name, чтобы при поиске findUp не происходило ложное срабатывание
 	def clone(self, newCore):
