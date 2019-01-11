@@ -2,6 +2,7 @@ from Python.PyBlock import PyBlock
 from Python.PyClass import PyClass
 from Python.PyExpression import PyArrayValue, PyBinOp, PyCall, PyConst, PyFieldExpr, PyIdExpr, PyNew, PyNull, PySuper, PyThis, PyTernaryOp, PyUnOp
 from Python.PyFunc import PyConstructor, PyFunc, PyMethod, PyOverloads
+from Python.PyIf import PyIf
 from Python.PyModule import PyModule
 from Python.PyPackage import PyPackage
 from Python.PyReturn import PyReturn
@@ -20,6 +21,7 @@ PyTaxonMap = {
 	'FieldExpr': PyFieldExpr,
 	'Func': PyFunc,
 	'IdExpr': PyIdExpr,
+	'If': PyIf,
 	'Method': PyMethod,
 	'Module': PyModule,
 	'New': PyNew,

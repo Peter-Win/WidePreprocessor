@@ -7,7 +7,7 @@ class PyCommonVar(PyTaxon):
 		if expr:
 			val = expr.exportString()
 		else:
-			val = 'None'	# TODO: Значение по умолчанию для используемого типа
+			val = self.getLocalType().getDefaultValue().exportString()
 		outContext.writeln(self.getName(self) + ' = ' + val)
 
 class PyVar(TaxonVar, PyCommonVar):

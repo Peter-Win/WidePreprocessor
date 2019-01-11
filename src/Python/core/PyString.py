@@ -25,8 +25,8 @@ class PyString(PyClass):
 		self.addNamedItem(PyStringLength(name='length'))
 
 	def getDefaultValue(self):
-		return self.core.taxonMap['Const']('string', '""')
+		return self.core.taxonMap['Const']('string', '')
 
 	@staticmethod
 	def exportConst(value):
-		return '"' + value + '"'
+		return '\'' + value + '\''

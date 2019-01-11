@@ -12,7 +12,7 @@ func public main
 		"""
 		expected = """
 def main():
-	s = "Hello!"
+	s = 'Hello!'
 	n = len(s)
 		"""
 		srcModule = WppCore.createMemModule(source, 'string.fake')
