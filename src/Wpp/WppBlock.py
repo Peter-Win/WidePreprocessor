@@ -6,23 +6,29 @@ class WppBlock(TaxonBlock, WppTaxon):
 		from Wpp.WppVar import WppVar
 		from Wpp.WppReturn import WppReturn
 		from Wpp.WppExpression import WppExpression
+		from Wpp.WppIf import WppIf
 
 		word = context.getFirstWord()
 		if word == 'var':
 			return WppVar()
 		if word == 'return':
 		 	return WppReturn()
-		# if word == 'if':
-		# 	return TaxonIf(self)
-		# if word == 'elif' or word == 'else':
-		# 	cmd = self.body[-1] if len(self.body) > 0 else None
-		# 	if cmd and cmd.type == 'if' and cmd.canAdd():
-		# 		return cmd
-		# 	context.throwError('Invalid statement "' + word + '" without "if"')
+		if word == 'if':
+			return WppIf()
+		if word == 'elif' or word == 'else':
+		 	cmd = self.items[-1] if self.items else None
+		 	if cmd and cmd.type == 'If' and cmd.canAdd():
+		 		return cmd
+		 	context.throwError('Invalid statement "' + word + '" without "if"')
 
 		# Когда все стандартные инструкции закончились, возможен вариант вычисления выражения
 		# Последнее выражение функции воспринимается как return
 		return WppExpression.create(context.currentLine.strip(), context)
+
+	def addTaxon(self, taxon):
+		if taxon not in self.items:
+			self.addItem(taxon)
+		return taxon
 
 	def export(self, outContext):
 		for item in self.items:

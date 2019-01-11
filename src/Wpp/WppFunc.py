@@ -77,7 +77,7 @@ class WppCommonFunc(WppTaxon):
 
 	def addTaxon(self, taxon):
 		if self._phase == 'body':
-			return self.getBody().addItem(taxon)
+			return self.getBody().addTaxon(taxon)
 		else:
 			return self.addNamedItem(taxon)
 
