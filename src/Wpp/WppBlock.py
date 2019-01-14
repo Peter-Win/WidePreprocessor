@@ -7,19 +7,22 @@ class WppBlock(TaxonBlock, WppTaxon):
 		from Wpp.WppReturn import WppReturn
 		from Wpp.WppExpression import WppExpression
 		from Wpp.WppIf import WppIf
+		from Wpp.WppForeach import WppForeach
 
 		word = context.getFirstWord()
 		if word == 'var':
 			return WppVar()
 		if word == 'return':
-		 	return WppReturn()
+			return WppReturn()
 		if word == 'if':
 			return WppIf()
 		if word == 'elif' or word == 'else':
-		 	cmd = self.items[-1] if self.items else None
-		 	if cmd and cmd.type == 'If' and cmd.canAdd():
-		 		return cmd
-		 	context.throwError('Invalid statement "' + word + '" without "if"')
+			cmd = self.items[-1] if self.items else None
+			if cmd and cmd.type == 'If' and cmd.canAdd():
+				return cmd
+			context.throwError('Invalid statement "' + word + '" without "if"')
+		if word == 'foreach':
+			return WppForeach()
 
 		# Когда все стандартные инструкции закончились, возможен вариант вычисления выражения
 		# Последнее выражение функции воспринимается как return

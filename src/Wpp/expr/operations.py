@@ -34,7 +34,7 @@ squareBracketPrior = 2
 ternaryPrior = 15
 
 specChars = ''
-specWordsList = sorted(['(', ')', '[', ']', '?', ':', ','] + list(binOps.keys()) + list(unOps), reverse=True)
+specWordsList = sorted(['(', ')', '[', ']', '?', ':', ',', '=>'] + list(binOps.keys()) + list(unOps), reverse=True)
 specCharsSet = set()
 for word in specWordsList:
 	for c in word: specCharsSet.add(c)
