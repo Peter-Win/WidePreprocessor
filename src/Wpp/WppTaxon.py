@@ -12,6 +12,11 @@ class WppTaxon(Taxon):
 		if line[0] == '#':
 			self.addComment(line[1:])
 			return None
+		pair = line.split(' ', 1)
+		word = pair[0]
+		if word == 'cloneScheme':
+			self.cloneScheme = pair[1]
+			return None
 		context.throwError('Invalid instruction')
 
 	def addTaxon(self, taxon):

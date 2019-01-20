@@ -63,3 +63,36 @@ func func03: double
 		module.export(outContext)
 		self.assertEqual(str(outContext), source.strip())
 
+	def testCloneScheme(self):
+		source = """
+func func04
+	cloneScheme Owner
+		"""
+		module = WppCore.createMemModule(source, 'func04.fake')
+		funcOver = module.dictionary['func04']
+		self.assertEqual(funcOver.type, 'Overloads')
+		self.assertEqual(funcOver.name, 'func04')
+		func = funcOver.items[0]
+		self.assertEqual(func.type, 'Func')
+		self.assertEqual(func.name, 'func04')
+		self.assertEqual(func.cloneScheme, None)
+		self.assertEqual(funcOver.cloneScheme, 'Owner')
+
+	def testAltName(self):
+		source = """
+func func05
+	altname hello
+		"""
+		module = WppCore.createMemModule(source, 'func05.fake')
+
+		funcOver = module.dictionary['func05']
+		self.assertEqual(funcOver.type, 'Overloads')
+		func = funcOver.items[0]
+		self.assertEqual(func.type, 'Func')
+		self.assertEqual(func.name, 'func05')
+		self.assertEqual(func.altName, 'hello')
+
+		outContext = OutContextMemoryStream()
+		module.export(outContext)
+		self.assertEqual(str(outContext), source.strip())
+		

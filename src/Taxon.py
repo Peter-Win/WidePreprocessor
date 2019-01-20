@@ -111,13 +111,19 @@ class Taxon:
 	def _findCoreTaxon(self, alienCoreTaxon):
 		scheme = alienCoreTaxon.cloneScheme
 		if not scheme:
-			# Если схема не указана, значит поиск глобального объекта по имени
-			taxon = self.core.findUp(alienCoreTaxon.name, self.core, self.core)
+			if self.type == 'Method':
+				taxonOwner = self.core.findUp(alienCoreTaxon.owner.owner.name, self.core, self.core)
+				taxon = taxonOwner.dictionary[alienCoreTaxon.name]
+			else:
+				# Если схема не указана, значит поиск глобального объекта по имени
+				taxon = self.core.findUp(alienCoreTaxon.name, self.core, self.core)
 		elif scheme == 'Owner':
 			taxonOwner = self.core.findUp(alienCoreTaxon.owner.name, self.core, self.core)
+			if alienCoreTaxon.name not in taxonOwner.dictionary:
+				self.throwError('Not found "%s" in %s.%s' % (alienCoreTaxon.name, self.core.name, taxonOwner.name))
 			taxon = taxonOwner.dictionary[alienCoreTaxon.name]
 		if not taxon:
-			self.throwError('Not found "'+alienCoreTaxon.name+'" in "'+self.core.name+'"')
+			self.throwError('Not found "'+alienCoreTaxon.name+':'+alienCoreTaxon.type+'" in "'+self.core.name+'"')
 		return taxon
 
 	def updateRefs(self):
@@ -183,6 +189,14 @@ class Taxon:
 			self.throwError('Not found owner with type '+type)
 		return taxon
 
+	def findUpEx(self, name, fromWho = None):
+		""" Поиск обхекта по имени. Если не найден, кидается исключение """
+		fromWho = fromWho or self
+		result = self.findUp(name, fromWho, fromWho)
+		if not result:
+			self.throwError('Name "%s" is not defined' % (name))
+		return result
+
 	def findUp(self, name, fromWho, source):
 		""" Поиск с подъёмом вверх.
 		Большинство таксонов могут лишь проверить себя и вызвать поиск владельца
@@ -211,6 +225,11 @@ class Taxon:
 		if len(used) > 1:
 			msg = 'Incompatible attributes used: ' + ', '.join(used)
 			self.throwError(msg)
+
+	def getExportAttrs(self):
+		result = list(self.attrs)
+		result.sort()
+		return result
 
 class UpdateContext:
 	step = 0

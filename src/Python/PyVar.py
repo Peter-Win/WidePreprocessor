@@ -1,7 +1,7 @@
 from core.TaxonVar import TaxonVar, TaxonField, TaxonReadonly, TaxonParam
 from Python.PyTaxon import PyTaxon
 
-class PyCommonVar(PyTaxon):		
+class PyCommonVar(PyTaxon):
 	def export(self, outContext):
 		expr = self.getValueTaxon()
 		if expr:
@@ -21,13 +21,15 @@ class PyField(TaxonField, PyCommonVar):
 		if 'static' not in self.attrs:
 			return
 		super().export(outContext)
+	# def getName(self, user):
+	# 	return self.name
 
 class PyReadonly(TaxonReadonly, PyCommonVar):
 	def getPrivateFieldName(self):
 		return '_' + self.getName(self)
 
 	def getName(self, user):
-		if user == self.owner or user.type == 'Constructor':
+		if user == self.owner or (user.type == 'FieldExpr' and user.findOwner('Constructor')):
 			return self.getPrivateFieldName()
 		return super().getName(user)
 

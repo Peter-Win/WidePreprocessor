@@ -89,10 +89,10 @@ class WppForeach(TaxonForeach, WppTaxon):
 		self.phase += 1
 		if self.phase == 1:
 			if self.valueId:
-				varValue = self.owner.findUp(self.valueId, self.owner, self.owner)
+				varValue = self.owner.findUpEx(self.valueId)
 				self.setRef('value', varValue)
 			if self.indexId:
-				varIndex = self.owner.findUp(self.indexId, self.owner, self.owner)
+				varIndex = self.owner.findUpEx(self.indexId)
 				self.setRef('index', varIndex)
 			return True
 		if len(self.items) == 2:

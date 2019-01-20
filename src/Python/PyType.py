@@ -1,4 +1,4 @@
-from core.TaxonType import TaxonTypeName, TaxonTypeArray
+from core.TaxonType import TaxonTypeName, TaxonTypeArray, TaxonTypeMap
 
 class PyTypeName(TaxonTypeName):
 	pass
@@ -9,3 +9,15 @@ class PyTypeArray(TaxonTypeArray):
 		if bUseIndex:
 			s = 'enumerate('+s+')'
 		return s
+
+class PyTypeMap(TaxonTypeMap):
+	def exportCollection(self, user, bUseIndex):
+		s = user.exportString()
+		if bUseIndex:
+			# Обычно словари используются с использованием ключа
+			# Цикл foreach не может использоваться только с использованием ключа
+			# Поэтому наиболее вероятный вариант - ключ, значение
+			return s + '.items()'
+		else:
+			# Это менее вероятно, но необходимо для полноты
+			return s + '.values()'

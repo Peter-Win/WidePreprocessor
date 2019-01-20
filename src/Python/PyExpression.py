@@ -22,7 +22,8 @@ class PyIdExpr(TaxonIdExpr):
 
 class PyFieldExpr(TaxonFieldExpr):
 	def exportString(self):
-		return self.id
+		decl = self.owner.getLeft().getFieldDeclaration(self.id)
+		return decl.getName(self)
 
 class PyThis(TaxonThis):
 	def exportString(self):

@@ -6,17 +6,13 @@ class TestLambda(unittest.TestCase):
 	@unittest.skip('Wait for template, for, func type, lambda')
 	def testSimple(self):
 		source = """
-template
-	TValue
-	TItem
-	func template calcSum: @Value
-		param collection: Array @Item
-		param callback: func const: @Value
-			param item: @Item
-		var result: @Value = 0
-		foreach collection => cell
-			result += callback(cell)
-		result
+func template calcSum: @Value
+	param collection: Array @Item
+	param callback: func const: @Value -> @Item
+	var result: @Value = 0
+	foreach collection => cell
+		result += callback(cell)
+	result
 
 class A
 	readonly mass: double
@@ -24,12 +20,11 @@ class A
 		param init mass
 
 func public main
-	var sum1: int = calcSum([1, 2, 3], ===>
+	var sum1: int = calcSum([1, 2, 3], ===>)
 		param item: int
 		item
-	->)
-	var sum2: double = calcSum([A(1.1), A(2.2), A(3.3)], ===>
+	
+	var sum2: double = calcSum([A(1.1), A(2.2), A(3.3)], ===>)
 		param a: A
 		A.mass
-	->)
 		"""

@@ -20,6 +20,9 @@ class PyCommonFunc(PyTaxon):
 			sparams.insert(0, 'self')
 		s += ', '.join(sparams) + '):'
 		outContext.writeln(s)
+		outContext.level += 1
+		self.exportComment(outContext)
+		outContext.level -= 1
 		self.getBody().export(outContext)
 
 	def onUpdate(self):

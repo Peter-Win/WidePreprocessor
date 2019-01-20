@@ -15,7 +15,9 @@ class PyCore(TaxonModule):
 			self.addNamedItem(PyTypeScalar(name, value))
 
 		from Python.core.PyString import PyString
+		from Python.core.PyArray import PyArray
 		self.addNamedItem(PyString())
+		self.addNamedItem(PyArray())
 
 		initFunctions(self)
 

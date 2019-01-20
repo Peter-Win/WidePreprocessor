@@ -9,16 +9,22 @@ class WppCore(TaxonModule):
 		super().__init__()
 		from Wpp.core.WppTaxonMap import WppTaxonMap
 		from Wpp.core.WppString import WppString
+		from Wpp.core.WppArray import WppArray
 		self.taxonMap = WppTaxonMap
 		self.name = 'WppCore'
 
 		for name in Scalars:
 			self.addNamedItem(WppTypeScalar(name))
 
-		classString = WppString()
-		classString.name = 'String'
-		self.addNamedItem(classString)
-		classString.init()
+		complexTypes = [
+			('String', WppString),
+			('Array', WppArray)
+		]
+		for name, Constructor in complexTypes:
+			inst = Constructor()
+			inst.name = name
+			self.addNamedItem(inst)
+			inst.init()
 
 
 	def createRootModule(self, context):
@@ -35,6 +41,15 @@ class WppCore(TaxonModule):
 		module.read(context)
 		module.fullUpdate()
 		return module
+
+	def createRootPackage(self, name, path):
+		from Wpp.WppPackage import WppPackage
+		srcRoot = WppPackage(name)
+		srcRoot.core = self
+		srcRoot.owner = self
+		srcRoot.read(path)
+		srcRoot.fullUpdate()
+		return srcRoot
 
 	@staticmethod
 	def createMemModule(source, fakeName):

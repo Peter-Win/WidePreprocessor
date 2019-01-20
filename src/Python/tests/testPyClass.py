@@ -1,3 +1,7 @@
+if __name__=='__main__':
+	import sys, os.path
+	sys.path.append(os.path.abspath('../../'))
+
 import unittest
 from Wpp.WppCore import WppCore
 from Python.PyCore import PyCore
@@ -106,6 +110,19 @@ class public Test
 		classTest = dstModule.dictionary['Test']
 		first = classTest.dictionary['first']
 		self.assertTrue(first.canBeStatic)
+		conOver = classTest.findConstructor()
+		self.assertEqual(conOver.type, 'Overloads')
+		con = conOver.items[0]
+		self.assertEqual(con.type, 'Constructor')
+		cmd2 = con.getBody().items[1]
+		self.assertEqual(cmd2.type, 'BinOp')
+		self.assertEqual(cmd2.opCode, '=')
+		pt = cmd2.getLeft()
+		self.assertEqual(pt.type, 'BinOp')
+		self.assertEqual(pt.opCode, '.')
+		field = pt.getRight()
+		self.assertEqual(field.type, 'FieldExpr')
+		self.assertEqual(field.id, 'second')
 
 		expected = """
 class Parent:

@@ -11,6 +11,14 @@ class TaxonCommonFunc(TaxonDictionary):
 	Может иметь тип результата (второй, если есть)
 	И параметры, которые доступны через dictionary
 	"""
+	def __init__(self):
+		super().__init__()
+		self.altName = ''
+
+	def clone(self, newCore):
+		result = super().clone(newCore)
+		result.altName = self.altName
+		return result
 
 	def getBody(self):
 		""" Тело функции присутствует всегда"""
@@ -41,6 +49,22 @@ class TaxonMethod(TaxonCommonFunc):
 	"""
 	type = 'Method'
 	canBeStatic = True
+
+class TaxonOperator(TaxonCommonFunc):
+	type = 'Operator'
+	def __init__(self, bMethod = False):
+		super().__init__()
+		self.bMethod = bMethod
+	def isMethod(self):
+		return self.bMethod
+	def clone(self, newCore):
+		taxon = super().clone(newCore)
+		taxon.bMethod = self.bMethod
+		return taxon
+	def isBinary(self):
+		return len(self.getParams()) == 1
+	def isUnary(self):
+		return len(self.getParams()) == 0
 
 class TaxonConstructor(TaxonMethod):
 	type = 'Constructor'

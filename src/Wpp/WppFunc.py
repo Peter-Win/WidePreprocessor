@@ -1,4 +1,4 @@
-from core.TaxonFunc import TaxonOverloads, TaxonFunc, TaxonMethod, TaxonConstructor
+from core.TaxonFunc import TaxonOverloads, TaxonFunc, TaxonMethod, TaxonConstructor, TaxonOperator
 from Wpp.WppBlock import WppBlock
 from Wpp.WppTaxon import WppTaxon
 from core.ErrorTaxon import ErrorTaxon
@@ -52,6 +52,12 @@ class WppCommonFunc(WppTaxon):
 			context.throwError('Expected name of '+self.type)
 		self.name = chunks[-1]	# Имя функции
 		self.attrs |= set(chunks[1:-1]) # Атрибуты
+		defaultAccess = self.getDefaultAccessLevel()
+		if defaultAccess and not self.getAccessLevel(): # Если квалификатор доступа не указан, используется defaultAccess
+			self.attrs.add(defaultAccess)
+
+	def getDefaultAccessLevel(self):
+		return None
 
 	def readBody(self, context):
 		if self._phase == 'body':
@@ -60,6 +66,9 @@ class WppCommonFunc(WppTaxon):
 		if not ok:
 			try:
 				taxon = super().readBody(context)
+				if context.getFirstWord() == 'cloneScheme':
+					self.owner.cloneScheme = self.cloneScheme
+					self.cloneScheme = None
 			except ErrorTaxon:
 				self._phase = 'body'
 				taxon = self.readFunctionBody(context)
@@ -70,6 +79,9 @@ class WppCommonFunc(WppTaxon):
 		word = context.getFirstWord()
 		if word == 'param':
 			return WppParam(), True
+		if word == 'altname':
+			self.altName = context.currentLine.split()[1]
+			return None, True
 		return None, False
 
 	def readFunctionBody(self, context):
@@ -107,13 +119,21 @@ class WppCommonFunc(WppTaxon):
 		outContext.writeln(s)
 		outContext.level += 1
 		self.exportComment(outContext)
+		if self.altName:
+			outContext.writeln('altname '+self.altName)
 		for item in self.getParams():
 			item.export(outContext)
 		self.getBody().export(outContext)
 		outContext.level -= 1
 
 	def exportAttrs(self):
-		return list(self.attrs)
+		res = list(self.attrs)
+		res.sort()
+		defaultAccess = self.getDefaultAccessLevel()
+		if defaultAccess and defaultAccess in res:
+			res.remove(defaultAccess)
+		return res
+
 
 class WppFunc(TaxonFunc, WppCommonFunc):
 	keyWord = 'func'
@@ -122,24 +142,33 @@ class WppFunc(TaxonFunc, WppCommonFunc):
 class WppMethod(TaxonMethod, WppCommonFunc):
 	keyWord = 'method'
 	attrsUp = ('static', 'virtual', 'public', 'protected', 'private')
-	def readHead(self, context):
-		super().readHead(context)
-		if not self.getAccessLevel(): # Если квалификатор доступа не указан, используется public
-			self.attrs.add('public')
+	classMember = True
+
+	def getDefaultAccessLevel(self):
+		return 'public'
 
 	def exportAttrs(self):
 		res = super().exportAttrs()
-		if 'public' in res:
-			# Если используется public, то он не указывается
-			res.remove('public')
 		ownerClass = self.findOwner('Class', True)
 		if 'static' in ownerClass.attrs:
 			# Если класс статический, то не указывать static для членов
 			res.remove('static')
 		return res
 
+class WppOperator(TaxonOperator, WppCommonFunc):
+	""" Если у оператора есть атрибут right то он выполняется для аргументов, находящихся справа, 
+	и только в случае, если для левого операнда не определён соответствующий метод.
+	Например, операция x + y будет сначала пытаться вызвать x.__add__(y), и только в том случае, если это не получилось, будет пытаться вызвать y.__radd__(x).
+	"""
+	keyWord = 'operator'
+	attrsUp = ('public', 'private', 'right')
+	classMember = True
+	def getDefaultAccessLevel(self):
+		return 'public'
+
 class WppConstructor(TaxonConstructor, WppCommonFunc):
 	keyWord = 'constructor'
+	classMember = True
 	def getName(self, user):
 		return ''
 	def readHead(self, context):

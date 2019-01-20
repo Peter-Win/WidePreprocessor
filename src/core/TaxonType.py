@@ -18,3 +18,16 @@ class TaxonTypeArray(TaxonType):
 	type = 'TypeArray'
 	def getItemType(self):
 		return self.items[0]
+	def getArray(self):
+		return self.core.dictionary['Array']
+	def getFieldDeclaration(self, name):
+		return self.getArray().getFieldDeclaration(name)
+	def getDefaultValue(self):
+		return self.getArray().getDefaultValue()
+
+class TaxonTypeMap(TaxonType):
+	type = 'TypeMap'
+	def getKeyType(self):
+		return self.items[0]
+	def getValueType(self):
+		return self.items[1]

@@ -1,0 +1,37 @@
+class simple Point
+	# 2D Point (or vector) object
+	typedef Value: double
+
+	field public x: Value
+	field public y: Value
+
+	constructor
+		param init x
+		param init y
+
+	method init: ref Point
+		# Reusing a point instance with new values.
+		# Returns this point object with new x, y values.
+		param newX: Value
+		param newY: Value
+		x = newX
+		y = newY
+		this
+
+	method fromPoint
+		# Copying a point from another object
+		param pt: const ref Point
+		x = pt.x
+		y = pt.y
+
+	method const clone: Point
+		# Point cloning
+		Point(x, y)
+
+	method static is0: bool
+		param a: Value
+		a == 0
+		
+	operator const ==: bool
+		param pt: const ref Point
+		is0(x - pt.x) && is0(y - pt.y)

@@ -5,9 +5,11 @@ from Python.PyForeach import PyForeach
 from Python.PyFunc import PyConstructor, PyFunc, PyMethod, PyOverloads
 from Python.PyIf import PyIf
 from Python.PyModule import PyModule
+from Python.PyOperator import PyOperator
 from Python.PyPackage import PyPackage
 from Python.PyReturn import PyReturn
-from Python.PyType import PyTypeArray, PyTypeName
+from Python.PyType import PyTypeArray, PyTypeMap, PyTypeName
+from Python.PyTypedef import PyTypedef
 from Python.PyVar import PyField, PyParam, PyReadonly, PyVar
 
 PyTaxonMap = {
@@ -29,6 +31,7 @@ PyTaxonMap = {
 	'Module': PyModule,
 	'New': PyNew,
 	'Null': PyNull,
+	'Operator': PyOperator,
 	'Overloads': PyOverloads,
 	'Package': PyPackage,
 	'Param': PyParam,
@@ -39,6 +42,8 @@ PyTaxonMap = {
 	'This': PyThis,
 	'True': PyTrue,
 	'TypeArray': PyTypeArray,
+	'Typedef': PyTypedef,
+	'TypeMap': PyTypeMap,
 	'TypeName': PyTypeName,
 	'UnOp': PyUnOp,
 	'Var': PyVar,

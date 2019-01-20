@@ -21,7 +21,7 @@ class PyClass(TaxonClass, PyTaxon):
 			taxonMap = self.core.taxonMap
 			for slot in self.slots:
 				f = taxonMap['FieldExpr']()
-				f.id = slot.getName(self)
+				f.id = slot.name # getName(self) не годится, т.к. поиск поля идет по name
 				pt = taxonMap['BinOp']()
 				pt.opCode = '.'
 				pt.addItem(taxonMap['This']())

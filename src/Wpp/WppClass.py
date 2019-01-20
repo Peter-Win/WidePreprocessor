@@ -27,7 +27,8 @@ class WppClass(TaxonClass, WppDictionary):
 
 	def readBody(self, context):
 		from Wpp.WppVar import WppField, WppReadonly
-		from Wpp.WppFunc import WppMethod, WppConstructor
+		from Wpp.WppFunc import WppMethod, WppConstructor, WppOperator
+		from Wpp.WppTypedef import WppTypedef
 		word = context.getFirstWord()
 		line = context.currentLine
 		if word == 'extends':
@@ -44,13 +45,17 @@ class WppClass(TaxonClass, WppDictionary):
 			return WppMethod()
 		if word == WppConstructor.keyWord:
 			return WppConstructor()
+		if word == WppOperator.keyWord:
+			return WppOperator(True)
+		if word == 'typedef':
+			return WppTypedef()
 		return super().readBody(context)
 
 	def addTaxon(self, taxon):
 		if 'static' in self.attrs and taxon.canBeStatic:
 			# Если класс статическмй, то элементы автоматически получают атрибут static
 			taxon.attrs.add('static')
-		if taxon.type == 'Method' or taxon.type == 'Constructor':
+		if hasattr(taxon, 'classMember'):
 			taxon.addFuncToOwner(self)
 			return taxon
 		return super().addTaxon(taxon)

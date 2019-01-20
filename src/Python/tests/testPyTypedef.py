@@ -3,19 +3,21 @@ from Wpp.WppCore import WppCore
 from Python.PyCore import PyCore
 from out.OutContextMemoryStream import OutContextMemoryStream
 
-class TestPyArray(unittest.TestCase):
-	def testArrayInit(self):
+class TestPyTypedef(unittest.TestCase):
+	def testClass(self):
 		source = """
-func public main
-	var vec: Array float = [1.11, 2.22, 3.33]
+class public Point
+	typedef Value: double
+	field public x: Value
 		"""
 		expected = """
-def main():
-	vec = [1.11, 2.22, 3.33]
+class Point:
+	__slots__ = ('x')
+	def __init__(self):
+		self.x = 0.0
 		"""
-		srcModule = WppCore.createMemModule(source, 'arrayInit.fake')
+		srcModule = WppCore.createMemModule(source, 'typedef.fake')
 		dstModule = srcModule.cloneRoot(PyCore())
-
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
 		self.assertEqual(str(outContext), expected.strip())
