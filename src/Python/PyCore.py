@@ -16,8 +16,10 @@ class PyCore(TaxonModule):
 
 		from Python.core.PyString import PyString
 		from Python.core.PyArray import PyArray
+		from Python.core.PyMath import PyMath
 		self.addNamedItem(PyString())
 		self.addNamedItem(PyArray())
+		self.addNamedItem(PyMath())
 
 		initFunctions(self)
 

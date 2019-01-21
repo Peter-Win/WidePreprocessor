@@ -161,7 +161,7 @@ class WppOperator(TaxonOperator, WppCommonFunc):
 	Например, операция x + y будет сначала пытаться вызвать x.__add__(y), и только в том случае, если это не получилось, будет пытаться вызвать y.__radd__(x).
 	"""
 	keyWord = 'operator'
-	attrsUp = ('public', 'private', 'right')
+	attrsUp = ('public', 'private')
 	classMember = True
 	def getDefaultAccessLevel(self):
 		return 'public'

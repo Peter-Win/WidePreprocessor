@@ -21,3 +21,21 @@ def lengthSqr(x, y):
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
 		self.assertEqual(str(outContext), expected.strip())
+
+	def testInitParams(self):
+		source = """
+func public add: double
+	param a: double = 0.0
+	param b: double = 0.0
+	a + b
+		"""
+		expected = """
+def add(a = 0.0, b = 0.0):
+	return a + b
+		"""
+		srcModule = WppCore.createMemModule(source, 'init.fake')
+		dstModule = srcModule.cloneRoot(PyCore())
+
+		outContext = OutContextMemoryStream()
+		dstModule.export(outContext)
+		self.assertEqual(str(outContext), expected.strip())

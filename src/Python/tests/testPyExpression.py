@@ -194,3 +194,21 @@ class Unary:
 		outStream = OutContextMemoryStream()
 		dstModule.export(outStream)
 		self.assertEqual(str(outStream), expected.strip())
+
+
+	def testTranslation(self):
+		source = """
+func public And: bool
+	param a: bool
+	param b: bool
+	a && b
+		"""
+		expected = """
+def And(a, b):
+	return a and b
+		"""
+		srcModule = WppCore.createMemModule(source, 'unary.fake')
+		dstModule = srcModule.cloneRoot(PyCore())
+		outStream = OutContextMemoryStream()
+		dstModule.export(outStream)
+		self.assertEqual(str(outStream), expected.strip())

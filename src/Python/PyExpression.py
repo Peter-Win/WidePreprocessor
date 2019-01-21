@@ -81,8 +81,16 @@ binOpPrior = {
 unOpPrior = {'~': 20, '-': 20, 'not': 130}
 ternaryOpPrior = 140
 
+binOpMap = {
+	'&&': 'and',
+	'||': 'or',
+}
+
 class PyBinOp(TaxonBinOp):
 	def onUpdate(self):
+		newCode = binOpMap.get(self.opCode)
+		if newCode:
+			self.opCode = newCode
 		if not self.prior and self.opCode in binOpPrior:
 			self.prior = binOpPrior[self.opCode]
 

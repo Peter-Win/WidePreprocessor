@@ -6,8 +6,8 @@ class simple Point
 	field public y: Value
 
 	constructor
-		param init x
-		param init y
+		param init x = 0.0
+		param init y = 0.0
 
 	method init: ref Point
 		# Reusing a point instance with new values.
@@ -30,8 +30,138 @@ class simple Point
 
 	method static is0: bool
 		param a: Value
-		a == 0
-		
+		Math.abs(a) < 0.001
+
 	operator const ==: bool
 		param pt: const ref Point
 		is0(x - pt.x) && is0(y - pt.y)
+
+	method iaddn: ref Point
+		# Point operator += (x, y)
+		param x: Value
+		param y: Value
+		this.x += x
+		this.y += y
+		return this
+
+	operator += : ref Point
+		altname iadd
+		param pt: const ref Point
+		x += pt.x
+		y += pt.y
+		this
+
+	method const addn: Point
+		# Add external numbers. Point operator + (x, y)
+		param x: Value
+		param y: Value
+		Point(this.x + x, this.y + y)
+
+	operator const +: Point
+		# Add external point. Point operator + (Point)
+		param pt: const ref Point
+		Point(x + pt.x, y + pt.y)
+
+	method isubn: ref Point
+		# Subtraction internal numbers. Point operator -= (x, y)
+		param x: Value
+		param y: Value
+		this.x -= x
+		this.y -= y
+		this
+
+	operator -=: ref Point
+		# subtraction internal (Point)
+		param pt: const ref Point
+		x -= pt.x
+		y -= pt.y
+		this
+
+	method const subn: Point
+		# Point operator - (x, y)
+		param x: Value
+		param y: Value
+		Point(this.x - x, this.y - y)
+
+	operator const -: Point
+		# Point operator - (Point)
+		param pt: const ref Point
+		Point(x - pt.x, y - pt.y)
+
+	method iminn: ref Point
+		# min internal numbers
+		param x1: Value
+		param y1: Value
+		x = Math.min(x, x1)
+		y = Math.min(y, y1)
+		this
+
+	method imin: ref Point
+		# min internal (Point)
+		param pt: const ref Point
+		iminn(pt.x, pt.y)
+
+	method imaxn: ref Point
+		# max internal numbers
+		param x1: Value
+		param y1: Value
+		x = Math.max(x, x1)
+		y = Math.max(y, y1)
+		this
+
+	method imax: ref Point
+		# max internal (Point)
+		param pt: const ref Point
+		imaxn(pt.x, pt.y)
+
+	method ineg: ref Point
+		# negative internal: pt = -pt
+		x = -x
+		y = -y
+		this
+
+	operator const -: Point
+		altname neg
+		Point(-x, -y)
+
+	operator *= : ref Point
+		# internal multiply by coefficient
+		altname imul
+		param k: Value
+		x *= k
+		y *= k
+		this
+
+	operator const *: Point
+		altname mul
+		param k: Value
+		Point(x * k, y * k)
+
+	operator right const *: Point
+		altname rmul
+		param k: Value
+		Point(k * x, k * y)
+
+	method const lengthSqr: Value
+		# square of length
+		Math.sqr(x) + Math.sqr(y)
+
+	method const length: Value
+		# Length
+		Math.sqrt(lengthSqr())
+
+	method const distSqrn: Value
+		# Square of distance to point, defined by numbers
+		param x1: Value
+		param y1: Value
+		Math.sqr(x - x1) + Math.sqr(y - y1)
+
+	method const distSqr: Value
+		# Square of distance to point
+		param pt: const ref Point
+		this.distSqrn(pt.x, pt.y)
+
+	method const dist: Value
+		# Distance to point
+		param pt: const ref Point
+		Math.sqrt(this.distSqr(pt))

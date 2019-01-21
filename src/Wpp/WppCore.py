@@ -25,6 +25,8 @@ class WppCore(TaxonModule):
 			inst.name = name
 			self.addNamedItem(inst)
 			inst.init()
+		mathModule = self.createRootModule(Context.createFromMemory(Math, 'Math.fake'))
+		self.addNamedItem(mathModule.dictionary['Math'])
 
 
 	def createRootModule(self, context):
@@ -69,3 +71,42 @@ class WppTypeScalar(Taxon):
 	def __init__(self, name):
 		super().__init__()
 		self.name = name
+
+Math = """
+class static Math
+	method pure abs: double
+		cloneScheme Owner
+		param value: double
+	method pure max: double
+		cloneScheme Owner
+		param a: double
+		param b: double
+	method pure min: double
+		cloneScheme Owner
+		param a: double
+		param b: double
+	method pure sqr: double
+		cloneScheme Owner
+		param value: double
+	method pure sqrt: double
+		cloneScheme Owner
+		param value: double
+	method pure cos: double
+		cloneScheme Owner
+		param value: double
+	method pure sin: double
+		cloneScheme Owner
+		param value: double
+	method pure tan: double
+		cloneScheme Owner
+		param value: double
+	method pure acos: double
+		cloneScheme Owner
+		param value: double
+	method pure asin: double
+		cloneScheme Owner
+		param value: double
+	method pure atan: double
+		cloneScheme Owner
+		param value: double
+"""

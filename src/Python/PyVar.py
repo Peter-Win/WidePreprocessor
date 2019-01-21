@@ -49,5 +49,5 @@ class PyParam(TaxonParam, PyCommonVar):
 		s = self.getName(self)
 		expr = self.getValueTaxon()
 		if expr:
-			s += ' ' + expr.exportString()
+			s += ' = ' + expr.exportString()
 		return s

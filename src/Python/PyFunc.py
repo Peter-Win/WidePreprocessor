@@ -1,16 +1,29 @@
 from core.TaxonFunc import TaxonOverloads, TaxonFunc, TaxonMethod, TaxonConstructor
 from Python.PyTaxon import PyTaxon
+from functools import reduce
 
 class PyOverloads(TaxonOverloads):
 	def export(self, outContext):
-		if len(self.items) != 1:
-			# Пока не поддерживается перегрузка
-			self.throwError('Python is not maintains overloaded function')
-		self.items[0].export(outContext)
+		# Разделить на специальные группы (группы используютмя только для проверки, т.к. нарушается порядок следования)
+		groups = {}
+		for item in self.items:
+			if item.type == 'Operator' and item.isUnary():
+				key = 'unary'
+			elif 'right' in item.attrs:
+				key = 'right'
+			else:
+				key = 'std'
+			groups.setdefault(key, []).append(item)
+			if len(groups[key]) > 1:
+				# Пока не поддерживается перегрузка
+				self.throwError('Python is not maintains overloaded function '+self.name)
+
+		for i in self.items:
+			i.export(outContext)
 
 class PyCommonFunc(PyTaxon):
-	def __init__(self):
-		super().__init__()
+	def __init__(self, name = None):
+		super().__init__(name)
 		self._initsAdded = False
 
 	def export(self, outContext):
