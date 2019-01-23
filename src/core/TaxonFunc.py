@@ -72,3 +72,4 @@ class TaxonConstructor(TaxonMethod):
 	def __init__(self):
 		super().__init__()
 		self.name = self.key
+

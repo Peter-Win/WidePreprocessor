@@ -58,21 +58,22 @@ class Norm:
 
 	def testMethodStatic(self):
 		source = """
-class static MyMath
+class public static MyMath
 	method abs: double
 		param value: double
 		value < 0.0 ? -value : value
+
 func public main
 	var x: double = MyMath.abs(-3.14)
 		"""
 		expected = """
-class __MyMath:
+class MyMath:
 	@staticmethod
 	def abs(value):
 		return -value if value < 0.0 else value
 
 def main():
-	x = __MyMath.abs(-3.14)
+	x = MyMath.abs(-3.14)
 		"""
 		srcModule = WppCore.createMemModule(source, 'methodStatic.fake')
 		dstModule = srcModule.cloneRoot(PyCore())
@@ -80,6 +81,17 @@ def main():
 		absOver = cls.dictionary['abs']
 		absMethod = absOver.items[0]
 		self.assertIn('static', absMethod.attrs)
+
+		main = dstModule.dictionary['main'].items[0]
+		cmd = main.getBody().items[0]
+		self.assertEqual(cmd.type, 'Var')
+		expr = cmd.getValueTaxon()
+		self.assertEqual(expr.type, 'Call')
+		pt = expr.getCaller()
+		self.assertEqual(pt.getDebugStr(), '(MyMath . abs)')
+		field = pt.getRight()
+		self.assertEqual(field.type, 'FieldExpr')
+		
 
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
@@ -157,6 +169,29 @@ class B:
 	ok = None
 	__hidden = None
 		"""
+		outContext = OutContextMemoryStream()
+		dstModule.export(outContext)
+		self.assertEqual(str(outContext).strip(), expected.strip())
+
+	def testSelfStatic(self):
+		source = """
+class Abc
+	method static toa: String
+		param s: String
+		"[" + s + "]"
+	method name: String
+		toa("Hello")
+		"""
+		expected = """
+class Abc:
+	@staticmethod
+	def toa(s):
+		return '[' + s + ']'
+	def name(self):
+		return Abc.toa('Hello')
+		"""
+		srcModule = WppCore.createMemModule(source, 'staticFields.fake')
+		dstModule = srcModule.cloneRoot(PyCore())
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
 		self.assertEqual(str(outContext).strip(), expected.strip())

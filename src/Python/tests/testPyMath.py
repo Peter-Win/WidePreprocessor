@@ -58,13 +58,26 @@ func public testCos: double
 	param x: double
 	Math.cos(x * 0.25)
 		"""
-		expected = ''
-		expected1 = """
+		expected = """
 import math
+
 def testCos(x):
 	return math.cos(x * 0.25)
 		"""
 		srcModule = WppCore.createMemModule(source, 'cos.fake')
+		dstModule = srcModule.cloneRoot(PyCore())
+		outContext = OutContextMemoryStream()
+		dstModule.export(outContext)
+		self.assertEqual(str(outContext), expected.strip())
+
+	def testPI(self):
+		source = """var a : double = Math.PI * 0.75"""
+		expected = """
+import math
+
+a = math.pi * 0.75
+		"""
+		srcModule = WppCore.createMemModule(source, 'pi.fake')
 		dstModule = srcModule.cloneRoot(PyCore())
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)

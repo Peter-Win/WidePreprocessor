@@ -74,6 +74,10 @@ class WppTypeScalar(Taxon):
 
 Math = """
 class static Math
+	field const PI: double = 3.141592653589793
+		cloneScheme Owner
+	field const E: double = 2.718281828459045
+		cloneScheme Owner
 	method pure abs: double
 		cloneScheme Owner
 		param value: double
@@ -109,4 +113,18 @@ class static Math
 	method pure atan: double
 		cloneScheme Owner
 		param value: double
+	method pure radians: double
+		cloneScheme Owner
+		param grad: double
+	method pure degrees: double
+		cloneScheme Owner
+		param rad: double
+	method pure round: double
+		cloneScheme Owner
+		param value: double
+	method pure atan2: double
+		cloneScheme Owner
+		param y: double
+		param x: double
+
 """

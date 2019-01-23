@@ -12,6 +12,9 @@ class TaxonExpression(Taxon):
 			s = '(' + s + ')'
 		return s
 
+	def getDebugStr(self):
+		return self.type
+
 	def export(self, outContext):
 		""" Используется в блоках. Например this.a = a """
 		outContext.writeln(self.exportString())
@@ -28,6 +31,9 @@ class TaxonConst(TaxonExpression):
 		result.constType = self.constType
 		result.value = self.value
 		return result
+
+	def getDebugStr(self):
+		return '%s(%s)' % (self.constType, self.value)
 
 class TaxonNull(TaxonExpression):
 	type = 'Null'
@@ -49,6 +55,40 @@ class TaxonId(TaxonExpression):
 	def getFieldDeclaration(self, name):
 		decl = self.getDeclaration()
 		return decl.getFieldDeclaration(name)
+	def getDebugStr(self):
+		return self.id
+	def checkShortStatic(self):
+		""" Проверяет, является ли данная конструкция обращением к статическому члему класса без указания класса
+		В Wpp такое возможно, но лишь внутри класса. В других языках нужно дописывать класс.
+		Если нет, возвращает None. Если да - таксон того класса, которому принадлежит поле
+		"""
+		decl = self.getDeclaration()
+		if decl.type == 'Class':
+			return None
+		if 'static' not in decl.attrs:
+			return None
+		ownerClass = decl.findOwner('Class')
+		if not ownerClass:
+			return None
+		# Теперь надо проверить, не является ли правой частью частью бинарного оператора ClassName.member
+		owner = self.owner
+		if owner.type == 'BinOp' and owner.opCode == '.' and self == owner.getRight():
+			leftDecl = owner.getLeft().getDeclaration()
+			if leftDecl.type == 'Class':
+				return None
+		return ownerClass
+
+	def updateShortStatic(self, classTaxon):
+		""" Дописать имя класса к обращению к статическому члену. Вызывается из onUpdate если testShortStatic() вернет True """
+		binOp = self.core.taxonMap['BinOp']()
+		binOp.opCode = '.'
+		self.replace(binOp)
+		idClass = self.core.taxonMap['IdExpr']()
+		field = self.core.taxonMap['FieldExpr']()
+		binOp.addItems([idClass, field])
+		idClass.id = classTaxon.name
+		idClass.setRef('decl', classTaxon)
+		field.id = self.id
 
 class TaxonIdExpr(TaxonId):
 	type = 'IdExpr'
@@ -67,6 +107,8 @@ class TaxonUnOp(TaxonOpCode):
 	type = 'UnOp'
 	def getArgument(self):
 		return self.items[0]
+	def getDebugStr(self):
+		return '(%s %s)' % (self.opCode, self.getArgument())
 
 class TaxonBinOp(TaxonOpCode):
 	type = 'BinOp'
@@ -74,6 +116,8 @@ class TaxonBinOp(TaxonOpCode):
 		return self.items[0]
 	def getRight(self):
 		return self.items[1]
+	def getDebugStr(self):
+		return '(%s %s %s)' % (self.getLeft().getDebugStr(), self.opCode, self.getRight().getDebugStr())
 
 class TaxonClassRef(TaxonExpression):
 	def getClass(self):

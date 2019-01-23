@@ -29,6 +29,7 @@ class WppClass(TaxonClass, WppDictionary):
 		from Wpp.WppVar import WppField, WppReadonly
 		from Wpp.WppFunc import WppMethod, WppConstructor, WppOperator
 		from Wpp.WppTypedef import WppTypedef
+		from Wpp.WppCast import WppCast
 		word = context.getFirstWord()
 		line = context.currentLine
 		if word == 'extends':
@@ -49,6 +50,8 @@ class WppClass(TaxonClass, WppDictionary):
 			return WppOperator(True)
 		if word == 'typedef':
 			return WppTypedef()
+		if word == 'cast':
+			return WppCast()
 		return super().readBody(context)
 
 	def addTaxon(self, taxon):

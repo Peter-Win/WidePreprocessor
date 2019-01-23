@@ -1,0 +1,21 @@
+class Rect
+	# Rectangle object
+
+	typedef Value: Point.Value
+	field A: Point
+		# Left top corner
+	field B: Point
+		# Right bottom corner
+
+	method init
+		# Init rect by number coordinates
+		param xa: Value
+			# first x
+		param ya: Value
+			# first y
+		param xb: Value
+			# second x
+		param yb: Value
+			# second y
+		A.init(xa, ya)
+		B.init(xb, yb)

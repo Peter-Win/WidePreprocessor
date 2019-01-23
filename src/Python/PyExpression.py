@@ -19,6 +19,11 @@ class PyIdExpr(TaxonIdExpr):
 		if decl.type == 'Field':
 			s = 'self.'+s
 		return s
+	def onUpdate(self):
+		cls = self.checkShortStatic()
+		if cls:
+			self.updateShortStatic(cls)
+		return super().onUpdate()
 
 class PyFieldExpr(TaxonFieldExpr):
 	def exportString(self):

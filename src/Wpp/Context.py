@@ -49,7 +49,10 @@ class Context:
 
 	def getFirstWord(self):
 		"Первое слово текущей строки"
-		return self.currentLine.split()[0]
+		w = self.currentLine.split()[0]
+		if w and w[-1] == ':':
+			w = w[:-1]
+		return w
 
 	def getCurrentLevel(self):
 		"Уровень вложенности текущей строки"

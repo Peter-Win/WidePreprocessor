@@ -165,3 +165,49 @@ class simple Point
 		# Distance to point
 		param pt: const ref Point
 		Math.sqrt(this.distSqr(pt))
+
+	method fromRad: ref Point
+		# Make unit vector from angle (in radians)
+		param radAngle: double
+			# angle in radians, for ex: Math.PI/2
+		x = Math.cos(radAngle)
+		y = Math.sin(radAngle)
+		this
+
+	method fromDeg: ref Point
+		# Make unit vector from angle (in degrees)
+		param degAngle: double
+		fromRad(Math.radians(degAngle))
+
+	method itranspose: ref Point
+		# Transpose internal
+		var tmp: Value = x
+		x = y
+		y = tmp
+		this
+
+	method const transpose: Point
+		# Transpose external
+		Point(y, x)
+
+	method static toa: String
+		# Rounding and casting to string.
+		param value: Value
+		String(Math.round(value * 1000) / 1000)
+
+	cast const: String
+		"(" + toa(x) + ", " + toa(y) + ")"
+
+	method const polarAngle: double
+		# Calculate the angle from vector
+		# *----> X
+		# | *
+		# |   *
+		# v     *
+		# Y
+		# (10,10) -> Pi/4 (45º); (10, -10) -> -Pi/4 (-45º)
+		if x == 0
+			if y == 0
+				return 0
+			return y > 0 ? Math.PI / 2 : -Math.PI / 2
+		Math.atan2(y, x)

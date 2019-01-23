@@ -36,3 +36,15 @@ class WppBlock(TaxonBlock, WppTaxon):
 	def export(self, outContext):
 		for item in self.items:
 			item.export(outContext)
+
+	def tryAutoReturn(self, funcType):
+		""" Возможная автозамена последнего выражения на return """
+		from Wpp.WppReturn import WppReturn
+		from core.TaxonExpression import TaxonExpression
+		bodyItems = self.items
+		if funcType and len(bodyItems) > 0:
+			lastCmd = bodyItems[-1]
+			if isinstance(lastCmd, TaxonExpression):
+				#TODO: Здесь надо проверять соответствие типов
+				bodyItems.pop()
+				self.addItem(WppReturn.createAuto(lastCmd))

@@ -33,3 +33,30 @@ def main():
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
 		self.assertEqual(str(outContext), expected.strip())
+
+	def testStringStr(self):
+		source = """
+var s: String = String(15)
+		"""
+		srcModule = WppCore.createMemModule(source, 'toa.fake')
+		s = srcModule.dictionary['s']
+		v = s.getValueTaxon()
+		self.assertEqual(v.type, 'New')
+		c = v.getCaller()
+		self.assertEqual(c.type, 'IdExpr')
+		wString = c.refs['decl']
+		self.assertEqual(wString.name+':'+wString.type, 'String:Class')
+
+		dstModule = srcModule.cloneRoot(PyCore())
+		s1 = dstModule.dictionary['s']
+		v1 = s1.getValueTaxon()
+		self.assertEqual(v1.type, 'New')
+		c1 = v1.getCaller()
+		self.assertEqual(c1.type, 'IdExpr')
+		pString = c1.refs['decl']
+		self.assertEqual(pString.name, 'String')
+
+		outContext = OutContextMemoryStream()
+		dstModule.export(outContext)
+		self.assertEqual(str(outContext), 's = str(15)')
+

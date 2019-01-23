@@ -97,19 +97,7 @@ class WppCommonFunc(WppTaxon):
 		if self._phase == 'update':
 			return
 		self._phase = 'update'		
-		self.tryAutoReturn()
-
-	def tryAutoReturn(self):
-		""" Возможная автозамена последнего выражения на return """
-		from Wpp.WppReturn import WppReturn
-		funcType = self.getResultType()
-		bodyItems = self.getBody().items
-		if funcType and len(bodyItems) > 0:
-			lastCmd = bodyItems[-1]
-			if isinstance(lastCmd, TaxonExpression):
-				#TODO: Здесь надо проверять соответствие типов
-				bodyItems.pop()
-				self.getBody().addItem(WppReturn.createAuto(lastCmd))
+		self.getBody().tryAutoReturn(self.getResultType())
 
 	def export(self, outContext):
 		s = (' '.join([self.keyWord] + self.exportAttrs() + [self.getName(self)])).strip()

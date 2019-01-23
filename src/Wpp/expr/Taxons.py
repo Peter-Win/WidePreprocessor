@@ -76,7 +76,7 @@ class WppCall(TaxonCall, WppExpression):
 			taxonNew.addItem(i)
 		self.replace(taxonNew)
 
-class WppNew(TaxonNew, WppExpression):
+class WppNew(TaxonNew, WppCall):
 	pass
 
 class WppUnOp(TaxonUnOp, WppExpression):

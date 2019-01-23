@@ -1,3 +1,5 @@
+import math
+
 class Point:
 	""" 2D Point (or vector) object """
 	__slots__ = ('x', 'y')
@@ -21,7 +23,7 @@ class Point:
 	def is0(a):
 		return abs(a) < 0.001
 	def __eq__(self, pt):
-		return is0(self.x - pt.x) and is0(self.y - pt.y)
+		return Point.is0(self.x - pt.x) and Point.is0(self.y - pt.y)
 	def iaddn(self, x, y):
 		""" Point operator += (x, y) """
 		self.x += x
@@ -100,4 +102,40 @@ class Point:
 	def dist(self, pt):
 		""" Distance to point """
 		return sqrt(self.distSqr(pt))
+	def fromRad(self, radAngle):
+		""" Make unit vector from angle (in radians) """
+		self.x = math.cos(radAngle)
+		self.y = math.sin(radAngle)
+		return self
+	def fromDeg(self, degAngle):
+		""" Make unit vector from angle (in degrees) """
+		return fromRad(math.radians(degAngle))
+	def itranspose(self):
+		""" Transpose internal """
+		tmp = self.x
+		self.x = self.y
+		self.y = tmp
+		return self
+	def transpose(self):
+		""" Transpose external """
+		return Point(self.y, self.x)
+	@staticmethod
+	def toa(value):
+		""" Rounding and casting to string. """
+		return str(round(value * 1000) / 1000)
+	def __str__(self):
+		return '(' + Point.toa(self.x) + ', ' + Point.toa(self.y) + ')'
+	def polarAngle(self):
+		""" Calculate the angle from vector
+		 *----> X
+		 | *
+		 |   *
+		 v     *
+		 Y
+		 (10,10) -> Pi/4 (45º); (10, -10) -> -Pi/4 (-45º) """
+		if self.x == 0:
+			if self.y == 0:
+				return 0
+			return math.pi / 2 if self.y > 0 else -math.pi / 2
+		return math.atan2(self.y, self.x)
 

@@ -1,14 +1,17 @@
 from core.TaxonClass import TaxonClass
 from Python.PyTaxon import PyTaxon
+from Python.PyImport import PyImportSimple
 
 class PyMath(TaxonClass):
 	def __init__(self):
 		super().__init__()
 		self.name = 'Math'
-		for name in ['abs', 'max', 'min', 'sqrt', 'pow']:
+		for name in ['abs', 'max', 'min', 'sqrt', 'pow', 'round']:
 			self.addNamedItem(PyMathFunc(name = name))
-		for name in ['cos', 'sin', 'tan', 'asin', 'acos', 'atan', 'log', 'log10']:
-			self.addNamedItem(PyMathMethod(name = name))			
+		for name in ['cos', 'sin', 'tan', 'asin', 'acos', 'atan', 'log', 'log10', 'degrees', 'radians', 'atan2']:
+			self.addNamedItem(PyMathMethod(name = name))
+		for name in ['PI', 'E']:
+			self.addNamedItem(PyMathConst(name = name))
 		self.addNamedItem(PyMathSqr(name = 'sqr'))
 	def getName(self, user):
 		return 'math'
@@ -31,6 +34,14 @@ class PyMathMethod(PyTaxon):
 	""" Функции, импортируемые из math """
 	def getName(self, user):
 		return self.name
+	def onRef(self, user, key):
+		user.addImport(PyImportSimple('math'))
+
+class PyMathConst(PyTaxon):
+	def getName(self, user):
+		return self.name.lower()
+	def onRef(self, user, key):
+		user.addImport(PyImportSimple('math'))
 
 class PyMathSqr(PyMathFunc):
 	type = 'MathSqr'

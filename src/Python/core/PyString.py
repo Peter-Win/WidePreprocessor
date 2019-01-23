@@ -24,6 +24,10 @@ class PyString(PyClass):
 		self.name = 'String'
 		self.addNamedItem(PyStringLength(name='length'))
 
+	def getName(self, user):
+		# if user.type == 'IdExpr' and user.owner.type == 'New': # wpp: String(...)
+		return 'str'
+
 	def getDefaultValue(self):
 		return self.core.taxonMap['Const']('string', '')
 

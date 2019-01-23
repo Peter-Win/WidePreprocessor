@@ -1,4 +1,5 @@
 from Python.PyBlock import PyBlock
+from Python.PyCast import PyCast
 from Python.PyClass import PyClass
 from Python.PyExpression import PyArrayValue, PyBinOp, PyCall, PyConst, PyFieldExpr, PyIdExpr, PyNew, PyNull, PySuper, PyThis, PyTernaryOp, PyUnOp, PyTrue, PyFalse
 from Python.PyForeach import PyForeach
@@ -17,6 +18,7 @@ PyTaxonMap = {
 	'BinOp': PyBinOp,
 	'Block': PyBlock,
 	'Call': PyCall,
+	'Cast': PyCast,
 	'Class': PyClass,
 	'Const': PyConst,
 	'Constructor': PyConstructor,

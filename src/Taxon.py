@@ -21,6 +21,7 @@ class Taxon:
 		self.location = None	# tuple(fileName, lineNumber, string)
 		self.attrs = set()
 		self.comment = ''
+		self.importBlock = None # Возможно наличие объекта TaxonImportBlock
 
 	def getName(self, user):
 		return self.name
@@ -230,6 +231,19 @@ class Taxon:
 		result = list(self.attrs)
 		result.sort()
 		return result
+
+	def createImportBlock(self, importBlockClass):
+		if not self.importBlock:
+			self.importBlock = importBlockClass()
+
+	def addImport(self, targetTaxon):
+		""" Вызывается для таксона (элемент выражения, указание на базовый класс) """
+		taxon = self
+		while taxon and not taxon.importBlock:
+			taxon = taxon.owner
+		if not taxon:
+			self.throwError('Not found import block')
+		taxon.importBlock.addImport(targetTaxon)
 
 class UpdateContext:
 	step = 0
