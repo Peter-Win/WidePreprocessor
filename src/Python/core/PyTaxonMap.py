@@ -9,7 +9,7 @@ from Python.PyModule import PyModule
 from Python.PyOperator import PyOperator
 from Python.PyPackage import PyPackage
 from Python.PyReturn import PyReturn
-from Python.PyType import PyTypeArray, PyTypeMap, PyTypeName
+from Python.PyType import PyTypeArray, PyTypeMap, PyTypeName, PyTypePath
 from Python.PyTypedef import PyTypedef
 from Python.PyVar import PyField, PyParam, PyReadonly, PyVar
 
@@ -47,6 +47,7 @@ PyTaxonMap = {
 	'Typedef': PyTypedef,
 	'TypeMap': PyTypeMap,
 	'TypeName': PyTypeName,
+	'TypePath': PyTypePath,
 	'UnOp': PyUnOp,
 	'Var': PyVar,
 }

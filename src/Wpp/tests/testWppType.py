@@ -49,3 +49,15 @@ class TestWppType(unittest.TestCase):
 		self.assertIn('const', t.attrs)
 		self.assertEqual(t.getKeyType().type, 'TypeName')
 		self.assertEqual(t.getValueType().type, 'TypeName')
+
+	def testPath(self):
+		source = """
+class public Point
+	typedef Value: double
+	field public x: Value
+	field public y: Value
+
+class public Rect
+	typedef Value: Point.Value
+		"""
+		module = WppCore.createMemModule(source, 'Rect.fake')

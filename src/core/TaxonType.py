@@ -14,6 +14,27 @@ class TaxonTypeName(TaxonType):
 	def getFieldDeclaration(self, name):
 		return self.getTypeTaxon().getFieldDeclaration(name)
 
+class TaxonTypePath(TaxonTypeName):
+	type = 'TypePath'
+	def __init__(self, path = ''):
+		super().__init__()
+		self.path = path
+		self.taxPath = None
+
+	def getTypeTaxon(self):
+		return self.taxPath[-1]
+	def onUpdate(self):
+		if not self.taxPath:
+			chunks = self.path.split('.')
+			self.taxPath = [self.findUpEx(chunks[0])]
+			for word in chunks[1:]:
+				taxon = self.taxPath[-1].dictionary.get(word)
+				if not taxon:
+					self.throwError('Invalid field "'+word+'" in '+self.path)
+				self.taxPath.append(taxon)
+
+
+
 class TaxonTypeArray(TaxonType):
 	type = 'TypeArray'
 	def getItemType(self):

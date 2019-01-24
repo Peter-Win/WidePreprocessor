@@ -2,9 +2,9 @@ class Rect
 	# Rectangle object
 
 	typedef Value: Point.Value
-	field A: Point
+	field public A: Point
 		# Left top corner
-	field B: Point
+	field public B: Point
 		# Right bottom corner
 
 	method init

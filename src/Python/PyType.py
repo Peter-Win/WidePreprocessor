@@ -1,6 +1,9 @@
-from core.TaxonType import TaxonTypeName, TaxonTypeArray, TaxonTypeMap
+from core.TaxonType import TaxonTypeName, TaxonTypeArray, TaxonTypeMap, TaxonTypePath
 
 class PyTypeName(TaxonTypeName):
+	pass
+
+class PyTypePath(TaxonTypePath):
 	pass
 
 class PyTypeArray(TaxonTypeArray):

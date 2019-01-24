@@ -1,4 +1,4 @@
-from core.TaxonType import TaxonType, TaxonTypeName, TaxonTypeArray, TaxonTypeMap
+from core.TaxonType import TaxonType, TaxonTypeName, TaxonTypePath, TaxonTypeArray, TaxonTypeMap
 
 class WppType(TaxonType):
 	@staticmethod
@@ -23,6 +23,8 @@ class WppType(TaxonType):
 				return WppTypeMap.create(keyType, valueType, attrs)
 			if i == N - 1:
 				# Type with reference by name
+				if '.' in word:
+					return WppTypePath(word, attrs)
 				return WppTypeName(word, attrs)
 			attrs.add(word)
 
@@ -63,6 +65,12 @@ class WppTypeName(TaxonTypeName):
 	def exportString(self):
 		chunks = self.getExportAttrs() + [self.getTypeTaxon().name]
 		return ' '.join(chunks)
+
+class WppTypePath(TaxonTypePath):
+	def __init__(self, path='', attrs=None):
+		super().__init__(path)
+		if attrs:
+			self.attrs |= attrs
 
 class WppTypeArray(TaxonTypeArray):
 	def __init__(self, itemType=None, attrs=None):
