@@ -20,25 +20,25 @@ class public Second
 		module = WppCore.createMemModule(source, 'superMethod.fake')
 		outContext = OutContextMemoryStream()
 		module.export(outContext)
-		self.assertEqual(str(outContext), source.strip())
+		self.assertEqual(str(outContext), module.strPack(source))
 
 
 	def testSuperConstructor(self):
 		source = """
 class public A
 	field count: int
-	constructor public
+	constructor
 		param init count
 
 class public B
 	extends A
 	field year: int
-	constructor public
+	constructor
 		param count: int
-		param init year
+		param init year = 2019
 		super(count)
 		"""
 		module = WppCore.createMemModule(source, 'testSuperConstructor.fake')
 		outContext = OutContextMemoryStream()
 		module.export(outContext)
-		self.assertEqual(str(outContext), source.strip())
+		self.assertEqual(str(outContext), module.strPack(source))

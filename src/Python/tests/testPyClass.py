@@ -36,7 +36,7 @@ class B(A):
 		self.assertEqual(classB.getParent(), classA)
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext).strip(), expected.strip())
+		self.assertEqual(str(outContext).strip(), WppCore.strPack(expected))
 
 	def testMethod(self):
 		source = """
@@ -54,7 +54,7 @@ class Norm:
 		dstModule = srcModule.cloneRoot(PyCore())
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext).strip(), expected.strip())
+		self.assertEqual(str(outContext).strip(), WppCore.strPack(expected))
 
 	def testMethodStatic(self):
 		source = """
@@ -95,7 +95,7 @@ def main():
 
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext).strip(), expected.strip())
+		self.assertEqual(str(outContext).strip(), WppCore.strPack(expected))
 
 	def testEmptyConstructor(self):
 		srcModule = WppCore.createMemModule('class Con', 'con.fake')
@@ -106,8 +106,6 @@ def main():
 		self.assertEqual(con.type, 'Constructor')
 		self.assertEqual(classCon.findConstructor(), con.owner)
 
-
-	#@unittest.skip('Need getDefaultValue')
 	def testFields(self):
 		source = """
 class public Parent
@@ -150,7 +148,7 @@ class Test:
 		"""
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext).strip(), expected.strip())
+		self.assertEqual(str(outContext).strip(), WppCore.strPack(expected))
 
 	def testStaticFields(self):
 		source = """
@@ -171,7 +169,7 @@ class B:
 		"""
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext).strip(), expected.strip())
+		self.assertEqual(str(outContext).strip(), WppCore.strPack(expected))
 
 	def testSelfStatic(self):
 		source = """
@@ -194,4 +192,26 @@ class Abc:
 		dstModule = srcModule.cloneRoot(PyCore())
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext).strip(), expected.strip())
+		self.assertEqual(str(outContext).strip(), WppCore.strPack(expected))
+
+	def testPyParamInit(self):
+		source = """
+class Point
+	field public x: double
+	field public y: double
+	constructor
+		param init x = 0
+		param init y = 0
+		"""
+		expected = """
+class Point:
+	__slots__ = ('x', 'y')
+	def __init__(self, x = 0, y = 0):
+		self.x = x
+		self.y = y
+		"""
+		srcModule = WppCore.createMemModule(source, 'paramInit.fake')
+		dstModule = srcModule.cloneRoot(PyCore())
+		outContext = OutContextMemoryStream()
+		dstModule.export(outContext)
+		self.assertEqual(str(outContext).strip(), WppCore.strPack(expected))

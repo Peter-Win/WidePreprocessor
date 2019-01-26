@@ -27,4 +27,4 @@ class B
 
 		outContext = OutContextMemoryStream()
 		module.export(outContext)
-		self.assertEqual(str(outContext).strip(), "# Comment to module\nclass A\n\nclass B")
+		self.assertEqual(str(outContext), module.strPack("# Comment to module\nclass A\n\nclass B"))

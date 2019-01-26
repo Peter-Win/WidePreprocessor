@@ -166,3 +166,8 @@ class WppConstructor(TaxonConstructor, WppCommonFunc):
 		self.name = self.key
 		# Создать пустой блок
 		self.addItem(WppBlock())
+		if not self.getAccessLevel():
+			self.attrs.add('public')
+
+	def getDefaultAccessLevel(self):
+		return 'public'

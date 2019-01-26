@@ -18,7 +18,7 @@ def testAbs(x):
 		dstModule = srcModule.cloneRoot(PyCore())
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext), expected.strip())
+		self.assertEqual(str(outContext), WppCore.strPack(expected))
 
 	def testSqrt(self):
 		source = """
@@ -34,7 +34,7 @@ def testSqrt(x):
 		dstModule = srcModule.cloneRoot(PyCore())
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext), expected.strip())
+		self.assertEqual(str(outContext), WppCore.strPack(expected))
 
 	def testSqr(self):
 		source = """
@@ -50,7 +50,7 @@ def testSqr(x):
 		dstModule = srcModule.cloneRoot(PyCore())
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext), expected.strip())
+		self.assertEqual(str(outContext), WppCore.strPack(expected))
 
 	def testCos(self):
 		source = """
@@ -68,7 +68,7 @@ def testCos(x):
 		dstModule = srcModule.cloneRoot(PyCore())
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext), expected.strip())
+		self.assertEqual(str(outContext), WppCore.strPack(expected))
 
 	def testPI(self):
 		source = """var a : double = Math.PI * 0.75"""
@@ -81,4 +81,4 @@ a = math.pi * 0.75
 		dstModule = srcModule.cloneRoot(PyCore())
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext), expected.strip())
+		self.assertEqual(str(outContext), WppCore.strPack(expected))

@@ -23,8 +23,8 @@ class Node:
 		return self.type == 'unop' and self.value == '-' and lexemType == 'const' and constType in {'int', 'fixed', 'float'}
 
 	def makeTaxon(self):
-		from Wpp.expr.Taxons import WppBinOp, WppCall, WppConst, WppFieldExpr, WppIdExpr, WppTernaryOp, WppThis, WppSuper, WppUnOp, WppArrayValue, WppTrue, WppFalse
-		keyWords = {'this': WppThis, 'super': WppSuper, 'true': WppTrue, 'false': WppFalse}
+		from Wpp.expr.Taxons import WppBinOp, WppCall, WppConst, WppFieldExpr, WppIdExpr, WppTernaryOp, WppThis, WppSuper, WppUnOp, WppArrayValue, WppTrue, WppFalse, WppNull
+		keyWords = {'this': WppThis, 'super': WppSuper, 'true': WppTrue, 'false': WppFalse, 'null': WppNull}
 
 		if self.type == 'array':
 			taxon = WppArrayValue()

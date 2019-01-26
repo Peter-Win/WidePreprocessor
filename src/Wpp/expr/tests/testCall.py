@@ -32,7 +32,7 @@ func public second: double
 
 		outContext = OutContextMemoryStream()
 		module.export(outContext)
-		self.assertEqual(str(outContext), source.strip())
+		self.assertEqual(str(outContext), module.strPack(source))
 
 	def testCallMethod(self):
 		source = """
@@ -49,7 +49,7 @@ class public CallMethod
 
 		outContext = OutContextMemoryStream()
 		module.export(outContext)
-		self.assertEqual(str(outContext), source.strip())
+		self.assertEqual(str(outContext), module.strPack(source))
 
 	def testCallMethodStatic(self):
 		source = """
@@ -74,7 +74,7 @@ func public main
 
 		outContext = OutContextMemoryStream()
 		module.export(outContext)
-		self.assertEqual(str(outContext), source.strip())
+		self.assertEqual(str(outContext), module.strPack(source))
 
 	def testNew(self):
 		source = """

@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonArrayIndex, TaxonArrayValue, TaxonBinOp, TaxonCall, TaxonConst, TaxonIdExpr, TaxonFieldExpr, TaxonNew, TaxonTernaryOp, TaxonThis, TaxonSuper, TaxonUnOp, TaxonTrue, TaxonFalse
+from core.TaxonExpression import TaxonArrayIndex, TaxonArrayValue, TaxonBinOp, TaxonCall, TaxonConst, TaxonIdExpr, TaxonFieldExpr, TaxonNew, TaxonTernaryOp, TaxonThis, TaxonSuper, TaxonUnOp, TaxonTrue, TaxonFalse, TaxonNull
 from Wpp.expr.parseExpr import slash
 from Wpp.WppExpression import WppExpression
 
@@ -55,6 +55,10 @@ class WppTrue(TaxonTrue, WppExpression):
 class WppFalse(TaxonFalse, WppExpression):
 	def exportString(self):
 		return 'false'
+
+class WppNull(TaxonNull, WppExpression):
+	def exportString(self):
+		return 'null'
 
 class WppCall(TaxonCall, WppExpression):
 	def __init__(self):

@@ -81,7 +81,6 @@ class public Atom
 	constructor
 		param init N
 		param init mass
-
 func public main
 	var H: Atom = Atom(1, 1.008)
 	var O: Atom = Atom(8, 15.999)

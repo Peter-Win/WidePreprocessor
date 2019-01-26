@@ -1,3 +1,4 @@
+from Taxon import Taxon
 
 class OutContextMemory:
 	def __init__(self):
@@ -20,4 +21,4 @@ class OutContextMemory:
 	def close(self):
 		pass
 	def __str__(self):
-		return ('\n'.join(self.lines)).strip()
+		return Taxon.strPack('\n'.join(self.lines))

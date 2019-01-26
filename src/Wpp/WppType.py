@@ -71,6 +71,9 @@ class WppTypePath(TaxonTypePath):
 		super().__init__(path)
 		if attrs:
 			self.attrs |= attrs
+	def exportString(self):
+		chunks = self.getExportAttrs() + [self.path]
+		return ' '.join(chunks)
 
 class WppTypeArray(TaxonTypeArray):
 	def __init__(self, itemType=None, attrs=None):

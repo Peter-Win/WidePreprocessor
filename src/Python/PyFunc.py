@@ -38,32 +38,6 @@ class PyCommonFunc(PyTaxon):
 		outContext.level -= 1
 		self.getBody().export(outContext)
 
-	def onUpdate(self):
-		if not self._initsAdded:
-			self._initsAdded = True
-			if not self.core:
-				self.throwError('Empty core')
-			taxonMap = self.core.taxonMap
-			ownerClass = None
-			for param in self.getAutoInits():
-				ownerClass = ownerClass or self.findOwner('Class', True)
-				eq = taxonMap['BinOp']()
-				eq.opCode = '='
-				self.getBody().addItem(eq)
-				pt = taxonMap['BinOp']()
-				pt.opCode = '.'
-				eq.addItem(pt)
-				pt.addItem(taxonMap['This']())
-				f = taxonMap['FieldExpr']()
-				linkedField = ownerClass.dictionary[param.name]
-				f.id = linkedField.getName(self)
-				pt.addItem(f)
-				v = taxonMap['IdExpr']()
-				v.id = param.name
-				v.refs['decl'] = param
-				eq.addItem(v)
-		return super().onUpdate()
-
 class PyFunc(TaxonFunc, PyCommonFunc):
 	pass
 

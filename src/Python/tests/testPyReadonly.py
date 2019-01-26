@@ -51,4 +51,4 @@ def main():
 
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
-		self.assertEqual(str(outContext), expected.strip())
+		self.assertEqual(str(outContext), WppCore.strPack(expected))

@@ -15,7 +15,7 @@ var public curYear: int = 2019
 		expected = """
 curYear = 2019
 		"""
-		self.assertEqual(str(outStream), expected.strip())
+		self.assertEqual(str(outStream), WppCore.strPack(expected))
 
 	def testField(self):
 		source = """
@@ -52,7 +52,7 @@ class Field:
 
 		outStream = OutContextMemoryStream()
 		dstModule.export(outStream)
-		self.assertEqual(str(outStream), expected.strip())
+		self.assertEqual(str(outStream), WppCore.strPack(expected))
 
 	def testBinOp(self):
 		source = """
@@ -68,7 +68,7 @@ __first = 2.2
 
 second = (__first + 1.1) / 3.3
 		"""
-		self.assertEqual(str(outStream), expected.strip())
+		self.assertEqual(str(outStream), WppCore.strPack(expected))
 
 	def testCall(self):
 		source = """
@@ -91,7 +91,7 @@ def func1(x):
 def func2(a, b):
 	return func1(a) + func1(b)
 		"""
-		self.assertEqual(str(outStream), expected.strip())
+		self.assertEqual(str(outStream), WppCore.strPack(expected))
 
 	def testNew(self):
 		source = """
@@ -110,7 +110,7 @@ def createUno():
 		dstModule = srcModule.cloneRoot(PyCore())
 		outStream = OutContextMemoryStream()
 		dstModule.export(outStream)
-		self.assertEqual(str(outStream), expected.strip())
+		self.assertEqual(str(outStream), WppCore.strPack(expected))
 
 	def testSuper(self):
 		source = """
@@ -142,7 +142,7 @@ class B(A):
 		super().__init__(index)
 		self.mass = mass
 		"""
-		self.assertEqual(str(outStream), expected.strip())
+		self.assertEqual(str(outStream), WppCore.strPack(expected))
 
 	def testTernary(self):
 		source = """
@@ -158,7 +158,7 @@ def isGood(value):
 		dstModule = srcModule.cloneRoot(PyCore())
 		outStream = OutContextMemoryStream()
 		dstModule.export(outStream)
-		self.assertEqual(str(outStream), expected.strip())
+		self.assertEqual(str(outStream), WppCore.strPack(expected))
 
 	#@unittest.skip('Need fields')
 	def testUnary(self):
@@ -193,7 +193,7 @@ class Unary:
 		dstModule = srcModule.cloneRoot(PyCore())
 		outStream = OutContextMemoryStream()
 		dstModule.export(outStream)
-		self.assertEqual(str(outStream), expected.strip())
+		self.assertEqual(str(outStream), WppCore.strPack(expected))
 
 
 	def testTranslation(self):
@@ -211,4 +211,4 @@ def And(a, b):
 		dstModule = srcModule.cloneRoot(PyCore())
 		outStream = OutContextMemoryStream()
 		dstModule.export(outStream)
-		self.assertEqual(str(outStream), expected.strip())
+		self.assertEqual(str(outStream), WppCore.strPack(expected))

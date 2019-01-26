@@ -15,9 +15,9 @@ class TaxonExpression(Taxon):
 	def getDebugStr(self):
 		return self.type
 
-	def export(self, outContext):
-		""" Используется в блоках. Например this.a = a """
-		outContext.writeln(self.exportString())
+	# def export(self, outContext):
+	# 	""" Используется в блоках. Например this.a = a """
+	# 	outContext.writeln(self.exportString())
 
 class TaxonConst(TaxonExpression):
 	type = 'Const'
@@ -46,6 +46,9 @@ class TaxonFalse(TaxonExpression):
 
 class TaxonId(TaxonExpression):
 	__slots__ = ('id') # Идентификатор хранится не в name, чтобы при поиске findUp не происходило ложное срабатывание
+	def __init__(self, id = None):
+		super().__init__()
+		self.id = id
 	def clone(self, newCore):
 		result = super().clone(newCore)
 		result.id = self.id
@@ -98,6 +101,9 @@ class TaxonFieldExpr(TaxonId):
 
 class TaxonOpCode(TaxonExpression):
 	__slots__ = ('opCode')
+	def __init__(self, opCode = None):
+		super().__init__()
+		self.opCode = opCode
 	def clone(self, newCore):
 		result = super().clone(newCore)
 		result.opCode = self.opCode

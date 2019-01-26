@@ -28,4 +28,4 @@ func public falseName: String
 
 		outContext = OutContextMemoryStream()
 		module.export(outContext)
-		self.assertEqual(str(outContext), source.strip())
+		self.assertEqual(str(outContext), module.strPack(source))

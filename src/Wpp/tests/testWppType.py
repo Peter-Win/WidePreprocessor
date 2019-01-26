@@ -2,6 +2,7 @@ import unittest
 from Wpp.WppType import WppType, splitComma
 from Wpp.Context import Context
 from Wpp.WppCore import WppCore
+from out.OutContextMemoryStream import OutContextMemoryStream
 
 class TestWppType(unittest.TestCase):
 	def testTypeName(self):
@@ -61,3 +62,6 @@ class public Rect
 	typedef Value: Point.Value
 		"""
 		module = WppCore.createMemModule(source, 'Rect.fake')
+		outContext = OutContextMemoryStream()
+		module.export(outContext)
+		self.assertEqual(str(outContext), module.strPack(source))

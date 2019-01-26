@@ -1,18 +1,22 @@
 from core.TaxonExpression import TaxonArrayValue, TaxonCall, TaxonConst, TaxonBinOp, TaxonFieldExpr, TaxonIdExpr, TaxonNew, TaxonNull, TaxonSuper, TaxonThis, TaxonTernaryOp, TaxonUnOp, TaxonTrue, TaxonFalse
 from Python.core.PyString import PyString
 
-class PyArrayValue(TaxonArrayValue):
+class PyExpression:
+	def export(self, outContext):
+		outContext.writeln(self.exportString())
+
+class PyArrayValue(TaxonArrayValue, PyExpression):
 	def exportString(self):
 		s = '[' + ', '.join([i.exportString() for i in self.items]) + ']'
 		return s
 
-class PyConst(TaxonConst):
+class PyConst(TaxonConst, PyExpression):
 	def exportString(self):
 		if self.constType == 'string':
 			return PyString.exportConst(self.value)
 		return self.value
 
-class PyIdExpr(TaxonIdExpr):
+class PyIdExpr(TaxonIdExpr, PyExpression):
 	def exportString(self):
 		decl = self.getDeclaration()
 		s = decl.getName(self)
@@ -25,32 +29,32 @@ class PyIdExpr(TaxonIdExpr):
 			self.updateShortStatic(cls)
 		return super().onUpdate()
 
-class PyFieldExpr(TaxonFieldExpr):
+class PyFieldExpr(TaxonFieldExpr, PyExpression):
 	def exportString(self):
 		decl = self.owner.getLeft().getFieldDeclaration(self.id)
 		return decl.getName(self)
 
-class PyThis(TaxonThis):
+class PyThis(TaxonThis, PyExpression):
 	def exportString(self):
 		return 'self'
 
-class PySuper(TaxonSuper):
+class PySuper(TaxonSuper, PyExpression):
 	def exportString(self):
 		return 'super()'
 
-class PyNull(TaxonNull):
+class PyNull(TaxonNull, PyExpression):
 	def exportString(self):
 		return 'None'
 
-class PyTrue(TaxonTrue):
+class PyTrue(TaxonTrue, PyExpression):
 	def exportString(self):
 		return 'True'
 
-class PyFalse(TaxonFalse):
+class PyFalse(TaxonFalse, PyExpression):
 	def exportString(self):
 		return 'False'
 
-class PyCall(TaxonCall):
+class PyCall(TaxonCall, PyExpression):
 	def __init__(self):
 		super().__init__()
 		self.prior = binOpPrior['.']
@@ -63,7 +67,7 @@ class PyCall(TaxonCall):
 		else:
 			return super().exportString()
 
-class PyNew(TaxonNew):
+class PyNew(TaxonNew, PyExpression):
 	def __init__(self):
 		super().__init__()
 		self.prior = binOpPrior['.']
@@ -91,7 +95,7 @@ binOpMap = {
 	'||': 'or',
 }
 
-class PyBinOp(TaxonBinOp):
+class PyBinOp(TaxonBinOp, PyExpression):
 	def onUpdate(self):
 		newCode = binOpMap.get(self.opCode)
 		if newCode:
@@ -107,7 +111,7 @@ class PyBinOp(TaxonBinOp):
 			op = ' ' + op + ' '
 		return self.priorExportString(left) + op + self.priorExportString(right)
 
-class PyTernaryOp(TaxonTernaryOp):
+class PyTernaryOp(TaxonTernaryOp, PyExpression):
 	def __init__(self):
 		super().__init__()
 		self.prior = ternaryOpPrior
@@ -118,7 +122,7 @@ class PyTernaryOp(TaxonTernaryOp):
 		s += ' else ' + self.priorExportString(self.getNegative())
 		return s
 
-class PyUnOp(TaxonUnOp):
+class PyUnOp(TaxonUnOp, PyExpression):
 	def onUpdate(self):
 		if not self.prior and self.opCode in unOpPrior:
 			self.prior = unOpPrior[self.opCode]

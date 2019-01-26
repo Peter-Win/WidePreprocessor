@@ -21,8 +21,6 @@ class PyField(TaxonField, PyCommonVar):
 		if 'static' not in self.attrs:
 			return
 		super().export(outContext)
-	# def getName(self, user):
-	# 	return self.name
 
 class PyReadonly(TaxonReadonly, PyCommonVar):
 	def getPrivateFieldName(self):
@@ -42,12 +40,19 @@ class PyReadonly(TaxonReadonly, PyCommonVar):
 		outContext.level -= 1
 
 class PyParam(TaxonParam, PyCommonVar):
+	def __init__(self):
+		super().__init__()
+		self._autoInit = False
 	def getName(self, user):
 		return self.name
-
 	def exportString(self):
 		s = self.getName(self)
 		expr = self.getValueTaxon()
 		if expr:
 			s += ' = ' + expr.exportString()
 		return s
+	def onUpdate(self):
+		if not self._autoInit and self.autoInitField():
+			self._autoInit = True
+			self.insertParamInitCode()
+		return super().onUpdate()

@@ -245,6 +245,14 @@ class Taxon:
 			self.throwError('Not found import block')
 		taxon.importBlock.addImport(targetTaxon)
 
+	def creator(self, typeId):
+		return self.core.taxonMap[typeId]
+
+	@staticmethod
+	def strPack(value):
+		lines = value.split('\n')
+		return '\n'.join(filter(lambda s: s.strip(), lines))
+
 class UpdateContext:
 	step = 0
 	items = []
