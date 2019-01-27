@@ -7,6 +7,8 @@ class TsString(TsClass):
 		self.name = 'String'
 
 	def getName(self, user):
+		if user.type == 'IdExpr' and user.owner.type == 'New':
+			return 'String'
 		return 'string'
 
 	@staticmethod

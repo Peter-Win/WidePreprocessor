@@ -1,6 +1,7 @@
 from Taxon import Taxon
 from TaxonDictionary import TaxonDictionary
 from core.TaxonBlock import TaxonBlock
+from core.Operators import BinOpNames, UnOpNames
 
 class TaxonOverloads(Taxon):
 	type = 'Overloads'
@@ -65,6 +66,14 @@ class TaxonOperator(TaxonCommonFunc):
 		return len(self.getParams()) == 1
 	def isUnary(self):
 		return len(self.getParams()) == 0
+	def getPossibleName(self):
+		""" Альтернативное имя, которое используется для тех языков, которые не поддерживают перегрузку операторов """
+		if self.altName:
+			return self.altName
+		name = (BinOpNames if self.isBinary() else UnOpNames)[self.name]
+		if 'right' in self.attrs:
+			name = 'r' + name
+		return name
 
 class TaxonConstructor(TaxonMethod):
 	type = 'Constructor'

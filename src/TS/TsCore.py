@@ -8,9 +8,11 @@ class TsCore(TaxonModule):
 		self.core = self
 		from TS.core.TsTaxonMap import TsTaxonMap
 		from TS.core.TsString import TsString
+		from TS.core.TsMath import TsMath
 
 		self.taxonMap = TsTaxonMap
 		self.addNamedItem(TsString())
+		self.addNamedItem(TsMath())
 
 		Scalars = [
 			('bool', 'boolean', 'False'),

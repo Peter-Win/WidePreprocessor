@@ -20,6 +20,10 @@ class TaxonTypePath(TaxonTypeName):
 		super().__init__()
 		self.path = path
 		self.taxPath = None
+	def clone(self, newCore):
+		result = super().clone(newCore)
+		result.path = self.path
+		return result
 
 	def getTypeTaxon(self):
 		return self.taxPath[-1]

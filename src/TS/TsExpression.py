@@ -57,21 +57,19 @@ class TsCall(TaxonCall, TsExpression):
 	def __init__(self):
 		super().__init__()
 		self.prior = binOpPrior['.']
-	# def exportString(self):
-	# 	caller = self.getCaller()
-	# 	if caller.type == 'Super':
-	# 		s = caller.exportString()+'.__init__('
-	# 		s += ', '.join([arg.exportString() for arg in self.getArguments()]) + ')'
-	# 		return s
-	# 	else:
-	# 		return super().exportString()
 
 class TsNew(TaxonNew, TsExpression):
 	def __init__(self):
 		super().__init__()
 		self.prior = binOpPrior['.']
 	def exportString(self):
-		return 'new ' + super().exportString()
+		s = super().exportString()
+		caller = self.getCaller()
+		if caller.type == 'IdExpr':
+			decl = caller.getDeclaration()
+			if decl.type == 'Class' and decl.name == 'String' and decl.owner == decl.core:
+				return s
+		return 'new ' + s
 
 # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
 binOpPrior = {
