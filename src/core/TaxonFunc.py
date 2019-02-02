@@ -12,14 +12,6 @@ class TaxonCommonFunc(TaxonDictionary):
 	Может иметь тип результата (второй, если есть)
 	И параметры, которые доступны через dictionary
 	"""
-	def __init__(self):
-		super().__init__()
-		self.altName = ''
-
-	def clone(self, newCore):
-		result = super().clone(newCore)
-		result.altName = self.altName
-		return result
 
 	def getBody(self):
 		""" Тело функции присутствует всегда"""

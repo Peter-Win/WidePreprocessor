@@ -22,13 +22,21 @@ class Taxon:
 		self.attrs = set()
 		self.comment = ''
 		self.importBlock = None # Возможно наличие объекта TaxonImportBlock
+		self.altName = ''
 
 	def getName(self, user):
 		return self.name
 
-	def addItem(self, item):
+	def isClass(self):
+		return False
+
+	def addItem(self, item, nextItem = None):
 		item.owner = self
-		self.items.append(item)
+		if nextItem:
+			i = self.items.index(nextItem)
+			self.items.insert(i, item)
+		else:
+			self.items.append(item)
 		if self.core:
 			item.core = self.core
 			item._setCore()
@@ -99,6 +107,7 @@ class Taxon:
 		newTaxon.type = self.type
 		newTaxon.name = self.name
 		newTaxon.location = self.location
+		newTaxon.altName = self.altName
 		self.derivedTaxon = newTaxon
 		for i in self.items:
 			n = i.clone(newCore)

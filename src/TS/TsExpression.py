@@ -19,7 +19,7 @@ class TsIdExpr(TaxonIdExpr, TsExpression):
 	def exportString(self):
 		decl = self.getDeclaration()
 		s = decl.getName(self)
-		if decl.type == 'Field':
+		if decl.owner.type == 'Class' or (decl.owner.type == 'Overloads' and delc.owner.owner.type == 'Class'):
 			s = 'this.'+s
 		return s
 	def onUpdate(self):

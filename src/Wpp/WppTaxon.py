@@ -17,6 +17,9 @@ class WppTaxon(Taxon):
 		if word == 'cloneScheme':
 			self.cloneScheme = pair[1]
 			return None
+		if word == 'altname':
+			self.altName = context.currentLine.split()[1]
+			return None
 		context.throwError('Invalid instruction')
 
 	def addTaxon(self, taxon):

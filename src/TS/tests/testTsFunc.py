@@ -25,3 +25,28 @@ export class Test {
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
 		self.assertEqual(str(outContext), expected.strip())
+
+	def testCheckThis(self):
+		source = """
+class A
+	method first: String
+		"Hello, "
+	method second: String
+		param name: String
+		first() + name
+		"""
+		expected = """
+export class A {
+	public first(): string {
+		return 'Hello, ';
+	}
+	public second(name: string): string {
+		return this.first() + name;
+	}
+}
+		"""
+		srcModule = WppCore.createMemModule(source, 'simple.fake')
+		dstModule = srcModule.cloneRoot(TsCore())
+		outContext = OutContextMemoryStream()
+		dstModule.export(outContext)
+		self.assertEqual(str(outContext), expected.strip())

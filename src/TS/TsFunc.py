@@ -4,8 +4,14 @@ from TS.TsTaxon import TsTaxon
 class TsOverloads(TaxonOverloads):
 	def export(self, outContext):
 		if len(self.items) != 1:
-			self.throwError('TypeScript is not maintains overloaded function '+self.name)
-		self.items[0].export(outContext)
+			names = set()
+			for item in self.items:
+				name = item.getName(self)
+				if name in names:
+					self.throwError('TypeScript is not maintains overloaded function: %s(%s)' % (self.name, name))
+				names.add(name)
+		for item in self.items:
+			item.export(outContext)
 
 class TsCommonFunc(TsTaxon):
 	def exportSignature(self):
@@ -15,6 +21,9 @@ class TsCommonFunc(TsTaxon):
 		if t:
 			s += ': ' + t.exportString()
 		return s
+
+	def getName(self, user):
+		return self.altName or self.name
 
 class TsFunc(TaxonFunc, TsCommonFunc):
 	def export(self, outContext):

@@ -79,9 +79,9 @@ class WppCommonFunc(WppTaxon):
 		word = context.getFirstWord()
 		if word == 'param':
 			return WppParam(), True
-		if word == 'altname':
-			self.altName = context.currentLine.split()[1]
-			return None, True
+		# if word == 'altname':
+		# 	self.altName = context.currentLine.split()[1]
+		# 	return None, True
 		return None, False
 
 	def readFunctionBody(self, context):

@@ -4,6 +4,9 @@ class TaxonClass (TaxonDictionary):
 	type = 'Class'
 	canBeStatic = True
 
+	def isClass(self):
+		return True
+
 	def getParent(self):
 		return self.refs.get('ext')
 
