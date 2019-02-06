@@ -39,7 +39,10 @@ class TsParam(TaxonField, TsCommonVar):
 	def onUpdate(self):
 		if not self._autoInit and self.autoInitField():
 			self._autoInit = True
-			self.insertParamInitCode()
+			initCode = self.createParamInitCode()
+			func = self.owner
+			cmd = getattr(func, 'cmdAfterParamInit', None)
+			func.getBody().addItem(initCode, nextItem = cmd)
 		return super().onUpdate()
 
 class TsReadonly(TaxonReadonly, TsField):

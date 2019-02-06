@@ -10,3 +10,8 @@ class TaxonBlock(Taxon):
 			if cmd.type == 'Var' and cmd.name == name:
 				return cmd
 		return self.owner.findUp(name, fromWho, source)
+
+	def getQuasiType(self):
+		# Вызов функции из тела. Н.р. someFunc(...)
+		# Означает, что результат игнорируется
+		return None

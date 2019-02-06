@@ -20,6 +20,15 @@ class TaxonClass (TaxonDictionary):
 			self.throwError('Not found field "'+name+'" in '+self.getPath())
 		return field
 
+	def matchQuasi(self, quasiType):
+		#TODO: пока без наследования
+		if self == quasiType:
+			return 'exact'
+		if hasattr(quasiType, 'getTypeTaxon'):
+			if quasiType.getTypeTaxon() == self:
+				return 'exact'
+		return ''
+
 	def findUp(self, name, fromWho, source):
 		""" Переопределенная фунция класса Taxon
 		Позволяет искать среди членов класса, но не спускаясь в них

@@ -60,3 +60,24 @@ export class Point {
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
 		self.assertEqual(str(outContext), WppCore.strPack(expected))
+
+	def testMinus(self):
+		source = """
+class Point
+	field x: double
+	field y: double
+	constructor
+		param init x
+		param init y
+	operator -: Point
+		param pt: Point
+		Point(x - pt.x, y - pt.y)
+	operator -: Point
+		Point(-x, -y)
+		"""
+		expected = ''
+		srcModule = WppCore.createMemModule(source, 'minus.fake')
+		dstModule = srcModule.cloneRoot(TsCore())
+		outContext = OutContextMemoryStream()
+		dstModule.export(outContext)
+		self.assertEqual(str(outContext), WppCore.strPack(expected))

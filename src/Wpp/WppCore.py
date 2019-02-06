@@ -13,8 +13,8 @@ class WppCore(TaxonModule):
 		self.taxonMap = WppTaxonMap
 		self.name = 'WppCore'
 
-		for name in Scalars:
-			self.addNamedItem(WppTypeScalar(name))
+		for name, matchConst in Scalars:
+			self.addNamedItem(WppTypeScalar(name, matchConst))
 
 		complexTypes = [
 			('String', WppString),
@@ -58,19 +58,30 @@ class WppCore(TaxonModule):
 		core = WppCore()
 		return core.createRootModule(Context.createFromMemory(source, fakeName))
 
+intMatches = {'int': 'constExact'}
+floatMatches = {'fixed': 'constExact', 'float': 'constExact', 'int': 'constNear'}
 
 Scalars = [
-	'bool',
-	'int',
-	'long',
-	'float',
-	'double'
+	('bool', {'bool': 'constExact'}),
+	('int', intMatches),
+	('long', intMatches),
+	('float', floatMatches),
+	('double', floatMatches),
 ]
 class WppTypeScalar(Taxon):
 	type = 'TypeScalar'
-	def __init__(self, name):
+	def __init__(self, name, matchConst):
 		super().__init__()
 		self.name = name
+		self.matchConst = matchConst
+	def matchQuasi(self, quasiType):
+		if self == quasiType:
+			return 'exact'
+		if hasattr(quasiType, 'getTypeTaxon'):
+			return 'exact' if quasiType.getTypeTaxon() == self else ''
+		if quasiType.type == 'Const':
+			return self.matchConst.get(quasiType.constType, '')
+		return ''
 
 Math = """
 class static Math

@@ -10,3 +10,12 @@ class TaxonReturn(Taxon):
 
 	def getExpression(self):
 		return self.items[0] if len(self.items) == 1 else None
+
+	def getOwnerFunc(self):
+		taxon = self
+		while taxon.owner.type != 'Overloads':
+			taxon = taxon.owner
+		return taxon
+	def getQuasiType(self):
+		fn = self.getOwnerFunc()
+		return fn.getResultType()

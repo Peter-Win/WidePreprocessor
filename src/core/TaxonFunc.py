@@ -2,9 +2,24 @@ from Taxon import Taxon
 from TaxonDictionary import TaxonDictionary
 from core.TaxonBlock import TaxonBlock
 from core.Operators import BinOpNames, UnOpNames
+from core.Signature import Signature
 
 class TaxonOverloads(Taxon):
 	type = 'Overloads'
+
+	def find(self, caller):
+		sign = Signature.createFromCall(caller)
+		weights = []
+		for fn in self.items:
+			curWeight = sign.match(fn)
+			if curWeight:
+				weights.append((curWeight, fn))
+		if len(weights) == 0:
+			self.throwError('Cant match call of '+self.getPath()+' '+str(sign))
+		weights.sort()
+		if len(weights) > 2 and weights[0][0] == weights[1][0]:
+			self.throwError('Too many matches for '+self.getPath()+' '+str(sign))
+		return weights[0][1]
 
 class TaxonCommonFunc(TaxonDictionary):
 	""" Функция или метод класса
@@ -32,6 +47,11 @@ class TaxonCommonFunc(TaxonDictionary):
 	def getAutoInits(self):
 		""" Список параметров с автоинициализацией """
 		return [param for param in self.getParams() if 'init' in param.attrs]
+
+	def checkSignature(self, sign):
+		""" Сигнатура создаётся таксоном типа Call. А здесь происходит сопоставление
+		Возвращается числовой вес. Чем выше, тем лучше соответствие.
+		"""
 
 class TaxonFunc(TaxonCommonFunc):
 	type = 'Func'

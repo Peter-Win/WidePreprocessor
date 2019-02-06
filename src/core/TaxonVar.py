@@ -4,6 +4,11 @@ class TaxonCommonVar(Taxon):
 	def getLocalType(self):
 		return self.items[0]
 
+	def getFinalType(self):
+		return self.getLocalType().getFinalType()
+	def getQuasiType(self):
+		return self.getLocalType()	# TODO: Заменить на getFinalType
+
 	def getValueTaxon(self):
 		return self.items[1] if len(self.items) > 1 else None
 
@@ -14,13 +19,7 @@ class TaxonCommonVar(Taxon):
 		""" Если это параметр конструктора, созданый через param init name, то возвращает поле name """
 		return self.refs.get('field')
 
-	def insertParamInitCode(self):
-		"""
-		Используется для параметров конструктора с атрибутом init.
-		Генерирует код инициализации this.name = name
-		Вызывается "вручную" из onUpdate таксона параметра для тех языков, где это нужно.
-		А нужно почти всегда, кроме Wpp и С++. Ну или в TypeScript можно использовать constructor(public x: number)
-		"""
+	def createParamInitCode(self):
 		pt = self.creator('BinOp')(opCode = '.')
 		pt.addItems([self.creator('This')(), self.creator('FieldExpr')(id = self.name)])
 		pt.getRight().refs['decl'] = self.autoInitField()
@@ -28,16 +27,17 @@ class TaxonCommonVar(Taxon):
 		command.addItems([pt, self.creator('IdExpr')(id = self.name)])
 		command.getRight().refs['decl'] = self;
 		command.attrs.add('paramInitializer')
-		# Теперь нужно вставить в тело конструктора
+		return command
+
+	def insertParamInitCode(self):
+		"""
+		Используется для параметров конструктора с атрибутом init.
+		Генерирует код инициализации this.name = name
+		Вызывается "вручную" из onUpdate таксона параметра для тех языков, где это нужно.
+		А нужно почти всегда, кроме Wpp и С++. Ну или в TypeScript можно использовать constructor(public x: number)
+		"""
 		body = self.owner.getBody()
-		body.addItem(command)
-		return
-		# Переместить конструкцию в самое начало, но после других аналогичных, которые бвли добавлены ранее
-		body.items.pop()
-		for i, cmd in enumerate(body.items):
-			if 'paramInitializer' not in cmd.attrs:
-				break
-		body.items.insert(i, command)
+		body.addItem(self.createParamInitCode())
 
 class TaxonVar(TaxonCommonVar):
 	""" Классическая переменная.

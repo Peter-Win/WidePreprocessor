@@ -11,3 +11,10 @@ field length: unsigned long
 		readWpp(ctx, self)
 		length = self.dictionary['length']
 		length.cloneScheme = 'Owner'
+
+	def matchQuasi(self, matchQuasi):
+		if matchQuasi == self:
+			return 'exact'
+		if matchQuasi.type == 'Const':
+			return 'constExact' if matchQuasi.constType == 'string' else ''
+		return ''

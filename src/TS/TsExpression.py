@@ -2,6 +2,14 @@ from core.TaxonExpression import TaxonArrayValue, TaxonCall, TaxonConst, TaxonBi
 from TS.core.TsString import TsString
 from TS.TsTaxon import TsTaxon
 
+def locateThis(taxon):
+	""" В результате замены перегруженных конструкторов на статические фабрики требуется менять this на обращение к переменной """
+	if hasattr(taxon, 'instName'):
+		return taxon.instName
+	if taxon.type == 'Class':
+		return 'this'
+	return locateThis(taxon.owner)
+
 class TsExpression(TsTaxon):
 	def export(self, outContext):
 		outContext.writeln(self.exportString() + ';')
@@ -20,7 +28,7 @@ class TsIdExpr(TaxonIdExpr, TsExpression):
 		decl = self.getDeclaration()
 		s = decl.getName(self)
 		if decl.owner.type == 'Class' or (decl.owner.type == 'Overloads' and delc.owner.owner.type == 'Class'):
-			s = 'this.'+s
+			s = locateThis(self) + '.'+s
 		return s
 	def onUpdate(self):
 		cls = self.checkShortStatic()
@@ -35,7 +43,7 @@ class TsFieldExpr(TaxonFieldExpr, TsExpression):
 
 class TsThis(TaxonThis, TsExpression):
 	def exportString(self):
-		return 'this'
+		return locateThis(self)
 
 class TsSuper(TaxonSuper, TsExpression):
 	def exportString(self):

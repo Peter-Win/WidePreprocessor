@@ -13,6 +13,8 @@ class TaxonTypeName(TaxonType):
 		return self.getTypeTaxon().getDefaultValue()
 	def getFieldDeclaration(self, name):
 		return self.getTypeTaxon().getFieldDeclaration(name)
+	def matchQuasi(self, quasiType):
+		return self.getTypeTaxon().matchQuasi(quasiType)
 
 class TaxonTypePath(TaxonTypeName):
 	type = 'TypePath'

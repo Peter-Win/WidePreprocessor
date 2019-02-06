@@ -4,536 +4,723 @@
 		"selected_items":
 		[
 			[
-				"read",
-				"readHead"
-			],
-			[
-				"new",
-				"newCore"
+				"cls",
+				"clsTaxon"
 			],
 			[
 				"add",
-				"addItem"
+				"addItems"
 			],
 			[
-				"Taxon",
-				"TaxonSrc"
+				"new",
+				"newTaxon"
 			],
 			[
-				"a",
-				"assertEqual"
-			],
-			[
-				"line",
-				"lineNumber"
-			],
-			[
-				"de",
-				"desiredType"
-			],
-			[
-				"type",
-				"typeExpr"
+				"super",
+				"superOwner"
 			],
 			[
 				"get",
-				"getFinalType"
+				"getName"
 			],
 			[
-				"__",
-				"__class__"
+				"_",
+				"_hidden"
+			],
+			[
+				"Ty",
+				"TsTypedef"
+			],
+			[
+				"exp",
+				"expected"
+			],
+			[
+				"r",
+				"return"
+			],
+			[
+				"is",
+				"isBinary"
+			],
+			[
+				"Bi",
+				"BinOpNames"
+			],
+			[
+				"TsTy",
+				"TsTypedef"
+			],
+			[
+				"Ts",
+				"TsTaxon"
+			],
+			[
+				"type",
+				"typeId"
+			],
+			[
+				"ta",
+				"taxonMap"
+			],
+			[
+				"TsCon",
+				"TsConstructor"
+			],
+			[
+				"bin",
+				"binOpCvt"
+			],
+			[
+				"ex",
+				"expected"
+			],
+			[
+				"binOp",
+				"binOpPrior"
+			],
+			[
+				"TsF",
+				"TsFieldExpr"
+			],
+			[
+				"e",
+				"export"
+			],
+			[
+				"Wpp",
+				"WppCore"
+			],
+			[
+				"Taxo",
+				"TaxonField"
+			],
+			[
+				"Ta",
+				"TaxonVar"
+			],
+			[
+				"PyTy",
+				"PyTypePath"
+			],
+			[
+				"Taxon",
+				"TaxonTypePath"
+			],
+			[
+				"tax",
+				"taxPath"
+			],
+			[
+				"PyMat",
+				"PyMathConst"
+			],
+			[
+				"getDe",
+				"getDebugStr"
+			],
+			[
+				"clas",
+				"classTaxon"
+			],
+			[
+				"id",
+				"idClass"
+			],
+			[
+				"cla",
+				"classTaxon"
+			],
+			[
+				"use",
+				"useInstShort"
+			],
+			[
+				"o",
+				"onUpdate"
+			],
+			[
+				"py",
+				"pyString"
+			],
+			[
+				"Py",
+				"PyCore"
+			],
+			[
+				"im",
+				"importBlockClass"
+			],
+			[
+				"Import",
+				"importBlock"
+			],
+			[
+				"import",
+				"importBlock"
+			],
+			[
+				"PyM",
+				"PyMathFunc"
+			],
+			[
+				"user",
+				"userOwner"
+			],
+			[
+				"out",
+				"outContext"
+			],
+			[
+				"create",
+				"createFromMemory"
+			],
+			[
+				"createRoo",
+				"createRootPackage"
+			],
+			[
+				"Tax",
+				"TaxonMethod"
+			],
+			[
+				"Math",
+				"MathAbs"
 			],
 			[
 				"op",
 				"opCode"
 			],
 			[
-				"Core",
-				"CoreArray"
+				"bi",
+				"binOpMap"
 			],
 			[
-				"Taxo",
-				"TaxonArrayIndex"
-			],
-			[
-				"Ta",
-				"Taxon"
-			],
-			[
-				"Array",
-				"TaxonArrayIndex"
-			],
-			[
-				"lex",
-				"lexems"
-			],
-			[
-				"make",
-				"makeAttrString"
-			],
-			[
-				"Type",
-				"TypeExprCPP"
-			],
-			[
-				"ty",
-				"typeExprName"
-			],
-			[
-				"typ",
-				"typeExpr"
-			],
-			[
-				"item",
-				"itemType"
-			],
-			[
-				"Arr",
-				"ArrayType"
-			],
-			[
-				"Tax",
-				"TaxonTernaryOp"
-			],
-			[
-				"ex",
-				"expression"
-			],
-			[
-				"ter",
-				"ternar"
-			],
-			[
-				"le",
-				"lexems"
-			],
-			[
-				"spec",
-				"specWords"
-			],
-			[
-				"spe",
-				"specChars"
-			],
-			[
-				"sp",
-				"specChars"
-			],
-			[
-				"bin",
-				"binOps"
-			],
-			[
-				"export",
-				"exportString"
+				"src",
+				"srcRoot"
 			],
 			[
 				"sr",
-				"srcBlock"
+				"srcRoot"
 			],
 			[
-				"cpp",
-				"cppBlock"
+				"PyT",
+				"PyTaxon"
 			],
 			[
-				"con",
-				"conditions"
-			],
-			[
-				"else",
-				"elseBlock"
-			],
-			[
-				"Co",
-				"CoreMath"
-			],
-			[
-				"No",
-				"NodeCPP"
-			],
-			[
-				"N",
-				"NodeCPP"
-			],
-			[
-				"d",
-				"declaration"
-			],
-			[
-				"co",
-				"context"
-			],
-			[
-				"o",
-				"owner"
-			],
-			[
-				"cr",
-				"createPure"
-			],
-			[
-				"e",
-				"expr"
-			],
-			[
-				"s",
-				"self"
+				"alt",
+				"altName"
 			],
 			[
 				"re",
 				"result"
 			],
 			[
-				"fun",
-				"funcType"
-			],
-			[
-				"func",
-				"funcType"
-			],
-			[
-				"owner",
-				"ownerFunc"
-			],
-			[
-				"own",
-				"ownerFunc"
-			],
-			[
-				"args",
-				"argsList"
-			],
-			[
-				"Exp",
-				"ExpressionCPP"
-			],
-			[
-				"init",
-				"initializationList"
-			],
-			[
-				"attrs",
-				"attrsSet"
-			],
-			[
-				"attr",
-				"attrsList"
-			],
-			[
-				"ta",
-				"taxon"
-			],
-			[
-				"tax",
-				"taxonOver"
-			],
-			[
-				"file",
-				"fileName"
-			],
-			[
-				"di",
-				"dictionary"
-			],
-			[
-				"F",
-				"FakeConstructor"
-			],
-			[
-				"over",
-				"overList"
-			],
-			[
-				"value",
-				"valueStr"
-			],
-			[
-				"Ex",
-				"TaxonExpression"
-			],
-			[
-				"sub",
-				"subType"
-			],
-			[
-				"up",
-				"updated"
-			],
-			[
-				"ini",
-				"initializationList"
-			],
-			[
-				"is",
-				"isConstructor"
-			],
-			[
-				"C",
-				"CoreCPP"
-			],
-			[
-				"exp",
-				"exportUsing"
-			],
-			[
-				"from",
-				"fromTaxon"
-			],
-			[
-				"c",
-				"currentOwner"
-			],
-			[
-				"lexem",
-				"lexems"
-			],
-			[
-				"se",
-				"second"
-			],
-			[
-				"lexe",
-				"lexemType"
-			],
-			[
-				"ch",
-				"checkBrackets"
-			],
-			[
-				"const",
-				"constType"
-			],
-			[
-				"fi",
-				"fixed"
-			],
-			[
-				"onF",
-				"onFinishLast"
-			],
-			[
-				"cu",
-				"chunks"
-			],
-			[
-				"cmd",
-				"cmdTaxon"
-			],
-			[
-				"Err",
-				"ErrClass"
-			],
-			[
-				"Met",
-				"MethodSingleCPP"
-			],
-			[
-				"T",
-				"TaxonMethod"
-			],
-			[
-				"res",
-				"resultStr"
-			],
-			[
-				"resul",
-				"resultType"
+				"__",
+				"__init__"
 			],
 			[
 				"def",
-				"defaultValue"
+				"defaultAccess"
 			],
 			[
-				"su",
-				"subTaxon"
+				"de",
+				"defaultAccess"
 			],
 			[
-				"acc",
-				"accessSpecifier"
+				"key",
+				"keyWord"
 			],
 			[
-				"Mol",
-				"ModuleImplCPP"
+				"Con",
+				"Constructor"
 			],
 			[
-				"Module",
-				"ModuleHeaderCPP"
+				"con",
+				"conOver"
 			],
 			[
-				"Mo",
-				"ModuleHeaderCPP"
+				"class",
+				"classAtom"
 			],
 			[
-				"curr",
-				"currentTaxon"
+				"cl",
+				"classAtom"
 			],
 			[
-				"st",
-				"stack"
+				"toL",
+				"toList"
 			],
 			[
-				"cur",
-				"currentTaxon"
+				"to",
+				"toList"
 			],
 			[
-				"taxon",
-				"taxonStack"
+				"toLi",
+				"toListOver"
 			],
 			[
-				"margin",
-				"margin-top\tproperty"
+				"PyA",
+				"PyArrayPush"
 			],
 			[
-				"font",
-				"font-weight\tproperty"
+				"push",
+				"pushOver"
 			],
 			[
-				"text",
-				"text-align\tproperty"
+				"func",
+				"funcOver"
 			],
 			[
-				"tex",
-				"text-align\tproperty"
+				"fu",
+				"funcOver"
 			],
 			[
-				"des",
-				"desiredMolarConc"
+				"split",
+				"splitComma"
 			],
 			[
-				"lin",
-				"line-number"
+				"value",
+				"valueType"
 			],
 			[
-				"border-bottom",
-				"border-bottom-width"
+				"co",
+				"collectionType"
 			],
 			[
-				"li",
-				"link\tTag"
+				"PyF",
+				"PyForeach"
 			],
 			[
-				"ti",
-				"title\tTag"
+				"var",
+				"varIndex"
 			],
 			[
-				"img",
-				"imgIndex"
+				"p",
+				"phase"
 			],
 			[
-				"in",
-				"inline-block"
+				"ite",
+				"itemType"
+			],
+			[
+				"coll",
+				"collectionDecl"
 			],
 			[
 				"va",
-				"value"
+				"valueLocal"
 			],
 			[
-				"lo",
-				"loadFile"
+				"i",
+				"indexLocal"
 			],
 			[
-				"Loader",
-				"LoaderContext"
+				"lex",
+				"lexemType"
 			],
 			[
-				"roo",
-				"rootFile"
+				"le",
+				"lexemType"
 			],
 			[
-				"src",
-				"srcList"
-			],
-			[
-				"v",
-				"values"
-			],
-			[
-				"tab",
-				"tablesSet"
-			],
-			[
-				"fields",
-				"fieldsList"
-			],
-			[
-				"mea",
-				"measureFields"
-			],
-			[
-				"prod",
-				"prodFields"
-			],
-			[
-				"report",
-				"reportEmptyUnits"
-			],
-			[
-				"u",
-				"unitIndexes"
-			],
-			[
-				"unit",
-				"unitIndexes"
-			],
-			[
-				"cate",
-				"categRoot"
-			],
-			[
-				"categ",
-				"categNameMap"
-			],
-			[
-				"cat",
-				"categMap"
-			],
-			[
-				"part",
-				"partitionNames"
-			],
-			[
-				"getOw",
-				"getOwnerName"
-			],
-			[
-				"partit",
-				"partitionMap"
+				"lexem",
+				"lexemType"
 			],
 			[
 				"pa",
-				"partitionNames"
+				"parseExpr"
 			],
 			[
-				"write",
-				"writeList"
+				"true",
+				"trueName"
 			],
 			[
-				"par",
-				"partitionTree"
+				"tru",
+				"trueNameOver"
 			],
 			[
-				"ar",
-				"articulDuplucates"
+				"W",
+				"WppExpression"
+			],
+			[
+				"PyType",
+				"PyTypeArray"
+			],
+			[
+				"len",
+				"lenDecl"
+			],
+			[
+				"length",
+				"lengthDecl"
+			],
+			[
+				"lengt",
+				"lengthDecl"
+			],
+			[
+				"fun",
+				"funcOver"
+			],
+			[
+				"Pt",
+				"PyStringLength"
+			],
+			[
+				"PySTri",
+				"PyStringLength"
+			],
+			[
+				"fo",
+				"foundDecl"
+			],
+			[
+				"left",
+				"leftDecl"
+			],
+			[
+				"lo",
+				"localType"
+			],
+			[
+				"mai",
+				"mainFunc"
+			],
+			[
+				"TaxonArr",
+				"TaxonArrayValue"
+			],
+			[
+				"export",
+				"exportString"
+			],
+			[
+				"P",
+				"PyCore"
+			],
+			[
+				"ass",
+				"assertEqual"
+			],
+			[
+				"fi",
+				"filteredAttrs"
+			],
+			[
+				"res",
+				"result"
+			],
+			[
+				"call",
+				"callerDecl"
+			],
+			[
+				"cre",
+				"create22"
+			],
+			[
+				"crea",
+				"createMemModule"
+			],
+			[
+				"owner",
+				"ownerClass"
+			],
+			[
+				"abs",
+				"absMethod"
+			],
+			[
+				"pri",
+				"priorExportString"
+			],
+			[
+				"pr",
+				"priorExportString"
+			],
+			[
+				"s",
+				"self"
+			],
+			[
+				"se",
+				"secondFunc"
+			],
+			[
+				"find",
+				"findDown"
+			],
+			[
+				"t",
+				"throwError"
+			],
+			[
+				"nam",
+				"nameAndType"
+			],
+			[
+				"Wp",
+				"WppClass"
+			],
+			[
+				"PyCo",
+				"PyConstructor"
+			],
+			[
+				"assert",
+				"assertEqual"
+			],
+			[
+				"WppC",
+				"WppCommonFunc"
+			],
+			[
+				"main",
+				"mainBlock"
+			],
+			[
+				"sta",
+				"staticFields"
+			],
+			[
+				"st",
+				"staticFields"
+			],
+			[
+				"ne",
+				"newRoot"
+			],
+			[
+				"rel",
+				"relatedAlienTaxon"
+			],
+			[
+				"sou",
+				"sourceTaxon"
+			],
+			[
+				"up",
+				"updateRefs"
+			],
+			[
+				"package",
+				"packageA"
+			],
+			[
+				"pac",
+				"packageA"
+			],
+			[
+				"path",
+				"pathDst"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "docs/common.txt",
+			"file": "src/Taxon.py",
 			"settings":
 			{
-				"buffer_size": 1793,
+				"buffer_size": 8295,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/Taxon.py",
+			"file": "src/Wpp/WppVar.py",
 			"settings":
 			{
-				"buffer_size": 1688,
+				"buffer_size": 3353,
 				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/core/TaxonVar.py",
+			"settings":
+			{
+				"buffer_size": 2020,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Python/PyVar.py",
+			"settings":
+			{
+				"buffer_size": 1671,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Wpp/tests/testWppVar.py",
+			"settings":
+			{
+				"buffer_size": 2991,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/core/TaxonExpression.py",
+			"settings":
+			{
+				"buffer_size": 4696,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/core/tests/testTaxonId.py",
+			"settings":
+			{
+				"buffer_size": 2125,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Python/PyCore.py",
+			"settings":
+			{
+				"buffer_size": 1089,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Python/core/PyMath.py",
+			"settings":
+			{
+				"buffer_size": 1946,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Python/PyClass.py",
+			"settings":
+			{
+				"buffer_size": 1731,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/core/TaxonClass.py",
+			"settings":
+			{
+				"buffer_size": 1396,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Wpp/WppCore.py",
+			"settings":
+			{
+				"buffer_size": 2975,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Wpp/core/WppString.py",
+			"settings":
+			{
+				"buffer_size": 323,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Wpp/core/WppArray.py",
+			"settings":
+			{
+				"buffer_size": 334,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Python/core/PyTaxonMap.py",
+			"settings":
+			{
+				"buffer_size": 1508,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/core/TaxonModule.py",
+			"settings":
+			{
+				"buffer_size": 1174,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/core/TaxonForeach.py",
+			"settings":
+			{
+				"buffer_size": 431,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/core/TaxonType.py",
+			"settings":
+			{
+				"buffer_size": 1542,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/core/TsTaxonMap.py",
+			"settings":
+			{
+				"buffer_size": 1411,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/tests/testTsCast.py",
+			"settings":
+			{
+				"buffer_size": 882,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/tests/testTsTypedef.py",
+			"settings":
+			{
+				"buffer_size": 3058,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/tests/testTsConstructor.py",
+			"settings":
+			{
+				"buffer_size": 1003,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Wpp/WppTypedef.py",
+			"settings":
+			{
+				"buffer_size": 1002,
 				"line_ending": "Windows"
 			}
 		},
@@ -541,34 +728,295 @@
 			"file": "src/Wpp/WppTaxon.py",
 			"settings":
 			{
-				"buffer_size": 349,
+				"buffer_size": 813,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/testTaxon.py",
+			"file": "src/Wpp/expr/Node.py",
 			"settings":
 			{
-				"buffer_size": 1055,
+				"buffer_size": 3746,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "CharChem/core/Periodic.wpp",
+			"file": "src/TS/TsBlock.py",
 			"settings":
 			{
-				"buffer_size": 376,
+				"buffer_size": 193,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "CharChem/core/Visitor.wpp",
+			"file": "src/TS/core/TsString.py",
 			"settings":
 			{
-				"buffer_size": 675,
+				"buffer_size": 343,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/core/TsMath.py",
+			"settings":
+			{
+				"buffer_size": 1901,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/TsFunc.py",
+			"settings":
+			{
+				"buffer_size": 2629,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/tests/testTsFunc.py",
+			"settings":
+			{
+				"buffer_size": 1239,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/TsOperator.py",
+			"settings":
+			{
+				"buffer_size": 388,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/tests/testTsOperator.py",
+			"settings":
+			{
+				"buffer_size": 1309,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/TsExpression.py",
+			"settings":
+			{
+				"buffer_size": 3975,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/tests/testTsExpression.py",
+			"settings":
+			{
+				"buffer_size": 5245,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/tests/testTsClass.py",
+			"settings":
+			{
+				"buffer_size": 1867,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/TsType.py",
+			"settings":
+			{
+				"buffer_size": 1156,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/TsTaxon.py",
+			"settings":
+			{
+				"buffer_size": 165,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/TsVar.py",
+			"settings":
+			{
+				"buffer_size": 1234,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Python/PyFunc.py",
+			"settings":
+			{
+				"buffer_size": 1579,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/TsTypedef.py",
+			"settings":
+			{
+				"buffer_size": 1481,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/TsCore.py",
+			"settings":
+			{
+				"buffer_size": 1217,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/core/TsArray.py",
+			"settings":
+			{
+				"buffer_size": 119,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/tests/testTsMath.py",
+			"settings":
+			{
+				"buffer_size": 1331,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/TsModule.py",
+			"settings":
+			{
+				"buffer_size": 250,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TS/TsClass.py",
+			"settings":
+			{
+				"buffer_size": 515,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Wpp/WppFunc.py",
+			"settings":
+			{
+				"buffer_size": 5149,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Wpp/WppType.py",
+			"settings":
+			{
+				"buffer_size": 2879,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/core/TaxonFunc.py",
+			"settings":
+			{
+				"buffer_size": 2240,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/core/Operators.py",
+			"settings":
+			{
+				"buffer_size": 463,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/core/TaxonCast.py",
+			"settings":
+			{
+				"buffer_size": 358,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Wpp/WppCast.py",
+			"settings":
+			{
+				"buffer_size": 1133,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Python/PyCast.py",
+			"settings":
+			{
+				"buffer_size": 348,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Python/tests/testPyCast.py",
+			"settings":
+			{
+				"buffer_size": 628,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Wpp/tests/testCast.py",
+			"settings":
+			{
+				"buffer_size": 420,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Wpp/Context.py",
+			"settings":
+			{
+				"buffer_size": 2160,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Wpp/core/WppTaxonMap.py",
+			"settings":
+			{
+				"buffer_size": 212,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -622,6 +1070,124 @@
 	},
 	"file_history":
 	[
+		"/C/WidePreprocessor/src/TS/tests/testTsVar.py",
+		"/C/WidePreprocessor/src/TS/tests/testTsFunc.py",
+		"/C/WidePreprocessor/src/TS/TsCast.py",
+		"/C/WidePreprocessor/src/TS/TsIf.py",
+		"/C/WidePreprocessor/src/TS/tests/testTsIf.py",
+		"/C/WidePreprocessor/src/Python/PyExpression.py",
+		"/C/WidePreprocessor/src/Python/core/PyString.py",
+		"/C/WidePreprocessor/src/TS/TsReturn.py",
+		"/C/WidePreprocessor/src/Wpp/expr/operations.py",
+		"/C/WidePreprocessor/src/out/OutContextMemory.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyClass.py",
+		"/C/WidePreprocessor/src/Wpp/WppModule.py",
+		"/C/WidePreprocessor/src/Python/PyTypedef.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyTypedef.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testTypedef.py",
+		"/C/WidePreprocessor/src/Wpp/WppTypedef.py",
+		"/C/WidePreprocessor/src/core/TaxonTypedef.py",
+		"/C/WidePreprocessor/src/TS/TsImport.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testWppFunc.py",
+		"/C/WidePreprocessor/src/Wpp/WppBlock.py",
+		"/C/WidePreprocessor/src/Python/PyFunc.py",
+		"/C/WidePreprocessor/src/Wpp/expr/tests/testSuper.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyReadonly.py",
+		"/C/WidePreprocessor/src/Python/PyModule.py",
+		"/C/WidePreprocessor/src/Python/PyImport.py",
+		"/C/WidePreprocessor/src/Python/PyType.py",
+		"/C/WidePreprocessor/src/Python/PyVar.py",
+		"/C/WidePreprocessor/src/Python/PyOperator.py",
+		"/C/WidePreprocessor/src/core/TaxonImport.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testWppType.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyFunc.py",
+		"/C/WidePreprocessor/src/Wpp/WppPackage.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyType.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyExpression.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyMath.py",
+		"/C/WidePreprocessor/src/TS/tests/testTsClass.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testWppModule.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testTemplate.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyOperator.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testOperator.py",
+		"/C/WidePreprocessor/src/Wpp/expr/tests/testCall.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testBool.py",
+		"/C/WidePreprocessor/src/out/OutContextMemoryStream.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyString.py",
+		"/C/WidePreprocessor/src/Wpp/expr/Taxons.py",
+		"/C/WidePreprocessor/src/Wpp/WppExpression.py",
+		"/C/WidePreprocessor/CharChem/wpp/math/Rect.wpp",
+		"/C/WidePreprocessor/CharChem/wpp/math/Point.wpp",
+		"/C/WidePreprocessor/src/core/__init__.py",
+		"/C/WidePreprocessor/src/core/tests/__init__.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testLambda.py",
+		"/C/WidePreprocessor/src/Wpp/WppTaxon.py",
+		"/C/WidePreprocessor/src/Wpp/WppClass.py",
+		"/C/WidePreprocessor/src/Python/core/PyArray.py",
+		"/C/WidePreprocessor/CharChem/build.py",
+		"/C/WidePreprocessor/src/Wpp/WppForeach.py",
+		"/C/WidePreprocessor/CharChem/math/Point.wpp",
+		"/C/WidePreprocessor/src/core/TaxonType.py",
+		"/C/WidePreprocessor/src/Python/PyForeach.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyArray.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyForeach.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testForeach.py",
+		"/C/WidePreprocessor/src/core/TaxonVar.py",
+		"/C/WidePreprocessor/src/Wpp/expr/Node.py",
+		"/C/WidePreprocessor/src/Wpp/expr/scanLexems.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testWppArray.py",
+		"/C/WidePreprocessor/src/Wpp/WppType.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testWppString.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyIf.py",
+		"/C/WidePreprocessor/src/Python/PyIf.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testIf.py",
+		"/C/WidePreprocessor/src/Wpp/WppIf.py",
+		"/C/WidePreprocessor/src/core/TaxonIf.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyBool.py",
+		"/C/WidePreprocessor/src/Python/PyCoreFunctions.py",
+		"/C/WidePreprocessor/src/Wpp/core/WppString.py",
+		"/C/WidePreprocessor/src/Wpp/WppFunc.py",
+		"/C/WidePreprocessor/src/Wpp/readWpp.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testWppClass.py",
+		"/C/WidePreprocessor/src/Wpp/expr/parseExpr.py",
+		"/C/WidePreprocessor/src/Python/core/PyTaxonMap.py",
+		"/C/WidePreprocessor/src/Python/PyTaxon.py",
+		"/C/WidePreprocessor/src/Python/PyReturn.py",
+		"/C/WidePreprocessor/src/Python/PyBlock.py",
+		"/C/WidePreprocessor/src/Wpp/Context.py",
+		"/C/WidePreprocessor/src/Wpp/WppDictionary.py",
+		"/C/WidePreprocessor/src/core/ErrorTaxon.py",
+		"/C/WidePreprocessor/src/Wpp/expr/tests/testArrayValue.py",
+		"/C/WidePreprocessor/src/core/TaxonFunc.py",
+		"/C/WidePreprocessor/src/Wpp/expr/tests/testTernaryOp.py",
+		"/C/WidePreprocessor/src/Wpp/expr/tests/testScanLexems.py",
+		"/C/WidePreprocessor/src/core/TaxonClass.py",
+		"/C/WidePreprocessor/src/core/TaxonBlock.py",
+		"/C/WidePreprocessor/src/TaxonDictionary.py",
+		"/C/WidePreprocessor/src/out/OutContextFolder.py",
+		"/C/WidePreprocessor/src/core/TaxonModule.py",
+		"/C/WidePreprocessor/src/core/TaxonPackage.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyPackage.py",
+		"/C/WidePreprocessor/src/Python/PyPackage.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testWppPackage.py",
+		"/C/WidePreprocessor/src/Python/tests/testPyModule.py",
+		"/C/WidePreprocessor/src/out/OutContextFile.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testWppBlock.py",
+		"/C/WidePreprocessor/src/Wpp/expr/tests/testParseExpr.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testWppVar.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testWppExpression.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testWppReturn.py",
+		"/C/WidePreprocessor/src/Wpp/WppReturn.py",
+		"/C/WidePreprocessor/src/core/TaxonReturn.py",
+		"/C/WidePreprocessor/src/testTaxon.py",
+		"/C/WidePreprocessor/CharChem/core/Visitor.wpp",
+		"/C/WidePreprocessor/CharChem/core/Periodic.wpp",
+		"/C/WidePreprocessor/src/out/tests/testOutContextFolder.py",
+		"/C/WidePreprocessor/docs/common.txt",
+		"/C/WidePreprocessor/src/Wpp/tests/packageTest/moduleA.wpp",
+		"/C/WidePreprocessor/src/testTaxonDictionary.py",
+		"/C/WidePreprocessor/src/out/deleteTree.py",
+		"/C/WidePreprocessor/src/Wpp/tests/testContext.py",
 		"/C/WidePreprocessor/src/read/testContext.py",
 		"/C/WidePreprocessor/src/read/Context.py",
 		"/C/WidePreprocessor/CharChem/core/ChemAtom.wpp",
@@ -631,89 +1197,11 @@
 		"/C/WidePreprocessor/src/core/expression/TaxonThis.py",
 		"/C/WidePreprocessor/src/lang/CPP/NodeCPP.py",
 		"/C/WidePreprocessor/src/lang/LangNode.py",
-		"/C/WidePreprocessor/src/lang/CPP/ExpressionCPP.py",
-		"/C/WidePreprocessor/src/core/expression/TaxonCall.py",
-		"/C/WidePreprocessor/src/lang/CPP/TypeExprCPP.py",
-		"/C/WidePreprocessor/examples/Point.wpp",
-		"/C/WidePreprocessor/examples/MyPoint.wpp",
-		"/C/WidePreprocessor/src/core/expression/TaxonIdExpr.py",
-		"/C/WidePreprocessor/src/core/Taxon.py",
-		"/C/WidePreprocessor/src/lang/CPP/StatementCPP.py",
-		"/C/WidePreprocessor/src/lang/CPP/MethodCPP.py",
-		"/C/WidePreprocessor/src/lang/CPP/BlockCPP.py",
-		"/C/WidePreprocessor/src/lang/CPP/LocalTypeCPP.py",
-		"/C/WidePreprocessor/src/core/TypeExpr.py",
-		"/C/WidePreprocessor/src/core/FinalType.py",
-		"/C/WidePreprocessor/src/core/TaxonCore.py",
-		"/C/WidePreprocessor/src/lang/CPP/CoreCPP.py",
-		"/C/WidePreprocessor/src/core/TaxonTypeScalar.py",
-		"/C/WidePreprocessor/src/core/TaxonTypedef.py",
-		"/C/WidePreprocessor/src/lang/CPP/ClassHeaderCPP.py",
-		"/C/WidePreprocessor/src/read/readWPP.py",
-		"/C/WidePreprocessor/examples/testClass.wpp",
-		"/C/WidePreprocessor/src/core/expression/TaxonConst.py",
-		"/C/WidePreprocessor/src/core/TaxonClass.py",
-		"/C/WidePreprocessor/src/core/TaxonVar.py",
-		"/C/WidePreprocessor/src/core/LocalType.py",
-		"/C/WidePreprocessor/src/core/TaxonMethod.py",
-		"/C/WidePreprocessor/src/core/TaxonMethodSingle.py",
-		"/C/WidePreprocessor/src/core/TaxonBlock.py",
-		"/C/WidePreprocessor/src/core/statement/TaxonIf.py",
-		"/C/WidePreprocessor/src/core/TaxonExpression.py",
-		"/C/WidePreprocessor/src/core/expression/TaxonArrayIndex.py",
-		"/C/WidePreprocessor/src/core/expression/TaxonTernaryOp.py",
-		"/C/WidePreprocessor/src/core/expression/TaxonBinOp.py",
-		"/C/WidePreprocessor/src/lang/CPP/FieldCPP.py",
-		"/C/WidePreprocessor/src/core/TaxonField.py",
-		"/C/WidePreprocessor/src/core/expression/TaxonAbstractExpr.py",
-		"/C/WidePreprocessor/src/core/TaxonModule.py",
-		"/C/WidePreprocessor/src/core/TaxonType.py",
-		"/C/WidePreprocessor/examples/test.wpp",
-		"/C/WidePreprocessor/src/lang/CPP/ModuleHeaderCPP.py",
-		"/C/WidePreprocessor/src/lang/OutContext.py",
-		"/C/WidePreprocessor/src/lang/CPP/TypedefCPP.py",
-		"/C/WidePreprocessor/src/lang/CPP/ModuleCPP.py",
-		"/C/WidePreprocessor/src/lang/CPP/ModuleImplCPP.py",
-		"/C/WidePreprocessor/src/core/Type.py",
-		"/C/WidePreprocessor/examples/exampleConfig.txt",
-		"/C/WidePreprocessor/src/core/TypeCommon.py",
-		"/C/WidePreprocessor/src/process.py",
-		"/C/WidePreprocessor/src/read/readWPP",
-		"/C/chem/Youtube/04_Что такое временная или карбонатная жесткость/html/air-table.html",
-		"/C/chem/Youtube/05a_Исследование общей и временной жесткости/05a-Salts/salts-calc.html",
-		"/C/JS/ramstal-slider/style.css",
-		"/C/JS/ramstal-slider/demo.html",
-		"/C/chem/sulfuric.html",
-		"/C/JS/canvas/index.html",
-		"/C/Apache/easychem.my/charchem_src/point.js",
-		"/C/UniProg/CharChem/src/main.taxon",
-		"/C/UniProg/UniProg/UniProg.py",
-		"/C/UniProg/UniProg/taxon.py",
-		"/C/UniProg/UniProg/taxonLoader.py",
-		"/C/UniProg/UniProg/LoaderCtx.py",
-		"/C/UniProg/project.sublime-project",
-		"/C/Apache/easychem.my/charchem_src/charchem.js.templ",
-		"/C/JS/TSTest2/main.ts",
-		"/C/JS/TSTest2/Point.taxon",
-		"/C/backup/restore.py",
-		"/C/Поездки/17-Мьянма/language/language.html",
-		"/C/Поездки/17-Мьянма/plan.html",
-		"/C/Поездки/17-Мьянма/language.html",
-		"/C/Apache/vhod.my/data/code/trash.py",
-		"/C/Apache/vhod.my/data/code/record.py",
-		"/C/Apache/vhod.my/data/code/part.py",
-		"/C/Apache/vhod.my/data/code/reports.py",
-		"/C/Apache/vhod.my/data/code/units.py",
-		"/C/Apache/vhod.my/data/export.py",
-		"/C/Apache/vhod.my/data/import.py",
-		"/C/Apache/vhod.my/data/code/invOwnersReport.py",
-		"/C/Apache/vhod.my/data/code/__init__.py",
-		"/E/WiSiter/nodejs/core/tests/core_agents_Agent.js",
-		"/E/WiSiter/nodejs/core/agents/AgentStatic.js"
+		"/C/WidePreprocessor/src/lang/CPP/ExpressionCPP.py"
 	],
 	"find":
 	{
-		"height": 27.0
+		"height": 40.0
 	},
 	"find_in_files":
 	{
@@ -728,6 +1216,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"altName",
+			"TsNew",
+			"Access",
+			"default",
+			"repla",
+			"self.refs[",
+			"update",
+			"'field",
 			"TaxonArr",
 			"pass",
 			"'[",
@@ -750,6 +1246,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"assert"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -760,29 +1257,596 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 28,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "docs/common.txt",
+					"file": "src/Taxon.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1793,
+						"buffer_size": 8295,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								451,
-								451
+								1321,
+								1321
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 304.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/Wpp/WppVar.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3353,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3353,
+								3353
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1051.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 31,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/core/TaxonVar.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2020,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1116,
+								1116
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 16.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 30,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/Python/PyVar.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1671,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1516,
+								1516
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 299.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 28,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/Wpp/tests/testWppVar.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2991,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2991,
+								2991
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 940.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 36,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/core/TaxonExpression.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4696,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								24,
+								24
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/core/tests/testTaxonId.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2125,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2123,
+								2123
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 555.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 45,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/Python/PyCore.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1089,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1089,
+								1089
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 75.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 24,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/Python/core/PyMath.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1946,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1361,
+								1361
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 267.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 34,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "src/Python/PyClass.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1731,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23,
+								23
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 33,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "src/core/TaxonClass.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1396,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								151,
+								151
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "src/Wpp/WppCore.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2975,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1890,
+								1890
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 976.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 44,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "src/Wpp/core/WppString.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 323,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								323
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 55,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "src/Wpp/core/WppArray.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 334,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								217,
+								236
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 51,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "src/Python/core/PyTaxonMap.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1508,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1474,
+								1474
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 218.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 43,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "src/core/TaxonModule.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1174,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1016,
+								1016
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 54,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "src/core/TaxonForeach.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 431,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								164,
+								164
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 35,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "src/core/TaxonType.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1542,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								712,
+								712
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 25,
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "src/TS/core/TsTaxonMap.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1411,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								954,
+								954
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "src/TS/tests/testTsCast.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 882,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								631,
+								631
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "src/TS/tests/testTsTypedef.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3058,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								253,
+								535
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -792,20 +1856,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "src/Taxon.py",
+					"buffer": 21,
+					"file": "src/TS/tests/testTsConstructor.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1688,
+						"buffer_size": 1003,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								689,
-								689
+								696,
+								696
 							]
 						],
 						"settings":
@@ -820,109 +1884,55 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 22,
+					"file": "src/Wpp/WppTypedef.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1002,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								110,
+								110
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
 					"file": "src/Wpp/WppTaxon.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 349,
+						"buffer_size": 813,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								349,
-								349
+								600,
+								600
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/testTaxon.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1055,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1039,
-								1039
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "CharChem/core/Periodic.wpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 376,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								375,
-								375
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "CharChem/core/Visitor.wpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 675,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								674,
-								674
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -930,13 +1940,918 @@
 					},
 					"stack_index": 4,
 					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "src/Wpp/expr/Node.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3746,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								898,
+								898
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 108.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 37,
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "src/TS/TsBlock.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 193,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								143,
+								143
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 38,
+					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "src/TS/core/TsString.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 343,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								254,
+								254
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 27,
+					"file": "src/TS/core/TsMath.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1901,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1294,
+								1294
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 218.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 16,
+					"type": "text"
+				},
+				{
+					"buffer": 28,
+					"file": "src/TS/TsFunc.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2629,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2324,
+								2324
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 811.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 29,
+					"file": "src/TS/tests/testTsFunc.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1239,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1000,
+								1000
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 155.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 30,
+					"file": "src/TS/TsOperator.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 388,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								361,
+								361
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 31,
+					"file": "src/TS/tests/testTsOperator.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1309,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1070,
+								1309
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 379.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 32,
+					"file": "src/TS/TsExpression.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3975,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								833,
+								833
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 33,
+					"file": "src/TS/tests/testTsExpression.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5245,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5245,
+								5245
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2379.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 32,
+					"type": "text"
+				},
+				{
+					"buffer": 34,
+					"file": "src/TS/tests/testTsClass.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1867,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								386,
+								625
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 26,
+					"type": "text"
+				},
+				{
+					"buffer": 35,
+					"file": "src/TS/TsType.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1156,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								574,
+								574
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 36,
+					"file": "src/TS/TsTaxon.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 165,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								161,
+								161
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 40,
+					"type": "text"
+				},
+				{
+					"buffer": 37,
+					"file": "src/TS/TsVar.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1234,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1125,
+								1125
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 107.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 29,
+					"type": "text"
+				},
+				{
+					"buffer": 38,
+					"file": "src/Python/PyFunc.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1579,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1579,
+								1579
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 459.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 27,
+					"type": "text"
+				},
+				{
+					"buffer": 39,
+					"file": "src/TS/TsTypedef.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1481,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								567,
+								567
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 40,
+					"file": "src/TS/TsCore.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1217,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								460,
+								460
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 41,
+					"file": "src/TS/core/TsArray.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 119,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								118,
+								118
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 42,
+					"file": "src/TS/tests/testTsMath.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1331,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 43,
+					"file": "src/TS/TsModule.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 250,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								105,
+								105
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 41,
+					"type": "text"
+				},
+				{
+					"buffer": 44,
+					"file": "src/TS/TsClass.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 515,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								488,
+								488
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 39,
+					"type": "text"
+				},
+				{
+					"buffer": 45,
+					"file": "src/Wpp/WppFunc.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5149,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2517,
+								2617
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 810.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 46,
+					"file": "src/Wpp/WppType.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2879,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2153,
+								2153
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 848.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 42,
+					"type": "text"
+				},
+				{
+					"buffer": 47,
+					"file": "src/core/TaxonFunc.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2240,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2240,
+								2240
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 603.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 48,
+					"file": "src/core/Operators.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 463,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								42,
+								42
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 22,
+					"type": "text"
+				},
+				{
+					"buffer": 49,
+					"file": "src/core/TaxonCast.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 358,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								338,
+								338
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 53,
+					"type": "text"
+				},
+				{
+					"buffer": 50,
+					"file": "src/Wpp/WppCast.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1133,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								765,
+								765
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 52,
+					"type": "text"
+				},
+				{
+					"buffer": 51,
+					"file": "src/Python/PyCast.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 348,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								309,
+								309
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 47,
+					"type": "text"
+				},
+				{
+					"buffer": 52,
+					"file": "src/Python/tests/testPyCast.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 628,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								627,
+								627
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 50,
+					"type": "text"
+				},
+				{
+					"buffer": 53,
+					"file": "src/Wpp/tests/testCast.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 420,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								228,
+								228
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 49,
+					"type": "text"
+				},
+				{
+					"buffer": 54,
+					"file": "src/Wpp/Context.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2160,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1455,
+								1455
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 379.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 48,
+					"type": "text"
+				},
+				{
+					"buffer": 55,
+					"file": "src/Wpp/core/WppTaxonMap.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 212,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								61,
+								61
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 46,
+					"type": "text"
 				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 27.0
+		"height": 25.0
 	},
 	"input":
 	{
@@ -977,7 +2892,7 @@
 	"project": "",
 	"replace":
 	{
-		"height": 50.0
+		"height": 46.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -986,6 +2901,190 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"TsTa",
+				"C:\\WidePreprocessor\\src\\TS\\core\\TsTaxonMap.py"
+			],
+			[
+				"TaxFu",
+				"C:\\WidePreprocessor\\src\\core\\TaxonFunc.py"
+			],
+			[
+				"TaxonFu",
+				"C:\\WidePreprocessor\\src\\core\\TaxonFunc.py"
+			],
+			[
+				"PyE",
+				"C:\\WidePreprocessor\\src\\Python\\PyExpression.py"
+			],
+			[
+				"TsV",
+				"C:\\WidePreprocessor\\src\\TS\\TsVar.py"
+			],
+			[
+				"TsCla",
+				"C:\\WidePreprocessor\\src\\TS\\TsClass.py"
+			],
+			[
+				"TsCo",
+				"C:\\WidePreprocessor\\src\\TS\\TsCore.py"
+			],
+			[
+				"PyMath",
+				"C:\\WidePreprocessor\\src\\Python\\core\\PyMath.py"
+			],
+			[
+				"Point",
+				"C:\\WidePreprocessor\\CharChem\\wpp\\math\\Point.wpp"
+			],
+			[
+				"Ta",
+				"C:\\WidePreprocessor\\src\\core\\TaxonExpression.py"
+			],
+			[
+				"PyCa",
+				"C:\\WidePreprocessor\\src\\Python\\PyCast.py"
+			],
+			[
+				"PyC",
+				"C:\\WidePreprocessor\\src\\Python\\PyCore.py"
+			],
+			[
+				"PyEx",
+				"C:\\WidePreprocessor\\src\\Python\\PyExpression.py"
+			],
+			[
+				"WppCo",
+				"C:\\WidePreprocessor\\src\\Wpp\\WppCore.py"
+			],
+			[
+				"tePyM",
+				"C:\\WidePreprocessor\\src\\Python\\tests\\testPyMath.py"
+			],
+			[
+				"PyMod",
+				"C:\\WidePreprocessor\\src\\Python\\PyModule.py"
+			],
+			[
+				"PyM",
+				"C:\\WidePreprocessor\\src\\Python\\core\\PyMath.py"
+			],
+			[
+				"PyMa",
+				"C:\\WidePreprocessor\\src\\Python\\core\\PyMath.py"
+			],
+			[
+				"Py",
+				"C:\\WidePreprocessor\\src\\Python\\PyFunc.py"
+			],
+			[
+				"testPyOp",
+				"C:\\WidePreprocessor\\src\\Python\\tests\\testPyOperator.py"
+			],
+			[
+				"PyOp",
+				"C:\\WidePreprocessor\\src\\Python\\PyOperator.py"
+			],
+			[
+				"WppC",
+				"C:\\WidePreprocessor\\src\\Wpp\\WppCore.py"
+			],
+			[
+				"TaFu",
+				"C:\\WidePreprocessor\\src\\core\\TaxonFunc.py"
+			],
+			[
+				"testPy",
+				"C:\\WidePreprocessor\\src\\Python\\tests\\testPyOperator.py"
+			],
+			[
+				"Wpp",
+				"C:\\WidePreprocessor\\src\\Wpp\\WppFunc.py"
+			],
+			[
+				"TaxonF",
+				"C:\\WidePreprocessor\\src\\core\\TaxonFunc.py"
+			],
+			[
+				"WppF",
+				"C:\\WidePreprocessor\\src\\Wpp\\WppFunc.py"
+			],
+			[
+				"test",
+				"C:\\WidePreprocessor\\src\\Wpp\\tests\\testOperator.py"
+			],
+			[
+				"",
+				"C:\\WidePreprocessor\\src\\Python\\PyVar.py"
+			],
+			[
+				"TaxEx",
+				"C:\\WidePreprocessor\\src\\core\\TaxonExpression.py"
+			],
+			[
+				"TaxonC",
+				"C:\\WidePreprocessor\\src\\core\\TaxonClass.py"
+			],
+			[
+				"PyA",
+				"C:\\WidePreprocessor\\src\\Python\\core\\PyArray.py"
+			],
+			[
+				"PyArr",
+				"C:\\WidePreprocessor\\src\\Python\\core\\PyArray.py"
+			],
+			[
+				"testPyA",
+				"C:\\WidePreprocessor\\src\\Python\\tests\\testPyArray.py"
+			],
+			[
+				"PyStr",
+				"C:\\WidePreprocessor\\src\\Python\\core\\PyString.py"
+			],
+			[
+				"WppT",
+				"C:\\WidePreprocessor\\src\\Wpp\\WppType.py"
+			],
+			[
+				"WppE",
+				"C:\\WidePreprocessor\\src\\Wpp\\WppExpression.py"
+			],
+			[
+				"TaxF",
+				"C:\\WidePreprocessor\\src\\core\\TaxonFunc.py"
+			],
+			[
+				"Taxo",
+				"C:\\WidePreprocessor\\src\\Wpp\\expr\\Taxons.py"
+			],
+			[
+				"WppBl",
+				"C:\\WidePreprocessor\\src\\Wpp\\WppBlock.py"
+			],
+			[
+				"WppVa",
+				"C:\\WidePreprocessor\\src\\Wpp\\WppVar.py"
+			],
+			[
+				"testT",
+				"C:\\WidePreprocessor\\src\\testTaxon.py"
+			],
+			[
+				"WppDi",
+				"C:\\WidePreprocessor\\src\\Wpp\\WppDictionary.py"
+			],
+			[
+				"testWpp",
+				"C:\\WidePreprocessor\\src\\Wpp\\tests\\testWppClass.py"
+			],
+			[
+				"testW",
+				"C:\\WidePreprocessor\\src\\Wpp\\tests\\testWppPackage.py"
+			],
+			[
+				"Out",
+				"C:\\WidePreprocessor\\src\\out\\OutContextFile.py"
+			],
 			[
 				"TaxVar",
 				"C:\\WidePreprocessor\\src\\core\\TaxonVar.py"

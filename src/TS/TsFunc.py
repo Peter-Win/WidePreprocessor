@@ -2,6 +2,22 @@ from core.TaxonFunc import TaxonOverloads, TaxonFunc, TaxonMethod, TaxonConstruc
 from TS.TsTaxon import TsTaxon
 
 class TsOverloads(TaxonOverloads):
+	def __init__(self):
+		super().__init__()
+		self.phase = 0
+	def onUpdate(self):
+		res = super().onUpdate()
+		self.phase += 1
+		# Необходимо проверить наличие перегруженных функций. И если есть, то заменить на altName
+		if self.phase == 1:
+			if len(self.items) > 1:
+				for fn in self.items:
+					if not fn.altName:
+						fn.throwError('Expected altname for overloaded function')
+					fn.bUseAlt = True
+					fn.prepareOverload()
+		return res
+
 	def export(self, outContext):
 		if len(self.items) != 1:
 			names = set()
@@ -14,6 +30,9 @@ class TsOverloads(TaxonOverloads):
 			item.export(outContext)
 
 class TsCommonFunc(TsTaxon):
+	def __init__(self):
+		super().__init__()
+		self.bUseAlt = False
 	def exportSignature(self):
 		""" Parameters + result type """
 		s = '(' + ', '.join([p.exportString() for p in self.getParams()]) + ')'
@@ -23,7 +42,10 @@ class TsCommonFunc(TsTaxon):
 		return s
 
 	def getName(self, user):
-		return self.altName or self.name
+		return self.altName if self.bUseAlt else self.name
+
+	def prepareOverload(self):
+		pass
 
 class TsFunc(TaxonFunc, TsCommonFunc):
 	def export(self, outContext):
@@ -48,8 +70,39 @@ class TsMethod(TaxonMethod, TsCommonFunc):
 		
 class TsConstructor(TaxonConstructor, TsCommonFunc):
 	def export(self, outContext):
-		s = self.getAccessLevel() + ' constructor'
+		s = self.getAccessLevel();
+		if self.bUseAlt:
+			s += ' static function ' + self.altName
+		else:
+			s += ' constructor'
 		s += self.exportSignature() + ' {'
 		outContext.writeln(s)
 		self.getBody().export(outContext)
 		outContext.writeln('}')
+
+	def prepareOverload(self):
+		self.instName = '_inst'
+		body = self.getBody()
+
+		# Создать экземпляр const _inst = new Type()
+		clsTaxon = self.owner.owner
+		varCmd = self.creator('Var')(name = self.instName)
+		varCmd.attrs.add('const')
+		locType = self.creator('TypeName')()
+		locType.refs['type'] = clsTaxon
+		value = self.creator('New')()
+		clsName = self.creator('IdExpr')(clsTaxon.getName(self))
+		clsName.refs['decl'] = clsTaxon
+		value.addItem(clsName)
+		varCmd.addItems([locType, value])
+		body.addItem(varCmd, pos = 0)
+
+		# Добавить return _inst
+		ret = self.creator('Return')()
+		retExpr = self.creator('IdExpr')(self.instName)
+		retExpr.refs['decl'] = varCmd
+		ret.addItem(retExpr)
+		body.addItem(ret)
+
+		# автоиниализация полей из параметров будет вставляться перед этой командой
+		self.cmdAfterParamInit = body.items[1]

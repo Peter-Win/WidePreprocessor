@@ -35,14 +35,21 @@ class TaxonConst(TaxonExpression):
 	def getDebugStr(self):
 		return '%s(%s)' % (self.constType, self.value)
 
+	def getQuasiType(self):
+		return self
+
 class TaxonNull(TaxonExpression):
 	type = 'Null'
 
 class TaxonTrue(TaxonExpression):
 	type = 'True'
+	def getQuasiType(self):
+		return self.creator('Const')('bool', 'true')
 
 class TaxonFalse(TaxonExpression):
 	type = 'False'
+	def getQuasiType(self):
+		return self.creator('Const')('bool', 'false')
 
 class TaxonId(TaxonExpression):
 	__slots__ = ('id') # Идентификатор хранится не в name, чтобы при поиске findUp не происходило ложное срабатывание
@@ -55,6 +62,8 @@ class TaxonId(TaxonExpression):
 		return result
 	def getDeclaration(self):
 		return self.refs['decl']
+	def getQuasiType(self):
+		return self.getDeclaration().getQuasiType()
 	def getFieldDeclaration(self, name):
 		decl = self.getDeclaration()
 		return decl.getFieldDeclaration(name)
@@ -140,6 +149,9 @@ class TaxonSuper(TaxonClassRef):
 
 class TaxonCall(TaxonExpression):
 	type = 'Call'
+	def __init__(self):
+		super().__init__()
+		self.phase = 0
 	def getCaller(self):
 		return self.items[0]
 	def getArguments(self):
@@ -148,6 +160,9 @@ class TaxonCall(TaxonExpression):
 		s = self.priorExportString(self.getCaller()) + '('
 		s += ', '.join([arg.exportString() for arg in self.getArguments()]) + ')'
 		return s
+
+	def getDeclaration(self):
+		return self.refs['decl']
 
 class TaxonNew(TaxonCall):
 	""" new Classname() """

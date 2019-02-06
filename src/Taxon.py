@@ -30,11 +30,13 @@ class Taxon:
 	def isClass(self):
 		return False
 
-	def addItem(self, item, nextItem = None):
+	def addItem(self, item, nextItem = None, pos = None):
 		item.owner = self
 		if nextItem:
 			i = self.items.index(nextItem)
 			self.items.insert(i, item)
+		elif pos != None:
+			self.items.insert(pos, item)
 		else:
 			self.items.append(item)
 		if self.core:
@@ -95,7 +97,13 @@ class Taxon:
 		return '.'.join(path)
 
 	def throwError(self, message):
-		raise ErrorTaxon(message, self.location)
+		raise ErrorTaxon(message, self.getLocation())
+
+	def getLocation(self):
+		taxon = self
+		while taxon.owner and not taxon.location:
+			taxon = taxon.owner
+		return taxon.location
 
 	def clone(self, newCore):
 		""" Клонирование таксона и всех его подчиненных в другое сообщество 
@@ -240,6 +248,11 @@ class Taxon:
 		result = list(self.attrs)
 		result.sort()
 		return result
+
+	def walk(self, onItem):
+		onItem(self)
+		for item in self.items:
+			item.walk(onItem)
 
 	def createImportBlock(self, importBlockClass):
 		if not self.importBlock:

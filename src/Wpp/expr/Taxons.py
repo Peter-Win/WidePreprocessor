@@ -63,17 +63,23 @@ class WppNull(TaxonNull, WppExpression):
 class WppCall(TaxonCall, WppExpression):
 	def __init__(self):
 		super().__init__()
-		self._newPhase = False
+		self._phase = 0
 	def onUpdate(self):
+		workPhase = 3	# На первлм шаге определяются объявления для IdExpr, на втором - FieldExpr
 		result = super().onUpdate()
-		# Возможная замена на new
-		caller = self.getCaller()
-		if not self._newPhase:
-			self._newPhase = True
-			result = True
-		elif caller.type == 'IdExpr' and caller.getDeclaration().type == 'Class':
-			self.replaceByNew()
-		return result
+		self._phase += 1
+		if self._phase == workPhase:
+			caller = self.getCaller()
+			# Возможная замена на new
+			if caller.type == 'IdExpr' and caller.getDeclaration().type == 'Class':
+				self.replaceByNew()
+			# Найти объявление функции (в том случае, если известен объект вызова)
+			elif caller.type == 'IdExpr':
+				decl = caller.getDeclaration()
+				# if decl.type == 'Overloads':
+				# 	self.setRef('decl', decl.find(self))
+		return result or self._phase < workPhase
+
 	def replaceByNew(self):
 		taxonNew = WppNew()
 		for i in self.items:

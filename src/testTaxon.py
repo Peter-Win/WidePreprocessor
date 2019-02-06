@@ -2,6 +2,7 @@ import unittest
 import os
 from Taxon import Taxon
 from core.ErrorTaxon import ErrorTaxon
+from Wpp.WppCore import WppCore
 
 def taxonEx(type, items=[]):
 	res = Taxon()
@@ -102,3 +103,25 @@ class TestTaxon(unittest.TestCase):
 		self.assertEqual(c.type, 'Class')
 		self.assertEqual(c.name, 'C')
 
+	def testLocationFind(self):
+		source = """
+func brackets: String
+	param s: String
+	"(" + s + ")"
+func public main
+	var r: String = brackets("Hello")
+		"""
+		module = WppCore.createMemModule(source, 'brackets.fake')
+		main = module.dictionary['main'].items[0]
+		self.assertEqual(main.type, 'Func')
+		self.assertIsNotNone(main.location)
+		r = main.getBody().items[0]
+		self.assertEqual(r.type, 'Var')
+		self.assertIsNotNone(r.location)
+		c = r.getValueTaxon()
+		self.assertEqual(c.type, 'Call')
+		self.assertIsNone(c.location)
+		self.assertEqual(c.getLocation(), r.location)
+		p = c.getArguments()[0]
+		self.assertEqual(p.type, 'Const')
+		self.assertEqual(p.getLocation(), r.location)
