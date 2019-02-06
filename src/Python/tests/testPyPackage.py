@@ -46,6 +46,14 @@ class TestPyPackage(unittest.TestCase):
 
 		# Создать исходную иерархию
 		pathSrc = os.path.join(path0, 'src1')
+		if not os.path.exists(pathSrc):
+			os.mkdir(pathSrc)
+			os.mkdir(os.path.join(pathSrc, 'packageA'))
+			os.mkdir(os.path.join(pathSrc, 'packageA', 'packageA1'))
+			os.mkdir(os.path.join(pathSrc, 'packageA', 'packageA2'))
+			os.mkdir(os.path.join(pathSrc, 'packageB'))
+			os.mkdir(os.path.join(pathSrc, 'packageB', 'packageB1'))
+			os.mkdir(os.path.join(pathSrc, 'packageB', 'packageB2'))
 		src1 = WppPackage('src1')
 		src1.read(pathSrc)
 		self.assertIn('packageA', src1.dictionary)
