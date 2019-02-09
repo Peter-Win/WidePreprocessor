@@ -6,7 +6,9 @@ from out.OutContextFolder import OutContextFolder
 
 class TestWppPackage(unittest.TestCase):
 	def setUp(self):
-		pass
+		folder22Path = os.path.join(os.path.dirname(__file__), 'packageTest', 'folder2', 'folder22')
+		if not os.path.exists(folder22Path):
+			os.mkdir(folder22Path)
 	def testRead(self):
 		root = WppPackage('packageTest')
 		self.assertEqual(root.type, 'Package')

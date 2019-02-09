@@ -9,14 +9,14 @@ class TsOverloads(TaxonOverloads):
 		res = super().onUpdate()
 		self.phase += 1
 		# Необходимо проверить наличие перегруженных функций. И если есть, то заменить на altName
-		if self.phase == 1:
+		if self.phase == 2: # На первой фазе операторы расставляют свои altName
 			if len(self.items) > 1:
 				for fn in self.items:
 					if not fn.altName:
 						fn.throwError('Expected altname for overloaded function')
 					fn.bUseAlt = True
 					fn.prepareOverload()
-		return res
+		return res or self.phase < 2
 
 	def export(self, outContext):
 		if len(self.items) != 1:

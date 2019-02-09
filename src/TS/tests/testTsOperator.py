@@ -75,9 +75,29 @@ class Point
 	operator -: Point
 		Point(-x, -y)
 		"""
-		expected = ''
+		expected = """
+export class Point {
+	private x: number;
+	private y: number;
+	public constructor(x: number, y: number) {
+		this.x = x;
+		this.y = y;
+	}
+	public sub(pt: Point): Point {
+		return new Point(this.x - pt.x, this.y - pt.y);
+	}
+	public neg(): Point {
+		return new Point(-this.x, -this.y);
+	}
+}
+		"""
 		srcModule = WppCore.createMemModule(source, 'minus.fake')
 		dstModule = srcModule.cloneRoot(TsCore())
+		classPoint = dstModule.dictionary['Point']
+		minusOver = classPoint.dictionary['-']
+		self.assertEqual(minusOver.type, 'Overloads')
+		self.assertEqual(len(minusOver.items), 2)
+
 		outContext = OutContextMemoryStream()
 		dstModule.export(outContext)
 		self.assertEqual(str(outContext), WppCore.strPack(expected))
