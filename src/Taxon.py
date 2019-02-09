@@ -194,6 +194,15 @@ class Taxon:
 		""" Для выполнения дополгительного прохода необходимо вернуть True """
 		pass
 
+	def addTask(self, task, taskId = None):
+		"""
+		task - объект со следующими свойствами
+			taxon: Taxon - таксон, для которого выполняется задание
+			check(): bool - имеются ли необходимые условия для выполнения задания
+			exec(): void - выполнение задания
+		"""
+		pass
+
 	def getAccessLevel(self):
 		for level in ['public', 'private', 'protected']:
 			if level in self.attrs:
