@@ -9,6 +9,8 @@ class TaxonTypeName(TaxonType):
 	type = 'TypeName'
 	def getTypeTaxon(self):
 		return self.refs['type']
+	def isQuasiReady(self):
+		return 'type' in self.refs
 	def getDefaultValue(self):
 		return self.getTypeTaxon().getDefaultValue()
 	def getFieldDeclaration(self, name):

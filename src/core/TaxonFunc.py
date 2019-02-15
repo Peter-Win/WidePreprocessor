@@ -7,6 +7,9 @@ from core.Signature import Signature
 class TaxonOverloads(Taxon):
 	type = 'Overloads'
 
+	def canFind(self, caller):
+		return Signature.canCreateFromCall(caller)
+
 	def find(self, caller):
 		sign = Signature.createFromCall(caller)
 		weights = []

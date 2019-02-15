@@ -125,3 +125,4 @@ func public main
 		p = c.getArguments()[0]
 		self.assertEqual(p.type, 'Const')
 		self.assertEqual(p.getLocation(), r.location)
+

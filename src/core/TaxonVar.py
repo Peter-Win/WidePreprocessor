@@ -8,6 +8,8 @@ class TaxonCommonVar(Taxon):
 		return self.getLocalType().getFinalType()
 	def getQuasiType(self):
 		return self.getLocalType()	# TODO: Заменить на getFinalType
+	def isQuasiReady(self):
+		return self.getLocalType().isQuasiReady()
 
 	def getValueTaxon(self):
 		return self.items[1] if len(self.items) > 1 else None

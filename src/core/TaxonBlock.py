@@ -15,3 +15,5 @@ class TaxonBlock(Taxon):
 		# Вызов функции из тела. Н.р. someFunc(...)
 		# Означает, что результат игнорируется
 		return None
+	def isQuasiReady(self):
+		return True

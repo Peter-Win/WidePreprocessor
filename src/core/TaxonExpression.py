@@ -37,19 +37,27 @@ class TaxonConst(TaxonExpression):
 
 	def getQuasiType(self):
 		return self
+	def isQuasiReady(self):
+		return True
 
 class TaxonNull(TaxonExpression):
 	type = 'Null'
+	def isQuasiReady(self):
+		return True
 
 class TaxonTrue(TaxonExpression):
 	type = 'True'
 	def getQuasiType(self):
 		return self.creator('Const')('bool', 'true')
+	def isQuasiReady(self):
+		return True
 
 class TaxonFalse(TaxonExpression):
 	type = 'False'
 	def getQuasiType(self):
 		return self.creator('Const')('bool', 'false')
+	def isQuasiReady(self):
+		return True
 
 class TaxonId(TaxonExpression):
 	__slots__ = ('id') # Идентификатор хранится не в name, чтобы при поиске findUp не происходило ложное срабатывание
@@ -62,6 +70,10 @@ class TaxonId(TaxonExpression):
 		return result
 	def getDeclaration(self):
 		return self.refs['decl']
+	def isDeclaration(self):
+		return 'decl' in self.refs
+	def isQuasiReady(self):
+		return self.isDeclaration()
 	def getQuasiType(self):
 		return self.getDeclaration().getQuasiType()
 	def getFieldDeclaration(self, name):
@@ -140,6 +152,10 @@ class TaxonClassRef(TaxonExpression):
 	def getFieldDeclaration(self, name):
 		myClass = self.getClass()
 		return myClass.getFieldDeclaration(name)
+	def isDeclaration(self):
+		return True
+	def getQuasiType(self):
+		return self.getClass()
 
 class TaxonThis(TaxonClassRef):
 	type = 'This'

@@ -18,11 +18,16 @@ class WppIdExpr(TaxonIdExpr, WppExpression):
 		return self.id
 
 	def onUpdate(self):
-		if 'decl' not in self.refs:
-			decl = self.findUp(self.id, self, self)
-			if not decl:
-				self.throwError('Not found declaration for "'+self.id+'"')
-			self.setRef('decl', decl)
+		class TaskWppIdExprDecl:
+			def check(self):
+				return True
+			def exec(self):
+				taxon = self.taxon
+				decl = taxon.findUpEx(taxon.id)
+				taxon.setRef('decl', decl)
+		if not self.isDeclaration():
+			self.addTask(TaskWppIdExprDecl(), 'decl')
+			
 
 class WppFieldExpr(TaxonFieldExpr, WppExpression):
 	def __init__(self):
@@ -61,24 +66,32 @@ class WppNull(TaxonNull, WppExpression):
 		return 'null'
 
 class WppCall(TaxonCall, WppExpression):
-	def __init__(self):
-		super().__init__()
-		self._phase = 0
 	def onUpdate(self):
-		workPhase = 3	# На первлм шаге определяются объявления для IdExpr, на втором - FieldExpr
-		result = super().onUpdate()
-		self._phase += 1
-		if self._phase == workPhase:
-			caller = self.getCaller()
-			# Возможная замена на new
-			if caller.type == 'IdExpr' and caller.getDeclaration().type == 'Class':
-				self.replaceByNew()
-			# Найти объявление функции (в том случае, если известен объект вызова)
-			elif caller.type == 'IdExpr':
-				decl = caller.getDeclaration()
-				# if decl.type == 'Overloads':
-				# 	self.setRef('decl', decl.find(self))
-		return result or self._phase < workPhase
+		class TaskWppCallOver:
+			def __init__(self, decl):
+				self.decl = decl
+			def check(self):
+				return self.decl.canFind(self.taxon)
+			def exec(self):
+				taxon = self.taxon
+				taxon.setRef('decl', self.decl.find(taxon))
+
+		class TaskWppCallId:
+			def check(self):
+				return self.taxon.getCaller().isDeclaration()
+			def exec(self):
+				taxon = self.taxon
+				decl = taxon.getCaller().getDeclaration()
+				# Возможная замена на new
+				if decl.type == 'Class':
+					taxon.replaceByNew()
+				# Найти объявление функции (в том случае, если известен объект вызова)
+				if decl.type == 'Overloads':
+				 	taxon.addTask(TaskWppCallOver(decl), 'over')
+		caller = self.getCaller()
+		if caller.type == 'IdExpr':
+			self.addTask(TaskWppCallId(), 'IdExpr')
+		return super().onUpdate()
 
 	def replaceByNew(self):
 		taxonNew = WppNew()
@@ -95,11 +108,37 @@ class WppUnOp(TaxonUnOp, WppExpression):
 
 nearBinOps = {'.'}
 class WppBinOp(TaxonBinOp, WppExpression):
+	def __init__(self):
+		super().__init__()
+		self.quasiType = None
+	def isQuasiReady(self):
+		return self.quasiType != None
+	def getQuasiType(self):
+		if not self.quasiType:
+			self.throwError('Not init quasi type for binOp '+self.opCode)
+		return self.quasiType
+
 	def exportString(self):
 		op = self.opCode
 		if op not in nearBinOps:
 			op = ' ' + op + ' '
 		return self.priorExportString(self.getLeft()) + op + self.priorExportString(self.getRight())
+	def onUpdate(self):
+		class TaskWppBinOp:
+			def check(self):
+				taxon = self.taxon
+				return taxon.getRight().isQuasiReady() and taxon.getRight().isQuasiReady()
+		class TaskWppPointOp:
+			def check(self):
+				return self.taxon.getRight().isDeclaration()
+			def exec(self):
+				self.taxon.setRef('decl', self.taxon.getRight().getDeclaration())
+		if self.opCode == '.':
+			# Для определения типа нужно извлечь тип правого аргумента (поля)
+			self.addTask(TaskWppPointOp(), 'decl')
+
+		return super().onUpdate()
+
 
 class WppTernaryOp(TaxonTernaryOp, WppExpression):
 	def exportString(self):

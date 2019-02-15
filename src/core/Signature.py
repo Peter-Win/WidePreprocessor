@@ -20,6 +20,14 @@ class Signature:
 			inst.params.append(param.getQuasiType())
 		inst.result = callTaxon.owner.getQuasiType()
 		return inst
+	@staticmethod
+	def canCreateFromCall(callTaxon):
+		if not callTaxon.owner.isQuasiReady():
+			return False
+		for param in callTaxon.getArguments():
+			if not param.isQuasiReady():
+				return False
+		return True
 
 	def __str__(self):
 		s = '; '.join([p.exportString() for p in self.params])

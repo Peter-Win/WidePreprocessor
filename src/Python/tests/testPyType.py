@@ -8,7 +8,7 @@ class TestPyType(unittest.TestCase):
 		srcModule = WppCore.createMemModule(source, 'types.fake')
 		num = srcModule.dictionary['num']
 		localType = num.getLocalType()
-		self.assertEqual(localType._typeName, None)
+		self.assertEqual(localType._typeName, 'int')
 		self.assertIn('type', localType.refs)
 		typeDecl = localType.getTypeTaxon()
 		self.assertIsNotNone(typeDecl)

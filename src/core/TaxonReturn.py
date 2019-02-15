@@ -19,3 +19,5 @@ class TaxonReturn(Taxon):
 	def getQuasiType(self):
 		fn = self.getOwnerFunc()
 		return fn.getResultType()
+	def isQuasiReady(self):
+		return True		

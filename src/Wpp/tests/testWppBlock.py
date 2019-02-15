@@ -45,4 +45,4 @@ func localVar
 		core = WppCore()
 		with self.assertRaises(ErrorTaxon) as ex:
 			module = core.createRootModule(Context.createFromMemory(source, 'localVar.fake'))
-		self.assertEqual(ex.exception.args[0], 'Not found declaration for "tmp1"')
+		self.assertEqual(ex.exception.args[0], 'Name "tmp1" is not defined')

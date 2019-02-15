@@ -7,6 +7,8 @@ class PyStringLength(PyTaxon):
 	def onRef(self, user, key):
 		# Замена на функцию len
 		userPt = user.owner
+		if userPt.type != 'BinOp':
+			self.throwError('Invalid owner type for PyStringLength: '+userPt.type)
 		assert(userPt.type == 'BinOp')
 		assert(userPt.opCode == '.')
 		assert(userPt.getRight() == user)

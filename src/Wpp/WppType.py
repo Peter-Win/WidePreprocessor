@@ -49,18 +49,27 @@ class WppTypeName(TaxonTypeName):
 		if attrs:
 			self.attrs = attrs
 
+	def isOk(self):
+		return 'type' in self.refs
+
 	def onUpdate(self):
-		if self._typeName:
-			if self._typeName.startswith('@'):
-				# Если это шаблонный тип
-				pass
-			else:
-				# Найти объявление типа
-				decl = self.findUp(self._typeName, self, self)
-				if not decl:
-					self.throwError('Not found type "'+self._typeName+'"')
-				self.setRef('type', decl)
-			self._typeName = None
+		class TaskWppTypeName:
+			def check(self):
+				return True
+			def exec(self):
+				taxon = self.taxon
+				if not taxon._typeName:
+					return
+				if taxon._typeName.startswith('@'):
+					# Если это шаблонный тип
+					pass
+				else:
+					# Найти объявление типа
+					decl = taxon.findUp(taxon._typeName, taxon, taxon)
+					if not decl:
+						taxon.throwError('Not found type "%s"' % (taxon._typeName))
+					taxon.setRef('type', decl)
+		self.addTask(TaskWppTypeName(), 'type')
 
 	def exportString(self):
 		chunks = self.getExportAttrs() + [self.getTypeTaxon().name]

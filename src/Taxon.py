@@ -23,6 +23,7 @@ class Taxon:
 		self.comment = ''
 		self.importBlock = None # Возможно наличие объекта TaxonImportBlock
 		self.altName = ''
+		self.usedTasks = set()
 
 	def getName(self, user):
 		return self.name
@@ -176,6 +177,7 @@ class Taxon:
 			# Позже можно анализировать факт уменьшения количества элементов
 			self.update(updateCtx)
 			if updateCtx.count == 0:
+				Taxon.resolveQueue(self._getQueue())
 				return
 			updateCtx.nextStep()
 		# Если пришли сюда, значит какие-то элементы постоянно возвращают True в onUpdate
@@ -197,11 +199,45 @@ class Taxon:
 	def addTask(self, task, taskId = None):
 		"""
 		task - объект со следующими свойствами
-			taxon: Taxon - таксон, для которого выполняется задание
+			taxon: Taxon - таксон, для которого выполняется задание (Заполняется автоматически при вызове addTask)
 			check(): bool - имеются ли необходимые условия для выполнения задания
 			exec(): void - выполнение задания
 		"""
-		pass
+		if taskId:
+			# Проверка уникальности
+			if taskId in self.usedTasks:
+				return
+			self.usedTasks.add(taskId)
+		task.taxon = self
+		# Если задание готово, то выполнить его сразу
+		if task.check():
+			task.exec()
+			return
+		# Поставить звдвние в очередь
+		self._getQueue().append(task)
+
+	# Пока используется статическая очередь заданий. Но лучше привязать её к ядру
+	def _getQueue(self):
+		return self._queue
+	_queue = []
+
+	@staticmethod
+	def resolveQueue(queue):
+		""" Выполнить все задания в очереди 
+		Для предотвращения вечного цикла используется сторож
+		"""
+		guard = None
+		while queue:
+			task = queue.pop(0)
+			if task.check():
+				task.exec()
+				guard = None	# Если любая задача выполняется, сторож сбрасывается
+			else:
+				if guard == task:
+					task.taxon.throwError('Dead loop');
+				queue.append(task)
+				guard = guard or task 	# Сторож устанавливается при невыполнении задачи
+
 
 	def getAccessLevel(self):
 		for level in ['public', 'private', 'protected']:
