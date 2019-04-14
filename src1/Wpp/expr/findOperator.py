@@ -1,0 +1,2 @@
+def findBinOp(taxonBinOp):
+	
