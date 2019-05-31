@@ -1,5 +1,5 @@
 from Wpp.expr.Taxons import WppBinOp, WppConst, WppFieldExpr, WppIdExpr
-from Wpp.WppType import WppTypeName
+from Wpp.WppLocalType import WppTypeName
 
 WppTaxonMap = {
 	'BinOp': WppBinOp,

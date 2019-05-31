@@ -15,3 +15,12 @@ class TaxonBlock(Taxon):
 		# Вызов функции из тела. Н.р. someFunc(...)
 		# Означает, что результат игнорируется
 		return None
+
+	def getDebugStr(self):
+		return 'BLOCK'
+
+	def isReady(self):
+		return True
+
+	def isReadyFull(self):
+		return True

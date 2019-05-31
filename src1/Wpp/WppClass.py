@@ -96,9 +96,14 @@ class WppClass(TaxonClass, WppDictionary):
 			if 'simple' in self.attrs and 'ptr' not in attrs:
 				return 'Cannot use null for simple class "%s" without pointer' % self.getName(self)
 			return ''
-		if valueTaxon.type == 'New':
+		if valueTaxon.type == 'New' or valueTaxon.type == 'Call':
 			sourceClass = valueTaxon.getCaller().getQuasiType()
 			if sourceClass.canUpcastTo(self):
 				return ''
+		if valueTaxon.type == 'IdExpr':
+			sourceClass = valueTaxon.getQuasiType()
+			if sourceClass.canUpcastTo(self):
+				return ''
+
 		# self.throwError('Invalid value for class %s = %s:%s' % (self.name, valueTaxon.type, valueTaxon.exportString()))
 		return 'NotFound'

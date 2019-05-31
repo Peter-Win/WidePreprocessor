@@ -26,7 +26,17 @@ class Taxon:
 		""" Получить конструктор таксона
 		example: varTaxon = self.creator('Var')('variableName')
 		 """
+		if not self.core:
+			self.throwError('Invalid core for %s:%s' % (self.type, self.getDebugStr()))
 		return self.core.taxonMap[typeId]
+
+	def trace(self, msg):
+		Taxon.Trace(msg)
+	@staticmethod
+	def Trace(msg):
+		# print(msg)
+		pass
+
 
 
 	def getName(self, user):
@@ -203,6 +213,7 @@ class Taxon:
 		task.taxon = self
 		# Если задание готово, то выполнить его сразу
 		if task.check():
+			self.trace('- Task started: %s' % (str(task)))
 			task.exec()
 			return
 		# Поставить звдвние в очередь
@@ -222,15 +233,22 @@ class Taxon:
 		"""
 		changed = False
 		newQueue = []
-		for task in queue:
+		# for task in queue:
+		Taxon.Trace('- queue start [%d]' % (len(queue)))
+		while queue:
+			task = queue[0]
 			if not task.taxon.isValid():
-				check = True # Таксон стал невалидным - исключить его из очереди
+				changed = True # Таксон стал невалидным - исключить его из очереди
+				Taxon.Trace('- cancel task: %s' % (str(task)))
 			elif task.check():
+				Taxon.Trace('- ready task: %s' % (str(task)))
 				task.exec()
 				# Здесь в исходную очередь могут добавиться новые задания
 				changed = True
 			else:
+				Taxon.Trace('- NOT ready task: %s' % (str(task)))
 				newQueue.append(task)
+			queue.pop(0)
 		return (changed, newQueue)
 
 	def _queueStr(self):

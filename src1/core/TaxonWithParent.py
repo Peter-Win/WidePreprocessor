@@ -1,6 +1,7 @@
 # Common parent for class and interface
 from TaxonDictionary import TaxonDictionary
 from core.Ref import Ref
+from core.QuasiType import QuasiType
 
 class TaxonWithParent(TaxonDictionary):
 	__slots__ = ('parent',)
@@ -12,6 +13,9 @@ class TaxonWithParent(TaxonDictionary):
 
 	def isType(self):
 		return True
+
+	def getDebugStr(self):
+		return '%s %s' % (self.type, self.name)
 
 	def isReady(self):
 		return self.parent.isReady() if self.parent else True
@@ -73,3 +77,12 @@ class TaxonWithParent(TaxonDictionary):
 			self.throwError('Non-ready parent')
 		return self.parent.target.canUpcastTo(targetClass)
 
+	def buildQuasiType(self):
+		return QuasiType(self, set())
+
+	def matchQuasiType(self, left, right):
+		if left.taxon == right.taxon:
+			return 'exact', None
+		if hasattr(right.taxon, 'canUpcastTo'):
+			return right.taxon.canUpcastTo(left.taxon)
+		return None, None

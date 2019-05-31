@@ -1,4 +1,5 @@
 from Taxon import Taxon
+from core.QuasiType import QuasiType
 
 class TaxonCommonVar(Taxon):
 	def getLocalType(self):
@@ -15,6 +16,12 @@ class TaxonCommonVar(Taxon):
 		return self.getLocalType().isReadyFull() and (not v or v.isReadyFull())
 	def getTypeDeclaration(self):
 		return self.getLocalType()
+	def buildQuasiType(self):
+		if not self.isReadyFull():
+			self.throwError('Var not ready in buildQuasiType')
+		return QuasiType.combine(self, self.getLocalType())
+	def getDebugStr(self):
+		return '%s %s:%s' % (self.type, self.name, self.getLocalType().getDebugStr() if self.getLocalType() else 'None')
 
 	def autoInitField(self):
 		""" Если это параметр конструктора, созданый через param init name, то возвращает поле name """

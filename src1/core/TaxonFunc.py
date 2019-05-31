@@ -1,27 +1,42 @@
 from Taxon import Taxon
 from TaxonDictionary import TaxonDictionary
 from core.Operators import BinOpNames, UnOpNames
-# from core.Signature import Signature
+from core.Signature import Signature
+from core.QuasiType import QuasiType
 
 class TaxonOverloads(Taxon):
 	type = 'Overloads'
 
-	# def canFind(self, caller):
-	# 	return Signature.canCreateFromCall(caller)
+	def canFind(self, caller):
+		return Signature.canCreateFromCall(caller)
 
-	# def find(self, caller):
-	# 	sign = Signature.createFromCall(caller)
-	# 	weights = []
-	# 	for fn in self.items:
-	# 		curWeight = sign.match(fn)
-	# 		if curWeight:
-	# 			weights.append((curWeight, fn))
-	# 	if len(weights) == 0:
-	# 		self.throwError('Cant match call of '+self.getPath()+' '+str(sign))
-	# 	weights.sort()
-	# 	if len(weights) > 2 and weights[0][0] == weights[1][0]:
-	# 		self.throwError('Too many matches for '+self.getPath()+' '+str(sign))
-	# 	return weights[0][1]
+	def find(self, caller):
+		sign = Signature.createFromCall(caller)
+		weights = []
+		for fn in self.items:
+			curWeight = sign.match(fn)
+			if curWeight:
+				weights.append((curWeight, fn))
+		if len(weights) == 0:
+			self.throwError('Cant match call of '+self.getPath()+' '+str(sign))
+		weights.sort()
+		if len(weights) > 2 and weights[0][0] == weights[1][0]:
+			self.throwError('Too many matches for '+self.getPath()+' '+str(sign))
+		return weights[0][1]
+
+	def isReady(self):
+		for fn in self.items:
+			if not fn.isReady():
+				return False
+		return True
+
+	def isReadyFull(self):
+		for fn in self.items:
+			if not fn.isReadyFull():
+				return False
+		return True
+	def getDebugStr(self):
+		return self.name
 
 class TaxonCommonFunc(TaxonDictionary):
 	""" Функция или метод класса
@@ -36,10 +51,16 @@ class TaxonCommonFunc(TaxonDictionary):
 
 	def getResultType(self):
 		""" Получить таксон типа функции. Может вернуть None, если функция не возвращает результат. """
-		from core.TaxonType import TaxonType
+		from core.TaxonLocalType import TaxonLocalType
 		# Тип результата (если есть) стоит первым в списке
-		hasResult = len(self.items) > 1 and isinstance(self.items[1], TaxonType)
+		hasResult = len(self.items) > 1 and isinstance(self.items[1], TaxonLocalType)
 		return self.items[1] if hasResult else None
+
+	def buildQuasiType(self):
+		resultType = self.getResultType()
+		if not resultType:
+			return None
+		return QuasiType.combine(self, resultType)
 
 	def getParams(self):
 		""" Линейный список параметров. А для доступа по имени лучше использовать dictionary """
@@ -56,6 +77,25 @@ class TaxonCommonFunc(TaxonDictionary):
 		"""
 		pass
 
+	def isReady(self):
+		for param in self.getParams():
+			if not param.isReady():
+				return False
+		resultType = self.getResultType()
+		return resultType.isReady() if resultType else True
+	def isReadyFull(self):
+		for param in self.getParams():
+			if not param.isReadyFull():
+				return False
+		resultType = self.getResultType()
+		return resultType.isReadyFull() if resultType else True
+	def getDebugStr(self):
+		s = '%s %s(%s)' % (self.type, self.name, ', '.join([i.getDebugStr() for i in self.getParams()]))
+		resultType = self.getResultType()
+		if resultType:
+			s += ':'+resultType.getDebugStr()
+		return s
+
 class TaxonFunc(TaxonCommonFunc):
 	type = 'Func'
 
@@ -68,15 +108,12 @@ class TaxonMethod(TaxonCommonFunc):
 
 class TaxonOperator(TaxonCommonFunc):
 	type = 'Operator'
+	__slots__ = ('bMethod')
 	def __init__(self, bMethod = False):
 		super().__init__()
 		self.bMethod = bMethod
 	def isMethod(self):
 		return self.bMethod
-	def clone(self, newCore):
-		taxon = super().clone(newCore)
-		taxon.bMethod = self.bMethod
-		return taxon
 	def isBinary(self):
 		return len(self.getParams()) == 1
 	def isUnary(self):

@@ -37,14 +37,14 @@ class WppCommonFunc(WppTaxon):
 				self.throwError('Attribute "'+a+'" incompatible with previous overloads')
 
 	def readHead(self, context):
-		from Wpp.WppType import WppType
+		from Wpp.WppLocalType import WppLocalType
 		self._phase = 'header'
 		# Создать пустой блок
 		self.addItem(WppBlock())
 		pair = context.currentLine.split(':', 1)
 		if len(pair) == 2:
 			# Создать тип функции
-			self.addItem(WppType.create(pair[1], context))
+			self.addItem(WppLocalType.create(pair[1], context))
 		chunks = pair[0].split()
 		if len(chunks) < 2:
 			context.throwError('Expected name of '+self.type)

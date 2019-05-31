@@ -263,5 +263,20 @@ var public a: A = B()
 		"""
 		with self.assertRaises(RuntimeError) as cm:
 			module = WppCore.createMemModule(source, 'root.fake')
-		self.assertEqual(cm.exception.args[0], 'Cannot convert from "B()" to "A"')
+		self.assertEqual(cm.exception.args[0], 'Cannot convert from "B():New" to "A"')
+
+	def testValidEq(self):
+		source = """
+class A
+class B
+	extends A
+var firstA: A = A()
+var firstB: B = B()
+var public secondA: A = firstA
+var public thirdA: A = firstB
+		"""
+		module = WppCore.createMemModule(source, 'root.fake')
+		outCtx = OutContextMemoryStream()
+		module.export(outCtx)
+		self.assertEqual(str(outCtx), source.strip())
 

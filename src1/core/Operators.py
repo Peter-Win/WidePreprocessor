@@ -33,3 +33,12 @@ BinOpNames = {
 	'^=': 'ixor',
 	'|=': 'ior',
 }
+
+def forSameType(ops, types):
+	result = []
+	for opId in ops:
+		for t in types:
+			result.append((opId, t, t, t))
+	return result
+
+StdBinOps = forSameType(['+', '-', '*', '/'], ['int', 'float', 'double'])

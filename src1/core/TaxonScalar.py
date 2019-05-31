@@ -1,24 +1,32 @@
 from Taxon import Taxon
+from core.QuasiType import QuasiType
 
-intMatches = {'int': 'constExact'}
-floatMatches = {'fixed': 'constExact', 'float': 'constExact', 'int': 'constNear'}
+constMatchesInt = {'int': 'constExact'}
+constMatchesFloat = {'float': 'constExact', 'int': 'constUpcast'}
 
 class TaxonScalar(Taxon):
 	type = 'TypeScalar'
 	propsList = [
-		('bool', {'bool': 'constExact'}),
-		('int8', {'int8': 'constExact'}),
-		('short', {'int8': 'constNear', 'short': 'constExact'}),
-		('int', intMatches),
-		('long', intMatches),
-		('float', floatMatches),
-		('double', floatMatches),
+		('bool', {'bool': 'constExact'}, {'bool': 'exact'}),
+		('int8', constMatchesInt, {'int8': 'exact'}),
+		('short', constMatchesInt, {'short': 'exact', 'int8': 'upcast'}),
+		('int', constMatchesInt, {'int': 'exact', 'short': 'upcast', 'int8': 'upcast'}),
+		('long', constMatchesInt, {'long': 'exact', 'int': 'upcast', 'short': 'upcast', 'int8': 'upcast'}),
+		('float', constMatchesFloat, {'float': 'exact'}),
+		('double', constMatchesFloat, {'double': 'exact', 'float': 'upcast'}),
 	]
+	@staticmethod
+	def createByName(typeName):
+		for props in TaxonScalar.propsList:
+			if props[0] == typeName:
+				return TaxonScalar(props)
+		raise 'Invalid scalar type ' + typeName
 
 	def __init__(self, props):
-		name, matchConst = props
+		name, matchConst, matchVar = props
 		super().__init__(name)
 		self.matchConst = matchConst
+		self.matchVar = matchVar
 
 	def isType(self):
 		return True
@@ -26,22 +34,16 @@ class TaxonScalar(Taxon):
 		return True
 	def getFinalType(self, attrs):
 		return self, attrs
-	def validate(self, valueTaxon, attrs):
-		if valueTaxon.type == 'Const':
-			constType = valueTaxon.constType
-			# Возможно ли присваивание переменной данному типу
-			if constType not in self.matchConst:
-				return "NotFound"
-			# Проверка беззнаковых типов
-			if 'unsigned' in attrs:
-				value = valueTaxon.getRealValue()
-				if value < 0:
-					return 'Conversion from "%s" to "unsigned %s"' % (valueTaxon.value, self.name)
-			return ''
-		# if valueTaxon.type == 'IdExpr':
-		if hasattr(valueTaxon, 'typeRef'):
-			typeRef, newAttrs = valueTaxon.typeRef.getFinalType(attrs)
-			if typeRef.type == 'TypeScalar' and typeRef.name in self.matchConst:
-				return ''
-		return "NotFound"
+
+	def buildQuasiType(self):
+		return QuasiType(self)
+
+	def matchQuasiType(self, left, right): #TODO: Проверять unsigned и диаазон констант
+		if right.isType('Const'):
+			result = self.matchConst.get(right.taxon.constType)
+			return result, None
+		if right.isType(TaxonScalar.type):
+			result = self.matchVar.get(right.taxon.name)
+			return result, None
+		return None, None
 

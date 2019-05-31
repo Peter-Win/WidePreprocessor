@@ -1,7 +1,7 @@
-from core.TaxonType import TaxonType, TaxonTypeName
+from core.TaxonLocalType import TaxonLocalType, TaxonTypeName
 from core.Ref import Ref
 
-class WppType(TaxonType):
+class WppLocalType(TaxonLocalType):
 	@staticmethod
 	def create(description, context):
 		"Создать тип из строкового описания"
@@ -19,8 +19,8 @@ class WppType(TaxonType):
 					context.throwError('Expected comma between key and value types')
 				if len(pair) > 2:
 					context.throwError('Too many commas in Map declaration')
-				keyType = WppType.create(pair[0], context)
-				valueType = WppType.create(pair[1], context)
+				keyType = WppLocalType.create(pair[0], context)
+				valueType = WppLocalType.create(pair[1], context)
 				return WppTypeMap.create(keyType, valueType, attrs)
 			if i == N - 1:
 				# Type with reference by name

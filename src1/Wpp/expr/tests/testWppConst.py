@@ -19,7 +19,7 @@ var public year: int = 3.14
 		"""
 		with self.assertRaises(ErrorTaxon) as cm:
 			WppCore.createMemModule(source, 'root.fake')
-		self.assertEqual(cm.exception.args[0], 'Cannot convert from "3.14" to "int"')
+		self.assertEqual(cm.exception.args[0], 'Cannot convert from "float(3.14):Const" to "int"')
 
 	def testInvalidUnsigned(self):
 		source = """

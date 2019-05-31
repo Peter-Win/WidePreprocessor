@@ -49,6 +49,18 @@ class TaxonClass (TaxonWithParent):
 			i.find(self.owner)
 		return True
 
+	def onUpdateField(self, binOp, fieldTaxon):
+		fieldDecl = self.getMemberDeclaration(fieldTaxon.id)
+		if fieldDecl.type == 'Field' or fieldDecl.type == 'Readonly':
+			return fieldDecl, fieldDecl.getLocalType()
+		if fieldDecl.type == 'Overloads':
+			if len(fieldDecl.items):
+				funcDecl = fieldDecl.items[0]
+				return funcDecl, funcDecl.getResultType() or self.creator('Void')()
+			else:
+				self.throwError('Multiple overload')
+		self.throwError('Invalid field "%s" type: %s' % (fieldDecl.name, fieldDecl.type))
+
 	def findUp(self, fromWho, params):
 		name = params['name']
 		result = self.findWithParent(name)

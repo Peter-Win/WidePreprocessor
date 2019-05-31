@@ -22,4 +22,4 @@ var public valueL: long = valueF
 		"""
 		with self.assertRaises(ErrorTaxon) as cm:
 			WppCore.createMemModule(source, 'root.fake')
-		self.assertEqual(cm.exception.args[0], 'Cannot convert from "valueF" to "long"')
+		self.assertEqual(cm.exception.args[0], 'Cannot convert from "valueF:IdExpr" to "long"')

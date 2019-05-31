@@ -1,8 +1,9 @@
 from core.TaxonVar import TaxonCommonVar, TaxonVar, TaxonField, TaxonReadonly, TaxonParam
 from Wpp.WppTaxon import WppTaxon
-from Wpp.WppType import WppType
+from Wpp.WppLocalType import WppLocalType
 from Wpp.WppExpression import WppExpression
 from core.tasks.TaskNextStep import TaskNextStep
+from core.QuasiType import QuasiType
 
 class WppCommonVar(TaxonCommonVar, WppTaxon):
 	def readHead(self, context):
@@ -26,7 +27,7 @@ class WppCommonVar(TaxonCommonVar, WppTaxon):
 		self.attrs |= set(words[1:-1])
 		# parse type
 		if typeDescr:
-			self.addItem(WppType.create(typeDescr, context))
+			self.addItem(WppLocalType.create(typeDescr, context))
 		else:
 			self.items.append(None)
 		if valueDescr:
@@ -45,6 +46,7 @@ class WppCommonVar(TaxonCommonVar, WppTaxon):
 		outContext.level -= 1
 
 	defaultAccessLevel = ''
+
 	def onUpdate(self):
 		result = super().onUpdate()
 
@@ -53,11 +55,13 @@ class WppCommonVar(TaxonCommonVar, WppTaxon):
 
 		# Проверка соответствия типа  переменной типу выражения
 		# На первом этапе просто ждем готовности
-		class TestValue1:
+		class WaitForReady:
 			def check(self):
 				return self.taxon.isReadyFull()
 			def exec(self):
 				self.taxon.addTask(TestValue2())
+			def __str__(self):
+				return 'WppVar.WaitForReady(%s)' % (self.taxon.getPath())
 		# Второй этап запускается на следующем цикле
 		# Это необходимо для того, чтобы сработали замены. Например, a: A = A() - здесь Call заменяется на New
 		class TestValue2(TaskNextStep):
@@ -65,20 +69,14 @@ class WppCommonVar(TaxonCommonVar, WppTaxon):
 				taxon = self.taxon
 				localType = taxon.getLocalType()
 				valueTaxon = taxon.getValueTaxon()
-				if localType.type != 'TypeName': # TODO временно
-					taxon.throwError('localType type = '+localType.type)
-				finalType, attrs = localType.getFinalType(set())
-				errorMsg = finalType.validate(valueTaxon, attrs)
-				if errorMsg == 'NotFound':
-					errorMsg = 'Cannot convert from "%s" to "%s"' % (
-						valueTaxon.exportString(), localType.exportString())
+				result, errorMsg = QuasiType.matchTaxons(localType, valueTaxon)
 				if errorMsg:
 					taxon.throwError(errorMsg)
 			def __str__(self):
-				return 'WppCommonVar.TestValue(%s)' % (self.taxon.getPath())
+				return 'WppCommonVar.TestValue2(%s:%s)' % (self.taxon.getPath(), self.taxon.type)
 
 		if self.getValueTaxon():
-			self.addTask(TestValue1())
+			self.addTask(WaitForReady())
 		return result
 
 	def filteredAttrs(self):

@@ -1,6 +1,7 @@
 from Wpp.WppTaxon import WppTaxon
 from core.TaxonModule import TaxonModule
 from core.TaxonScalar import TaxonScalar
+from core.Operators import StdBinOps
 from Wpp.Context import Context
 from Taxon import Taxon
 
@@ -28,6 +29,7 @@ class WppCore(TaxonModule):
 		# 	inst.init()
 		# mathModule = self.createRootModule(Context.createFromMemory(Math, 'Math.fake'))
 		# self.addNamedItem(mathModule.dictionary['Math'])
+
 
 
 	def createRootModule(self, context):

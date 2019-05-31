@@ -1,5 +1,6 @@
 from Taxon import Taxon
 from core.Ref import Ref
+from core.QuasiType import QuasiType
 
 class TaxonExpression(Taxon):
 	__slots__ = ('prior')
@@ -21,14 +22,19 @@ class TaxonExpression(Taxon):
 	def isReady(self):
 		return True
 	def isReadyFull(self):
-		return True
+		# if not self.isReady():
+		# 	return False
+		# for item in self.items:
+		# 	if not item.isReadyFull():
+		# 		return False
+		return self.isReady()
 
 class TaxonConst(TaxonExpression):
 	type = 'Const'
 	__slots__ = ('constType', 'value')
 	def __init__(self, constType = None, value = None):
 		super().__init__()
-		self.constType = constType
+		self.constType = 'float' if constType=='fixed' else constType
 		self.value = value
 
 	def getDebugStr(self):
@@ -41,45 +47,68 @@ class TaxonConst(TaxonExpression):
 			return float(self.value)
 		return self.value
 
-	def getQuasiType(self):
-		return self.creator('Const')(self.constType, self.value)
+	def buildQuasiType(self):
+		return QuasiType(self)
 
 class TaxonNull(TaxonExpression):
 	type = 'Null'
 
+class TaxonVoid(Taxon):
+	type = 'Void'
+	def isType(self):
+		return True
+	def getDebudStr(self):
+		return 'void'
+	def isReady():
+		return True
+	def isReadyFull():
+		return True
+
 class TaxonTrue(TaxonExpression):
 	type = 'True'
-	def getQuasiType(self):
-		return self.creator('Const')('bool', 'true')
+	def buildQuasiType(self):
+		return QuasiType(self)
 
 class TaxonFalse(TaxonExpression):
 	type = 'False'
-	def getQuasiType(self):
-		return self.creator('Const')('bool', 'false')
+	def buildQuasiType(self):
+		return QuasiType(self)
 
 class TaxonId(TaxonExpression):
-	__slots__ = ('id', 'decl', 'typeRef') # Идентификатор хранится не в name, чтобы при поиске findUp не происходило ложное срабатывание
-	refsList = ('decl', 'typeRef')
+	__slots__ = ('id', 'refDecl', 'typeTaxon') # Идентификатор хранится не в name, чтобы при поиске findUp не происходило ложное срабатывание
+	refsList = ('refDecl', 'typeTaxon')
 
 	def __init__(self, id = None):
 		super().__init__()
 		self.id = id
-		self.decl = None # Ref
-		self.typeRef = None # 
-
-	def getQuasiType(self):
-		return self.typeRef
+		self.refDecl = None
+		self.typeTaxon = None
 
 	def getDebugStr(self):
 		return self.id
+	def buildQuasiType(self):
+		if not self.typeTaxon:
+			self.throwError('Not ready typeTaxon in buildQuasiType')
+		return self.typeTaxon.buildQuasiType()
 
 	def isReady(self):
-		return self.typeRef
+		return self.typeTaxon != None
 	def isReadyFull(self):
-		return self.isReady() and self.typeRef.isReadyFull()
+		return self.isReady() and self.typeTaxon.isReadyFull()
 
+	def getFuncDeclaration(self):
+		if not self.refDecl or not self.refDecl.isReady():
+			return None
+		decl = self.refDecl.target
+
+		from core.TaxonFunc import TaxonCommonFunc
+		if decl.type != 'Class' and not isinstance(decl, TaxonCommonFunc):
+			from core.debugUtils import recursiveDebugStr
+			recursiveDebugStr(self)
+			self.throwError('Expected function instead of ' + decl.type)
+		return decl
 	def getMemberDeclaration(self, name):
-		return self.typeRef.getMemberDeclaration(name)
+		return self.typeTaxon.getMemberDeclaration(name)
 
 	def checkShortStatic(self):
 		""" Проверяет, является ли данная конструкция обращением к статическому члему класса без указания класса
@@ -116,51 +145,49 @@ class TaxonId(TaxonExpression):
 
 class TaskSetType:
 	def check(self):
-		return self.taxon.decl.isReadyFull()
+		return self.taxon.refDecl.isReadyFull()
 	def exec(self):
-		decl = self.taxon.decl.target
-		self.taxon.typeRef = decl.getTypeDeclaration() if hasattr(decl, 'getTypeDeclaration') else decl
+		decl = self.taxon.refDecl.target
+		self.taxon.typeTaxon = decl.getTypeDeclaration() if hasattr(decl, 'getTypeDeclaration') else decl
 	def __str__(self):
-		return 'TaskSetType(%s)' % (self.taxon.id)
+		return 'TaskSetType(%s) path=%s' % (self.taxon.id, self.taxon.getPath())
 
 class TaxonIdExpr(TaxonId):
+	__slots__ = ()
 	type = 'IdExpr'
 	def onUpdate(self):
 		result = super().onUpdate()
-		self.decl = Ref(self.id)
-		self.decl.find(self)
+		self.refDecl = Ref(self.id)
+		self.refDecl.find(self) # Возможно, тут нужно ждать готовности. Например, поиск в классе требует, чтобы были готовые его паренты
 		self.addTask(TaskSetType())
 		return result
 
 class TaxonFieldExpr(TaxonId):
+	__slots__ = ()
 	type = 'FieldExpr'
-	def onUpdate(self):
-		result = super().onUpdate()
-		self.decl = Ref(self.id)
-		class SetField:
-			def check(self):
-				return self.taxon.owner.isReady()
-			def exec(self):
-				taxon = self.taxon
-				binOp = taxon.owner
-				left = binOp.getLeft()
-				taxon.decl.setTarget(left.getMemberDeclaration(taxon.id))
-		self.addTask(SetField())
-		return result
+	def getFieldTaxon(self):
+		return self
 
 class TaxonOpCode(TaxonExpression):
-	__slots__ = ('opCode', 'decl', 'typeRef')
-	refsList = ('decl')
-	excludes = ('typeRef')
+	__slots__ = ('opCode', 'refDecl', 'typeTaxon')
+	refsList = ('refDecl')
+	excludes = ('typeTaxon')
 	def __init__(self, opCode = None):
 		super().__init__()
 		self.opCode = opCode
-		self.decl = Ref(opCode)
-		self.typeRef = None
-	def getQuasiType(self):
-		return self.typeRef
+		self.refDecl = Ref(opCode)
+		self.typeTaxon = None
+	def isReady(self):
+		return self.typeTaxon != None
+	def isReadyFull(self):
+		return self.isReady() and self.typeTaxon.isReadyFull()
+	def buildQuasiType(self):
+		if not self.typeTaxon:
+			self.throwError('Not ready type for (%s)' % self.opCode)
+		return self.typeTaxon.buildQuasiType()
 
 class TaxonUnOp(TaxonOpCode):
+	__slots__ = ()
 	type = 'UnOp'
 	def getArgument(self):
 		return self.items[0]
@@ -168,30 +195,69 @@ class TaxonUnOp(TaxonOpCode):
 		return '(%s %s)' % (self.opCode, self.getArgument())
 
 class TaxonBinOp(TaxonOpCode):
+	__slots__ = ()
 	type = 'BinOp'
 	def getLeft(self):
 		return self.items[0]
 	def getRight(self):
 		return self.items[1]
+	def isReadyFull(self): # Возможно, тут нужно ждать только свой typeTaxon
+		return self.getLeft().isReadyFull() and self.getRight().isReadyFull()
 	def getDebugStr(self):
 		return '(%s %s %s)' % (self.getLeft().getDebugStr(), self.opCode, self.getRight().getDebugStr())
+	def getFuncDeclaration(self):
+		if self.opCode == '.':
+			return self.getRight().getFuncDeclaration()
+		return super().getFuncDeclaration()
 	def onUpdate(self):
+		"""
+		Если оператор . то он обрабатывается по специальному алгоритму:
+		1. Ждать, пока созреет правый операнд.
+		2. Достать таксон поля из правого операнда через getFieldTaxon
+		3. Вызвать left.getFinalType().onUpdateField(left, field)
+		4. Заполнить своё поле типа
+		"""
 		result = super().onUpdate()
+		class WaitForLeft:
+			def check(self):
+				return self.taxon.getLeft().isReady()
+			def exec(self):
+				fieldTaxon = self.taxon.getRight().getFieldTaxon()
+				left = self.taxon.getLeft()
+				leftQuasi = left.buildQuasiType()
+				declTaxon, typeTaxon = leftQuasi.taxon.onUpdateField(self.taxon, fieldTaxon)
+				self.taxon.typeTaxon = typeTaxon
+				fieldTaxon.typeTaxon = typeTaxon
+				fieldTaxon.refDecl = Ref(declTaxon.name, declTaxon)
+
+			def __str__(self):
+				return 'BinOp.WaitForLeft'
+
 		class WaitForBoth:
 			def check(self):
 				return self.taxon.getLeft().isReadyFull() and self.taxon.getRight().isReadyFull()
 			def exec(self):
 				self.taxon._initType()
-		# self.addTask(WaitForBoth())
-		self.typeRef = self.findUpEx('int')
+			def __str__(self):
+				return 'BibOp.WaitForBoth(%s)' % (self.taxon.opCode)
+
+		if self.opCode == '.':
+			self.addTask(WaitForLeft())
+		else:
+			self.addTask(WaitForBoth())
+
 		return result
 
 	def _initType(self):
-		leftType = self.getLeft().getQuasiType()
-		rightType = self.getRight().getQuasiType()
+		leftType = self.getLeft().buildQuasiType()
+		rightType = self.getRight().buildQuasiType()
 		def cmp(taxon, params):
-			return False
-		self.decl.setTarget(self.findUpEx({'name': self.opCode, 'cmp': cmp}))
+			return taxon.name == params['name']
+		over = self.findUpEx({'name': self.opCode, 'cmp': cmp})
+		sig = Signature()
+		sig.params.append(leftType)
+		sig.params.append(rightType)
+		self.refDecl.setTarget()
 #-----
 
 class TaxonClassRef(TaxonExpression):
@@ -202,8 +268,8 @@ class TaxonClassRef(TaxonExpression):
 		return myClass.getMemberDeclaration(name)
 	def isDeclaration(self):
 		return True
-	def getQuasiType(self):
-		return self.getClass()
+	def buildQuasiType(self):
+		return self.getClass().buildQuasiType()
 
 class TaxonThis(TaxonClassRef):
 	type = 'This'
@@ -211,26 +277,6 @@ class TaxonThis(TaxonClassRef):
 class TaxonSuper(TaxonClassRef):
 	type = 'Super'
 
-class TaxonCall(TaxonExpression):
-	type = 'Call'
-	def __init__(self):
-		super().__init__()
-		self.phase = 0
-	def getCaller(self):
-		return self.items[0]
-	def getArguments(self):
-		return self.items[1:]
-	def exportString(self):
-		s = self.priorExportString(self.getCaller()) + '('
-		s += ', '.join([arg.exportString() for arg in self.getArguments()]) + ')'
-		return s
-
-	def getDeclaration(self):
-		return self.refs['decl']
-
-class TaxonNew(TaxonCall):
-	""" new Classname() """
-	type = 'New'
 
 class TaxonTernaryOp(TaxonExpression):
 	type = 'TernaryOp'
