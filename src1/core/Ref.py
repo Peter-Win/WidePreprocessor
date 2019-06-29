@@ -19,4 +19,4 @@ class Ref:
 		self.target = taxon.findUpPath(self.name)
 
 	def getDebugStr(self):
-		return '%s=>%s' % (self.name, self.target.getDebugStr() if self.target else 'None')
+		return '%s=>%s' % (self.name, '%s:%s' % (self.target.type, self.target.getDebugStr()) if self.target else 'None')

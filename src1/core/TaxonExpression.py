@@ -29,6 +29,9 @@ class TaxonExpression(Taxon):
 		# 		return False
 		return self.isReady()
 
+	def buildQuasiType(self):
+		return QuasiType(self)
+
 class TaxonConst(TaxonExpression):
 	type = 'Const'
 	__slots__ = ('constType', 'value')
@@ -101,12 +104,16 @@ class TaxonId(TaxonExpression):
 			return None
 		decl = self.refDecl.target
 
+		if decl.type == 'Class':	# create an instance of class (new)
+			return decl
+		if decl.type == 'Overloads': # На этом уровне невозможно получить сигнатуру и найти подходящую функции в перегрузках
+			return decl
 		from core.TaxonFunc import TaxonCommonFunc
-		if decl.type != 'Class' and not isinstance(decl, TaxonCommonFunc):
-			from core.debugUtils import recursiveDebugStr
-			recursiveDebugStr(self)
-			self.throwError('Expected function instead of ' + decl.type)
-		return decl
+		if isinstance(decl, TaxonCommonFunc): # function declaration
+			return decl
+
+		self.throwError('Expected function instead of ' + decl.type)
+
 	def getMemberDeclaration(self, name):
 		return self.typeTaxon.getMemberDeclaration(name)
 
@@ -202,7 +209,8 @@ class TaxonBinOp(TaxonOpCode):
 	def getRight(self):
 		return self.items[1]
 	def isReadyFull(self): # Возможно, тут нужно ждать только свой typeTaxon
-		return self.getLeft().isReadyFull() and self.getRight().isReadyFull()
+		# return self.getLeft().isReadyFull() and self.getRight().isReadyFull()
+		return self.typeTaxon
 	def getDebugStr(self):
 		return '(%s %s %s)' % (self.getLeft().getDebugStr(), self.opCode, self.getRight().getDebugStr())
 	def getFuncDeclaration(self):
@@ -249,18 +257,40 @@ class TaxonBinOp(TaxonOpCode):
 		return result
 
 	def _initType(self):
+		from core.Signature import Signature
 		leftType = self.getLeft().buildQuasiType()
 		rightType = self.getRight().buildQuasiType()
+
 		def cmp(taxon, params):
 			return taxon.name == params['name']
-		over = self.findUpEx({'name': self.opCode, 'cmp': cmp})
+		over = self.findUp(self, {'name': self.opCode, 'cmp': cmp})
+		if not over:
+			if self.opCode == '=':
+				# Если не найден оператор присваивания, то использовать дефолтный
+				self._defaultEquation(leftType, rightType)
+				return
+			self.throwError('Operator %s not found' % (self.opCode))
 		sig = Signature()
 		sig.params.append(leftType)
 		sig.params.append(rightType)
-		self.refDecl.setTarget()
+		operator = over.findSignature(sig)
+		self.refDecl.setTarget(operator)
+		self.typeTaxon = operator.getResultType()
+
+	def _defaultEquation(self, leftQuasi, rightQuasi):
+		""" Стандартный оператор присваивания """
+		from core.Operators import createOperatorLow
+		# Левая часть должна допускать присваивание
+		# Нужно, чтобы правый тип матчился в левый
+		matchCode, errorMsg = QuasiType.matchTaxons(leftQuasi, rightQuasi)
+		if errorMsg:
+			self.throwError(errorMsg)
+		self.typeTaxon = leftQuasi.taxon
+		self.refDecl.setTarget(createOperatorLow(self.core, '=', leftQuasi.taxon, rightQuasi.taxon, self.typeTaxon))
 #-----
 
 class TaxonClassRef(TaxonExpression):
+	__slots__ = ()
 	def getClass(self):
 		return self.findOwner('Class', True)
 	def getMemberDeclaration(self, name):
@@ -272,9 +302,11 @@ class TaxonClassRef(TaxonExpression):
 		return self.getClass().buildQuasiType()
 
 class TaxonThis(TaxonClassRef):
+	__slots__ = ()
 	type = 'This'
 
 class TaxonSuper(TaxonClassRef):
+	__slots__ = ()
 	type = 'Super'
 
 
@@ -288,10 +320,28 @@ class TaxonTernaryOp(TaxonExpression):
 		return self.items[2]
 
 class TaxonArrayIndex(TaxonExpression):
+	""" instance[index]. items = [instanceTaxon, indexTaxon] """
+	__slots__ = ()
 	type = 'ArrayIndex'
+	def getArrayInstance(self):
+		""" Экземпляр типа TaxonTypeArray """
+		return self.items[0]
+	def isReady(self):
+		return self.items[0].isReady() and self.items[1].isReady()
+	def isReadyFull(self):
+		return self.items[0].isReadyFull() and self.items[1].isReadyFull()
+	def getIndexTaxon(self):
+		return self.items[1]
+	def buildQuasiType(self):
+		instType = self.getArrayInstance().buildQuasiType()
+		return instType.itemType.buildQuasiType()
+	def matchQuasiType(self, left, right):
+		print('TaxonArrayIndex. left=', left, ', right=', right)
+
 
 class TaxonArrayValue(TaxonExpression):
 	""" example: [1, 2, 3] """
+	__slots__ = ()
 	type = 'ArrayValue'
 	def exportString(self):
 		return '[' + ', '.join([i.exportString() for i in self.items]) + ']'

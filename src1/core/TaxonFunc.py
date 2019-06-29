@@ -12,16 +12,20 @@ class TaxonOverloads(Taxon):
 
 	def find(self, caller):
 		sign = Signature.createFromCall(caller)
+		return self.findSignature(sign)
+		
+	def findSignature(self, sign):
 		weights = []
 		for fn in self.items:
 			curWeight = sign.match(fn)
 			if curWeight:
 				weights.append((curWeight, fn))
+
 		if len(weights) == 0:
-			self.throwError('Cant match call of '+self.getPath()+' '+str(sign))
-		weights.sort()
+			self.throwError('Cannot match call of %s(%s)' % (self.getPath(), str(sign)))
+		weights.sort(key = lambda p: -p[0])
 		if len(weights) > 2 and weights[0][0] == weights[1][0]:
-			self.throwError('Too many matches for '+self.getPath()+' '+str(sign))
+			self.throwError('Too many matches for %s(%s)' % (self.getPath(), str(sign)))
 		return weights[0][1]
 
 	def isReady(self):
@@ -109,8 +113,8 @@ class TaxonMethod(TaxonCommonFunc):
 class TaxonOperator(TaxonCommonFunc):
 	type = 'Operator'
 	__slots__ = ('bMethod')
-	def __init__(self, bMethod = False):
-		super().__init__()
+	def __init__(self, name = '', bMethod = False):
+		super().__init__(name)
 		self.bMethod = bMethod
 	def isMethod(self):
 		return self.bMethod

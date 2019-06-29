@@ -43,7 +43,8 @@ class TaxonCall(TaxonExpression):
 			self.throwError("Expected %d parameters instead of %d in %s %s" % (len(formalParams), len(args), self.type, self.getDebugStr()))
 		# Проверить соответствие типов. Фактический должен кастоваться к формальному
 		for i, arg in enumerate(args):
-			formal = formalParams[i]
+			formal = formalParams[i].buildQuasiType()
+			formal.inst = self
 			result, errMsg = QuasiType.matchTaxons(formal, arg)
 			if not result:
 				self.throwError('Invalid parameter #%d of %s: %s' % (i+1, self.declTaxon.getDebugStr(), errMsg))
@@ -68,8 +69,9 @@ class TaxonCall(TaxonExpression):
 				taxon = self.taxon
 				taxon._initDecl(self.over.find(taxon))
 		if decl.type == 'Overloads':
+			# TODO: Это может быть уже не актуально после поиска точной функции в onUpdate
 			self.addTask(TaskCallOver(decl), 'over')
-		elif decl.type == 'Method':
+		elif decl.type == 'Method' or decl.type == 'Func':
 			self._initDecl(decl)
 		else:
 			self.throwError('Invalid call declaration: ' + decl.type)
@@ -81,6 +83,10 @@ class TaxonCall(TaxonExpression):
 				self.decl = self.taxon.getCaller().getFuncDeclaration()
 				return self.decl != None
 			def exec(self):
+				if self.decl.type == 'Overloads': # Найти подходящий вариант
+					funcDecl = self.decl.find(self.taxon)
+					self.decl = funcDecl
+					
 				self.taxon._setDecl(self.decl)
 			def __str__(self):
 				return 'TaxonCall.TaskFindDecl(%s:%s)' % (self.taxon.type, self.taxon.exportString())

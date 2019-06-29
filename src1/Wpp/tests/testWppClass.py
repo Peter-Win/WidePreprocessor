@@ -263,7 +263,7 @@ var public a: A = B()
 		"""
 		with self.assertRaises(RuntimeError) as cm:
 			module = WppCore.createMemModule(source, 'root.fake')
-		self.assertEqual(cm.exception.args[0], 'Cannot convert from "B():New" to "A"')
+		self.assertEqual(cm.exception.args[0], 'Cannot convert from "B():B" to "A"')
 
 	def testValidEq(self):
 		source = """

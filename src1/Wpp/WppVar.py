@@ -69,7 +69,9 @@ class WppCommonVar(TaxonCommonVar, WppTaxon):
 				taxon = self.taxon
 				localType = taxon.getLocalType()
 				valueTaxon = taxon.getValueTaxon()
-				result, errorMsg = QuasiType.matchTaxons(localType, valueTaxon)
+				qtValue = valueTaxon.buildQuasiType()
+				qtValue.inst = valueTaxon
+				result, errorMsg = QuasiType.matchTaxons(localType, qtValue)
 				if errorMsg:
 					taxon.throwError(errorMsg)
 			def __str__(self):

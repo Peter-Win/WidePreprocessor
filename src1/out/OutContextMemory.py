@@ -1,9 +1,10 @@
 from Taxon import Taxon
+from out.OutContextBase import OutContextBase
 
-class OutContextMemory:
+class OutContextMemory(OutContextBase):
 	def __init__(self):
+		super().__init__()
 		self.lines = []
-		self.level = 0
 		self.curLine = ''
 
 	def writeln(self, string):
@@ -17,11 +18,6 @@ class OutContextMemory:
 	def eol(self):
 		self.lines.append(self.curLine)
 		self.curLine = ''
-
-	def push(self):
-		self.level += 1
-	def pop(self):
-		self.level -= 1
 
 	def close(self):
 		pass

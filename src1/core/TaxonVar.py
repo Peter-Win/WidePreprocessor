@@ -17,11 +17,13 @@ class TaxonCommonVar(Taxon):
 	def getTypeDeclaration(self):
 		return self.getLocalType()
 	def buildQuasiType(self):
-		if not self.isReadyFull():
+		if not self.isReady(): # C isReadyFull зацикливание
 			self.throwError('Var not ready in buildQuasiType')
 		return QuasiType.combine(self, self.getLocalType())
 	def getDebugStr(self):
 		return '%s %s:%s' % (self.type, self.name, self.getLocalType().getDebugStr() if self.getLocalType() else 'None')
+	def exportString(self):
+		return '%s: %s' % (self.name, self.getLocalType().getDebugStr())
 
 	def autoInitField(self):
 		""" Если это параметр конструктора, созданый через param init name, то возвращает поле name """

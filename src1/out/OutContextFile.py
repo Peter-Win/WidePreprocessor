@@ -1,8 +1,9 @@
-class OutContextFile:
+from out.OutContextBase import OutContextBase
+class OutContextFile(OutContextBase):
 	def __init__(self, fileName):
+		super().__init__()
 		self.fileName = fileName
 		self.file = open(fileName, 'w')
-		self.level = 0
 
 	def writeln(self, string):
 		self.file.write('\t' * self.level + string + '\n')
@@ -16,8 +17,3 @@ class OutContextFile:
 
 	def close(self):
 		self.file.close()
-
-	def push(self):
-		self.level += 1
-	def pop(self):
-		self.level -= 1

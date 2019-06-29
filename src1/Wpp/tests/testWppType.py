@@ -1,12 +1,12 @@
 import unittest
 from Wpp.WppCore import WppCore
-from Wpp.WppType import WppType
+from Wpp.WppLocalType import WppLocalType
 from Wpp.Context import Context
 from core.ErrorTaxon import ErrorTaxon
 
 class TestWppType(unittest.TestCase):
 	def testCreate(self):
-		taxon = WppType.create('MyType', Context.createFromMemory(''))
+		taxon = WppLocalType.create('MyType', Context.createFromMemory(''))
 		self.assertEqual(taxon.type, 'TypeName')
 		self.assertEqual(taxon.typeRef.name, 'MyType')
 

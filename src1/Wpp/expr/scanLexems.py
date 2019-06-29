@@ -44,8 +44,8 @@ def scanLexems(lexems, pos, terminators, context):
 								break
 				elif value == '[':
 					prior = squareBracketPrior
-					optimizeStack(stack, prior, context)
-					opNode = Node('index', lexemType, prior=prior)
+					# optimizeStack(stack, prior, context)
+					opNode = Node('index', lexemType, prior=prior, bArgument=True)
 					opNode.args.append(stack.pop())
 					aNode, pos = scanLexems(lexems, pos, {']'}, context)
 					opNode.args.append(aNode)

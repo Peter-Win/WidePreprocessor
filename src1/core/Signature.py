@@ -26,7 +26,7 @@ class Signature:
 		return callTaxon.isReadyFull()
 
 	def __str__(self):
-		return '; '.join([p.getDebugStr() for p in self.params])
+		return '; '.join([p.exportString() for p in self.params])
 
 	def match(self, funcTaxon):
 		"""

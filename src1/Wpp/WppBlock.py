@@ -4,28 +4,28 @@ from Wpp.WppTaxon import WppTaxon
 class WppBlock(TaxonBlock, WppTaxon):
 	def readBody(self, context):
 		from Wpp.WppVar import WppVar
-		# from Wpp.WppReturn import WppReturn
+		from Wpp.WppReturn import WppReturn
 		from Wpp.WppExpression import WppExpression
-		# from Wpp.WppIf import WppIf
+		from Wpp.WppIf import WppIf
 		# from Wpp.WppForeach import WppForeach
 
 		word = context.getFirstWord()
 		if word == 'var':
 			return WppVar()
-		# if word == 'return':
-		# 	return WppReturn()
-		# if word == 'if':
-		# 	return WppIf()
-		# if word == 'elif' or word == 'else':
-		# 	cmd = self.items[-1] if self.items else None
-		# 	if cmd and cmd.type == 'If' and cmd.canAdd():
-		# 		return cmd
-		# 	context.throwError('Invalid statement "' + word + '" without "if"')
+		if word == 'return':
+			return WppReturn()
+		if word == 'if':
+			return WppIf()
+		if word == 'elif' or word == 'else':
+			cmd = self.items[-1] if self.items else None
+			if cmd and cmd.type == 'If' and cmd.canAdd():
+				return cmd
+			context.throwError('Invalid statement "' + word + '" without "if"')
 		# if word == 'foreach':
 		# 	return WppForeach()
 
 		# Когда все стандартные инструкции закончились, возможен вариант вычисления выражения
-		# Последнее выражение функции воспринимается как return
+		# Последнее выражение функции воспринимается как return. Операторы присваивания - тоже выражения
 		return WppExpression.create(context.currentLine.strip(), context)
 
 	def addTaxon(self, taxon):
@@ -48,3 +48,5 @@ class WppBlock(TaxonBlock, WppTaxon):
 				#TODO: Здесь надо проверять соответствие типов
 				bodyItems.pop()
 				self.addItem(WppReturn.createAuto(lastCmd))
+			elif lastCmd.type == 'Return':
+				lastCmd.isAutoChange = True # Если оператор последний, то он может в некоторых случаях использоваться без ключевого слова return

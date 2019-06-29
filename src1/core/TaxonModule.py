@@ -9,6 +9,9 @@ class TaxonModule(TaxonDictionary):
 		super().__init__(name)
 		self.importBlock = None
 
+	def getDebugStr(self):
+		return '%s %s' % (self.type, self.getPath())
+
 	def findUp(self, fromWho, params):
 		return self._findUpSiblings(fromWho, params)
 

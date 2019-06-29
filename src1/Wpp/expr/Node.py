@@ -23,7 +23,7 @@ class Node:
 		return self.type == 'unop' and self.value == '-' and lexemType == 'const' and constType in {'int', 'fixed', 'float'}
 
 	def makeTaxon(self):
-		from Wpp.expr.Taxons import WppBinOp, WppCall, WppConst, WppFieldExpr, WppIdExpr, WppTernaryOp, WppThis, WppSuper, WppUnOp, WppArrayValue, WppTrue, WppFalse, WppNull
+		from Wpp.expr.Taxons import WppArrayIndex, WppArrayValue, WppBinOp, WppCall, WppConst, WppFalse, WppFieldExpr, WppIdExpr, WppNull, WppTernaryOp, WppThis, WppTrue, WppSuper, WppUnOp
 		keyWords = {'this': WppThis, 'super': WppSuper, 'true': WppTrue, 'false': WppFalse, 'null': WppNull}
 
 		if self.type == 'array':
@@ -69,8 +69,8 @@ class Node:
 				taxon.addItem(arg.makeTaxon())
 			return taxon
 		if self.type == 'index': # Array index
-			taxon = TaxonArrayIndex(owner)
-			taxon.args =[arg.makeTaxon(taxon) for arg in self.args]
+			taxon = WppArrayIndex()
+			taxon.addItems([arg.makeTaxon() for arg in self.args])
 			return taxon
 		raise RuntimeError('Invalid operation type: ' + str(self))
 

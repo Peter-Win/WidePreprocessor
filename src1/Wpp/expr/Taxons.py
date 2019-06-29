@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonArrayIndex, TaxonArrayValue, TaxonBinOp, TaxonConst, TaxonIdExpr, TaxonFieldExpr, TaxonTernaryOp, TaxonThis, TaxonSuper, TaxonUnOp, TaxonTrue, TaxonFalse, TaxonNull
+from core.TaxonExpression import TaxonArrayIndex, TaxonArrayValue, TaxonBinOp, TaxonConst, TaxonIdExpr, TaxonFieldExpr, TaxonTernaryOp, TaxonThis, TaxonSuper, TaxonUnOp, TaxonTrue, TaxonFalse, TaxonNull, TaxonVoid
 from core.TaxonCall import TaxonCall, TaxonNew
 from Wpp.expr.parseExpr import slash
 from Wpp.WppExpression import WppExpression
@@ -29,6 +29,12 @@ class WppNull(TaxonNull, WppExpression):
 	__slots__ = ()
 	def exportString(self):
 		return 'null'
+
+class WppVoid(TaxonVoid, WppExpression):
+	__slots__ = ()
+	def exportString(self):
+		return 'void'
+
 
 class WppIdExpr(TaxonIdExpr, WppExpression):
 	__slots__ = ()
@@ -131,6 +137,35 @@ class WppTernaryOp(TaxonTernaryOp, WppExpression):
 			res += self.priorExportString(item)
 			res += div[j]
 		return res
+
+class WppArrayIndex(TaxonArrayIndex, WppExpression):
+	__slots__ = ()
+	def exportString(self):
+		return '%s[%s]' % (self.getArrayInstance().exportString(), self.getIndexTaxon().exportString())
+	def _checkIndexType(self):
+		""" Индекс таксона должен каститься в unsigned long """
+		# Индексы строгие, как в C++, Java, JS.
+		# В PHP отрицательный индекс используется, как ключ ассоциативного массива. В Python - отсчитывает элемент от конца
+		# Поэтому для совместимости все индексы беззнаковые целые
+		from core.TaxonScalar import TaxonScalar
+		from core.QuasiType import QuasiType
+		requiredType = TaxonScalar.createByName('long')
+		requiredType.attrs.add('unsigned')
+		code, errMsg = QuasiType.matchTaxons(requiredType, self.getIndexTaxon())
+		if errMsg:
+			self.throwError(errMsg)
+	def onUpdate(self):
+		result = super().onUpdate()
+		# Проконтролировать тип индекса. Используется только для Wpp
+		class TestIndex:
+			def check(self):
+				return self.taxon.getIndexTaxon().isReadyFull()
+			def exec(self):
+				self.taxon._checkIndexType()
+			def __str__(self):
+				return 'TestArrayIndex'
+		self.addTask(TestIndex())
+		return result
 
 class WppArrayValue(TaxonArrayValue, WppExpression):
 	__slots__ = ()

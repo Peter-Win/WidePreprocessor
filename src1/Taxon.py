@@ -357,3 +357,15 @@ class Taxon:
 
 	def combineAttrs(self, attrs = set()):
 		return self.attrs | attrs
+
+	@staticmethod
+	def makeTypePrefix(attrs):
+		s = ''
+		if 'const' in attrs:
+			s+= 'const '
+		if 'unsigned' in attrs:
+			s += 'unsigned '
+		return s
+
+	def typePrefix(self):
+		return Taxon.makeTypePrefix(self.attrs)

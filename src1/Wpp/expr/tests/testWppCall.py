@@ -14,5 +14,5 @@ func public main
 		"""
 		module = WppCore.createMemModule(source, 'fake.memory')
 		ctx = OutContextMemoryStream()
-		module.export()
+		module.export(ctx)
 		self.assertEqual(str(ctx), module.strPack(source))

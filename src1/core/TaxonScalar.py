@@ -41,9 +41,15 @@ class TaxonScalar(Taxon):
 	def matchQuasiType(self, left, right): #TODO: Проверять unsigned и диаазон констант
 		if right.isType('Const'):
 			result = self.matchConst.get(right.taxon.constType)
+			if result and right.taxon.value[0]=='-' and ('unsigned' in left.attrs):
+				return None, 'Conversion from "%s" to "%s"' % (right.taxon.value, left.exportString())
 			return result, None
 		if right.isType(TaxonScalar.type):
 			result = self.matchVar.get(right.taxon.name)
 			return result, None
 		return None, None
 
+	def getDebugStr(self):
+		return '::' + self.name
+	def exportString(self):
+		return self.typePrefix() + self.name

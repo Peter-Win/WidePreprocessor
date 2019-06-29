@@ -1,4 +1,4 @@
-from core.TaxonLocalType import TaxonLocalType, TaxonTypeName
+from core.TaxonLocalType import TaxonLocalType, TaxonTypeName, TaxonTypeArray
 from core.Ref import Ref
 
 class WppLocalType(TaxonLocalType):
@@ -12,7 +12,7 @@ class WppLocalType(TaxonLocalType):
 		attrs = set()
 		for i, word in enumerate(chunks):
 			if word == 'Array':
-				return WppTypeArray(WppType.create(chunks[i+1:], context), attrs)
+				return WppTypeArray(WppLocalType.create(chunks[i+1:], context), attrs)
 			if word == 'Map':
 				pair = splitComma(chunks[i+1:])
 				if len(pair) < 2:
@@ -61,3 +61,14 @@ class WppTypeName(TaxonTypeName):
 			self.throwError('Invalid type: ' + typeTarget.type)
 		return result
 
+class WppTypeArray(TaxonTypeArray):
+	def __init__(self, itemType=None, attrs=None):
+		super().__init__()
+		if attrs:
+			self.attrs = attrs
+		if itemType:
+			self.addItem(itemType)
+
+	def exportString(self):
+		chunks = self.getExportAttrs() + ['Array']
+		return ' '.join(chunks) + ' ' + self.getItemType().exportString()

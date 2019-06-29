@@ -1,7 +1,7 @@
 from Wpp.WppTaxon import WppTaxon
 from core.TaxonModule import TaxonModule
 from core.TaxonScalar import TaxonScalar
-from core.Operators import StdBinOps
+from core.Operators import StdBinOps, addOperator, createOperator
 from Wpp.Context import Context
 from Taxon import Taxon
 
@@ -10,27 +10,34 @@ class WppCore(TaxonModule):
 	def __init__(self):
 		super().__init__()
 		from Wpp.core.WppTaxonMap import WppTaxonMap
-		# from Wpp.core.WppString import WppString
-		# from Wpp.core.WppArray import WppArray
+		from Wpp.core.WppArray import WppArray
+		from Wpp.core.WppString import WppString
 		self.taxonMap = WppTaxonMap
 		self.name = 'WppCore'
 
 		for props in TaxonScalar.propsList:
 			self.addNamedItem(WppTypeScalar(props))
 
-		# complexTypes = [
-		# 	('String', WppString),
-		# 	('Array', WppArray)
-		# ]
-		# for name, Constructor in complexTypes:
-		# 	inst = Constructor()
-		# 	inst.name = name
-		# 	self.addNamedItem(inst)
-		# 	inst.init()
+		complexTypes = [
+		 	('String', WppString),
+		 	('Array', WppArray)
+		]
+		for name, Constructor in complexTypes:
+			inst = Constructor()
+			inst.core = self
+			inst.name = name
+			inst.init()
+			self.addNamedItem(inst)
 		# mathModule = self.createRootModule(Context.createFromMemory(Math, 'Math.fake'))
 		# self.addNamedItem(mathModule.dictionary['Math'])
 
+		for descr in StdBinOps:
+			op = createOperator(descr, self)
+			addOperator(op, self)
+		self.fullUpdate()
 
+	def getDebugStr(self):
+		return 'WppCore'
 
 	def createRootModule(self, context):
 		""" Создать корневой модуль

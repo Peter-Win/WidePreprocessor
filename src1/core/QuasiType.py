@@ -28,6 +28,9 @@ class QuasiType:
 	def isType(self, typeName):
 		return self.taxon.type == typeName
 
+	def getDebugStr(self):
+		return 'Quasi:' + self.taxon.getDebugStr()
+
 	def buildQuasiType(self):
 		return self
 
@@ -36,15 +39,26 @@ class QuasiType:
 		if not childAttrs:
 			return parentAttrs
 		result = parentAttrs.copy()
-		if 'unsigned' in childAttrs:
-			result.add('unsigned')
-			if 'signed' in result:
-				result.remove('signed')
+		for childA in childAttrs:
+			if 'unsigned' == childA:
+				result.add('unsigned')
+				if 'signed' in result:
+					result.remove('signed')
+			else:
+				result.add(childA)
+		return result
 	def update(self, attrs):
 		self.attrs = QuasiType.mixAttrs(self.attrs, attrs)
 
 	def getDebugStr(self):
 		return self.taxon.getDebugStr()
+	def exportString(self):
+		from Taxon import Taxon
+		return Taxon.makeTypePrefix(self.attrs) + self.taxon.exportString()
+	def showType(self):
+		if self.taxon.type == 'Const':
+			return self.taxon.constType
+		return self.exportString()
 
 	@staticmethod
 	def combine(owner, slave):
@@ -62,6 +76,10 @@ class QuasiType:
 		leftType = left.buildQuasiType()
 		rightType = right.buildQuasiType()
 		result, errorMsg = leftType.taxon.matchQuasiType(leftType, rightType)
+		if not result and not errorMsg and hasattr(rightType.taxon, 'matchQuasiTypeReverse'):
+			result, errorMsg = rightType.taxon.matchQuasiTypeReverse(leftType, rightType)
 		if not result and not errorMsg:
-			errorMsg = 'Cannot convert from "%s:%s" to "%s"' % (right.getDebugStr(), right.type, left.getDebugStr())
+			rightSource = right.inst if hasattr(right, 'inst') else right
+			rightStr = rightSource.exportString() if hasattr(rightSource, 'exportString') else rightSource.getDebugStr()
+			errorMsg = 'Cannot convert from "%s:%s" to "%s"' % (rightStr, rightType.showType(), left.exportString())
 		return result, errorMsg

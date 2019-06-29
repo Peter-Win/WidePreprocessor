@@ -16,6 +16,8 @@ class TaxonWithParent(TaxonDictionary):
 
 	def getDebugStr(self):
 		return '%s %s' % (self.type, self.name)
+	def exportString(self):
+		return self.name
 
 	def isReady(self):
 		return self.parent.isReady() if self.parent else True
@@ -84,5 +86,11 @@ class TaxonWithParent(TaxonDictionary):
 		if left.taxon == right.taxon:
 			return 'exact', None
 		if hasattr(right.taxon, 'canUpcastTo'):
-			return right.taxon.canUpcastTo(left.taxon)
+			if right.taxon.canUpcastTo(left.taxon):
+				return 'upcast', None
+			return None, None # 'Cannot upcast %s to %s' % (right.taxon.exportString(), left.taxon.exportString())
+		if right.taxon.type == 'Null':
+			if 'simple' in self.attrs and 'ptr' not in left.attrs:
+				return None, 'Cannot use null for simple class "%s" without pointer' % (self.name)
+			return 'constUpcast', None
 		return None, None
