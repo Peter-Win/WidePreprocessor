@@ -92,7 +92,7 @@ class Node:
 	def export(self):
 		def checkBrackets(node, prior):
 			s = node.export()
-			if node.type == 'arg' or prior > node.prior:
+			if node.type == 'arg' or prior >= node.prior:
 				return s
 			return '(' + s + ')'
 		if self.type == 'arg':

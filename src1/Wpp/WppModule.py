@@ -18,7 +18,7 @@ class WppModule(TaxonModule, WppDictionary):
 		from Wpp.WppInterface import WppInterface
 		from Wpp.WppVar import WppVar
 		from Wpp.WppFunc import WppFunc
-		# from Wpp.WppTypedef import WppTypedef
+		from Wpp.WppTypedef import WppTypedef
 
 		word = context.getFirstWord()
 		if word == 'class':
@@ -29,8 +29,8 @@ class WppModule(TaxonModule, WppDictionary):
 		 	return WppVar()
 		if word == 'func':
 			return WppFunc()
-		# if word == 'typedef':
-		# 	return WppTypedef()
+		if word == 'typedef':
+			return WppTypedef()
 		return super().readBody(context)
 
 	def addTaxon(self, taxon):

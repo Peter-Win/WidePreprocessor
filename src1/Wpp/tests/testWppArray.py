@@ -37,4 +37,17 @@ func public main
 		module.export(outContext)
 		self.assertEqual(str(outContext), module.strPack(source))
 
+	def test2D(self):
+		source = """
+func public main
+	var table: Array Array int
+	var row: Array int = table[0]
+	var cell: int = table[1][0]
+		"""
+		module = WppCore.createMemModule(source, 'root.fake')
+		outContext = OutContextMemoryStream()
+		module.export(outContext)
+		self.assertEqual(str(outContext), module.strPack(source))
+
+
 

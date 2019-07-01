@@ -7,7 +7,7 @@ class TaxonBlock(Taxon):
 		for cmd in self.items:
 			if cmd == fromWho:
 				break
-			if cmd.type == 'Var' and cmd.isMatch(params):
+			if (cmd.type == 'Var' or cmd.type == 'Typedef') and cmd.isMatch(params):
 				return cmd
 		return self.owner.findUp(fromWho, params)
 

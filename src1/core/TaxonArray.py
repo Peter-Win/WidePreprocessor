@@ -1,4 +1,5 @@
 from TaxonDictionary import TaxonDictionary
+from core.QuasiType import QuasiType
 
 class TaxonArray(TaxonDictionary):
 	type = 'Array'
@@ -15,4 +16,7 @@ class TaxonArray(TaxonDictionary):
 					self.throwError(errMsg)
 			# Будем считать, что массив соответствует типу, даже если элементы имеют другие коды, н.р. constUpcast
 			return 'constExact', None
+		if right.taxon.type == 'Array':
+			# Нужно проверить соответствие типов элементов
+			return QuasiType.matchTaxons(left.itemType, right.itemType)
 		return None, None

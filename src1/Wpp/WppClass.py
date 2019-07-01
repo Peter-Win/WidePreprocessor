@@ -20,7 +20,7 @@ class WppClass(TaxonClass, WppDictionary):
 	def readBody(self, context):
 		from Wpp.WppVar import WppField, WppReadonly
 		from Wpp.WppFunc import WppMethod, WppConstructor, WppOperator
-		# from Wpp.WppTypedef import WppTypedef
+		from Wpp.WppTypedef import WppTypedef
 		# from Wpp.WppCast import WppCast
 		word = context.getFirstWord()
 		line = context.currentLine
@@ -44,8 +44,8 @@ class WppClass(TaxonClass, WppDictionary):
 			return WppConstructor()
 		if word == WppOperator.keyWord:
 			return WppOperator(True)
-		# if word == 'typedef':
-		# 	return WppTypedef()
+		if word == 'typedef':
+			return WppTypedef()
 		# if word == 'cast':
 		# 	return WppCast()
 		return super().readBody(context)

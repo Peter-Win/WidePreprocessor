@@ -12,6 +12,7 @@ class WppCore(TaxonModule):
 		from Wpp.core.WppTaxonMap import WppTaxonMap
 		from Wpp.core.WppArray import WppArray
 		from Wpp.core.WppString import WppString
+		from Wpp.core.WppMap import WppMap
 		self.taxonMap = WppTaxonMap
 		self.name = 'WppCore'
 
@@ -20,7 +21,8 @@ class WppCore(TaxonModule):
 
 		complexTypes = [
 		 	('String', WppString),
-		 	('Array', WppArray)
+		 	('Array', WppArray).
+		 	('Map', WppMap)
 		]
 		for name, Constructor in complexTypes:
 			inst = Constructor()

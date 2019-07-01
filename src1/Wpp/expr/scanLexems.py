@@ -54,7 +54,7 @@ def scanLexems(lexems, pos, terminators, context):
 					# Бинарный оператор
 					prior = binOps.get(value)
 					if not prior:
-						context.throwError('Invalid binary operation ' + value)
+						context.throwError('Invalid binary operation "%s"' % (value))
 					optimizeStack(stack, prior, context)
 					opNode = Node('binop', lexemType, value, prior=prior)
 					opNode.args.append(stack.pop())

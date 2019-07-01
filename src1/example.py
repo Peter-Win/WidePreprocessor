@@ -3,8 +3,8 @@ from out.OutContextMemoryStream import OutContextMemoryStream
 
 source = """
 func public main
-	var a: Array String
-	vas s: String = a[0][0]
+	typedef TSize: unsigned long
+	var a: TSize = 22.2
 """
 module = WppCore.createMemModule(source, 'fake.memory')
 outContext = OutContextMemoryStream()

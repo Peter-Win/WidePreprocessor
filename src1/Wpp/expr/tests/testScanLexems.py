@@ -18,6 +18,11 @@ class TestScanLexems(unittest.TestCase):
 		node, pos = scanLexems(lexems, 0, {','}, ctx)
 		self.assertEqual(node.export(), '(2 + 3) * 5')
 
+		# Equal priors a + b - c
+		lexems = [('a', 'id', None), ('+', 'cmd', None), ('b', 'id', None),	('-', 'cmd', None), ('c', 'id', None), (',', 'cmd', None)]
+		node, pos = scanLexems(lexems, 0, {','}, ctx)
+		self.assertEqual(node.export(), 'a + b - c')
+
 	def testMinusChange(self):
 		ctx = Context.createFromMemory('', 'fake')
 		lexems = [('-','cmd',None), ('3.14','const','float'), ('end','cmd',None)]
@@ -41,6 +46,14 @@ class TestScanLexems(unittest.TestCase):
 		self.assertEqual(node.type, 'index')
 		self.assertEqual(node.export(), 'vector[N - 1]')
 
+	def testArrayIndexDouble(self):
+		""" 2D Array access - table[i][j] """
+		ctx = Context.createFromMemory('', 'fake')
+		lexems = [('table','id',None), ('[','cmd',None), ('i','id',None), (']','cmd',None), ('[','cmd',None), ('j','id',None), (']','cmd',None), ('end','cmd',None)]
+		node, pos = scanLexems(lexems, 0, {'end'}, ctx)
+		self.assertEqual(node.type, 'index')
+		self.assertEqual(node.export(), 'table[i][j]')
+
 
 	def testInvalidLexems(self):
 		ctx = Context.createFromMemory('', 'fake')
@@ -52,4 +65,4 @@ class TestScanLexems(unittest.TestCase):
 		lexems = [('22','const','int'), (')','cmd',None), ('end','cmd',None)]
 		with self.assertRaises(ErrorTaxon) as ex:
 			node, pos = scanLexems(lexems, 0, {'end'}, ctx)
-		self.assertEqual(ex.exception.args[0], 'Invalid binary operation )')
+		self.assertEqual(ex.exception.args[0], 'Invalid binary operation ")"')

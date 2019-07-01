@@ -75,7 +75,25 @@ class TaxonTypeArray(TaxonLocalType):
 
 class TaxonTypeMap(TaxonLocalType):
 	type = 'TypeMap'
+	def getMap(self):
+		return self.core.dictionary['Map']
 	def getKeyType(self):
 		return self.items[0]
 	def getValueType(self):
 		return self.items[1]
+	def isReady(self):
+		return self.getKeyType().isReady() and self.getValueType().isReady()
+	def isReadyFull(self):
+		return self.getKeyType().isReadyFull() and self.getValueType().isReadyFull()
+	def buildQuasiType(self):
+		class QuasiMap(QuasiType):
+			def getDebugStr(self):
+				return 'Map<%s,%s>' % (self.keyType.getDebugStr(), self.valueType.getDebugStr())
+		qt = QuasiMap(self.getMap())
+		qt.update(self.attrs)
+		qt.keyType = self.getKeyType()
+		qt.valueType = self.getValueType()
+		qt.inst = self.owner	# Ссылка на переменную
+		return qt
+	def getDebugStr(self):
+		return ' '.join(self.getExportAttrs()) + ('Map<%s,%s>' % (self.getKeyType().getDebugStr(), self.getKeyType().getDebugStr() ))

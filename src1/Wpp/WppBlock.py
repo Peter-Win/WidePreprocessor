@@ -4,6 +4,7 @@ from Wpp.WppTaxon import WppTaxon
 class WppBlock(TaxonBlock, WppTaxon):
 	def readBody(self, context):
 		from Wpp.WppVar import WppVar
+		from Wpp.WppTypedef import WppTypedef
 		from Wpp.WppReturn import WppReturn
 		from Wpp.WppExpression import WppExpression
 		from Wpp.WppIf import WppIf
@@ -12,6 +13,8 @@ class WppBlock(TaxonBlock, WppTaxon):
 		word = context.getFirstWord()
 		if word == 'var':
 			return WppVar()
+		if word == 'typedef':
+			return WppTypedef()
 		if word == 'return':
 			return WppReturn()
 		if word == 'if':

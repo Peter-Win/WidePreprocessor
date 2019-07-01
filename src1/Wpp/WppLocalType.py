@@ -1,4 +1,4 @@
-from core.TaxonLocalType import TaxonLocalType, TaxonTypeName, TaxonTypeArray
+from core.TaxonLocalType import TaxonLocalType, TaxonTypeName, TaxonTypeArray, TaxonTypeMap
 from core.Ref import Ref
 
 class WppLocalType(TaxonLocalType):
@@ -21,7 +21,7 @@ class WppLocalType(TaxonLocalType):
 					context.throwError('Too many commas in Map declaration')
 				keyType = WppLocalType.create(pair[0], context)
 				valueType = WppLocalType.create(pair[1], context)
-				return WppTypeMap.create(keyType, valueType, attrs)
+				return WppTypeMap(keyType, valueType, attrs)
 			if i == N - 1:
 				# Type with reference by name
 				# if '.' in word:
@@ -72,3 +72,12 @@ class WppTypeArray(TaxonTypeArray):
 	def exportString(self):
 		chunks = self.getExportAttrs() + ['Array']
 		return ' '.join(chunks) + ' ' + self.getItemType().exportString()
+
+class WppTypeMap(TaxonTypeMap):
+	def __init__(self, keyType, valueType, attrs):
+		super().__init__()
+		self.addItems([keyType, valueType])
+		self.attrs = arres
+	def exportString(self):
+		chunks = self.getExportAttrs() + ['Map']
+		return '%s %s, %s' % (' '.join(chunks), self.getKeyType().exportString(), self.getValueType().exportString())
