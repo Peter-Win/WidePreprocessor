@@ -2,6 +2,7 @@ import unittest
 from Wpp.WppCore import WppCore
 from Wpp.WppModule import WppModule
 from Wpp.Context import Context
+from out.OutContextMemoryStream import OutContextMemoryStream
 
 class TestWppModule(unittest.TestCase):
 	def testCreateInstance(self):
@@ -10,15 +11,17 @@ class TestWppModule(unittest.TestCase):
 		module = core.creator('module')()
 		self.assertEqual(module.type, 'module')
 
-	@unittest.skip('wait for something internal module construction')
-	def testReadModule(self):
-		core = WppCore.createInstance()
-		module = core.addRoot(WppModule('MyModule'))
-		source = ''
-		context = Context.createFromMemory(source, 'MyModule.memory')
-		module.read(context)
-
 	def testCreateMemModule(self):
 		source = ''
 		module = WppCore.createMemModule(source, 'myModule.mem')
 		self.assertEqual(module.type, 'module')
+
+	def testComments(self):
+		source = """
+# Hello!
+# Module description
+"""
+		module = WppCore.createMemModule(source, 'myModule.mem')
+		ctx = OutContextMemoryStream()
+		module.export(ctx)
+		self.assertEqual(str(ctx), source.strip())

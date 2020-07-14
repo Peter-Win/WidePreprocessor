@@ -13,6 +13,7 @@ class Lex:
 	paramsBegin = ('(', 'paramsBegin')
 	paramsEnd = (')', 'paramsEnd')
 	space = (' ', 'space')
+	eol = ('\n', 'eol')
 
 	@staticmethod
 	def binop(name):
@@ -33,3 +34,7 @@ class Lex:
 	@staticmethod
 	def varName(name):
 		return (name, 'varName')
+
+	@staticmethod
+	def slashes(text):
+		return ('//'+text, 'comment')

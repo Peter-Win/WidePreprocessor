@@ -85,6 +85,7 @@ class WppVar(TaxonVar, WppCommonVar):
 		if val:
 			result += ['=', val.exportString()]
 		outContext.writeln(' '.join(result))
+		self.exportComments(outContext)
 
 	def onInit(self):
 		self.onCommonInit()

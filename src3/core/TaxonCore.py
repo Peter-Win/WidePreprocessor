@@ -26,7 +26,12 @@ class TaxonCore(TaxonDict):
 
 	def init(self):
 		self.createScalar()
+		self.createAliases()
 
+	def getSafeName(self, name):
+		# Если имя совпало с одним из ключевых слов, то добавить подчерк в конце
+		# Это гарантирует уникальность, т.к WPP запрещает использовать подчерки в именах, а в других языках это допустимо.
+		return name if name not in self.reservedWordsSet else name + '_'
 
 	def isReservedWord(self, word):
 		return False
@@ -106,15 +111,22 @@ class TaxonCore(TaxonDict):
 			inst = self.creator(TaxonScalar.type)(props)
 			self.addItem(inst)
 
-		# size_t. Тип для описания целочисленных размеров. Например, длина массива. Заимствован из C++. Идентичен unsigned long
-		size_t = self.creator(TaxonTypedef.type)('size_t')
-		self.addItem(size_t)
-		sztExpr = self.creator(TaxonTypeExprName.type)()
-		sztExpr.attrs.add('unsigned')
-		sztExpr.setType(self.findItem('long'))
-		size_t.setType(sztExpr)
+	def createAliases(self):
+		from core.TaxonTypeAlias import TaxonTypeAlias
+		for name, targetName, attrs in self.typeAliases:
+			aliasName = self.aliasesMap[name] if self.aliasesMap else name
+			tdef = TaxonTypeAlias(name, aliasName)
+			self.addItem(tdef)
+			tExpr = self.creator(TaxonTypeExprName.type)()
+			tExpr.attrs = attrs
+			tExpr.setType(self.findItem(targetName))
+			tdef.setType(tExpr)
 
-	def getSafeName(self, name):
-		# Если имя совпало с одним из ключевых слов, то добавить подчерк в конце
-		# Это гарантирует уникальность, т.к WPP запрещает использовать подчерки в именах, а в других языках это допустимо.
-		return name if name not in self.reservedWordsSet else name + '_'
+	typeAliases = [
+		# size_t. Тип для описания целочисленных размеров. Например, длина массива. Заимствован из C++. Идентичен unsigned long
+		('size_t', 'long', {'unsigned'}),
+		('byte', 'int8', {'unsigned'}),
+		('uint8', 'int8', {'unsigned'}),
+	]
+	aliasesMap = None
+

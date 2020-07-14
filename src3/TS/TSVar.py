@@ -1,8 +1,10 @@
 from core.TaxonVar import TaxonVar
+from TS.TSTaxon import TSTaxon
 from out.lexems import Lex
 
-class TSVar(TaxonVar):
+class TSVar(TaxonVar, TSTaxon):
 	def exportLexems(self, lexems, rules):
+		self.exportComment(lexems, rules)
 		if self.owner.isModule() and 'public' in self.attrs:
 			lexems += [Lex.keyword('export'), Lex.space]
 		lexems += [Lex.keyword('const' if 'const' in self.attrs else 'let'),

@@ -1,3 +1,5 @@
+from core.TaxonComment import TaxonComment
+
 class WppTaxon:
 	extension = 'wpp'
 
@@ -19,7 +21,9 @@ class WppTaxon:
 		Для функций ситуация сложнее, поэтому там функция переопределяется.
 		"""
 		taxonType = context.getFirstWord()
-		if not self.isValidSubTaxon(taxonType):
+		if taxonType[0] == '#':
+			taxonType = 'comment'
+		elif not self.isValidSubTaxon(taxonType):
 			context.throwError('Invalid member %s for %s' % (taxonType, self.getDebugStr()))
 		taxon = self.creator(taxonType)()
 		return taxon
@@ -28,10 +32,13 @@ class WppTaxon:
 	def isValidSubTaxon(self, taxonType):
 		return taxonType in self.validSubTaxons
 
-	def exportComment(self, outContext):
-		pass
-
 	def getExportAttrs(self):
 		res = list(self.attrs)
 		res.sort()
 		return res
+
+	def exportComments(self, context):
+		with context:
+			for taxon in self.items:
+				if taxon.type == TaxonComment.type:
+					taxon.export(context)

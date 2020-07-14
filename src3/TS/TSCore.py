@@ -25,9 +25,19 @@ class TSCore(TaxonCore):
 	def createModuleFromWpp(code, fileName):
 		from Wpp.WppCore import WppCore
 		wppModule = WppCore.createMemModule(code, fileName)
+		return TSCore.createFromSource(wppModule)
+
+	@staticmethod
+	def createFromSource(src):
 		tsCore = TSCore.createInstance()
-		tsModule = tsCore.setRoot(wppModule.cloneAll(tsCore))
+		tsModule = tsCore.setRoot(src.cloneAll(tsCore))
 		tsModule.initAll()
 		tsModule.initAllRefs()
 		tsCore.resolveTasks()
 		return tsModule
+
+	aliasesMap = {
+		'size_t': 'number',
+		'byte': 'number',
+		'uint8': 'number',
+	}

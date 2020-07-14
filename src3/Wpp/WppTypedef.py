@@ -33,3 +33,4 @@ class WppTypedef(TaxonTypedef, WppTaxon):
 	def export(self, outContext):
 		result = ['typedef'] + self.getExportAttrs() + [self.name, '=', self.getTypeExpr().exportString()]
 		outContext.writeln(' '.join(result))
+		self.exportComments(outContext)

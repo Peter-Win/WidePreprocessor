@@ -18,7 +18,9 @@ class TaxonVar(TaxonCommonVar):
 	type = 'var'
 
 class TaxonField(TaxonCommonVar):
-	""" Поле - переменная класса """
+	""" Поле - переменная класса 
+	attributes: static, public, private, protected
+	"""
 	type = 'field'
 	canBeStatic = True
 
@@ -27,5 +29,6 @@ class TaxonReadonly(TaxonCommonVar):
 	type = 'readonly'
 
 class TaxonParam(TaxonCommonVar):
-	""" Формальный параметр функции """
+	""" Формальный параметр функции
+	"""
 	type = 'param'

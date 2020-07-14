@@ -39,7 +39,6 @@ class TaxonNamed(TaxonExpression):
 	def __init__(self, targetName=''):
 		super().__init__()
 		self.targetName = targetName
-		self.addItem(TaxonRef())
 
 	def copyFieldsFrom(self, src):
 		super().copyFieldsFrom(src)
@@ -50,7 +49,10 @@ class TaxonNamed(TaxonExpression):
 
 	def getRef(self):
 		""" Always returns reference """
-		return self.items[0]
+		ref = self.findByType(TaxonRef.type)
+		if not ref:
+			ref = self.addItem(TaxonRef())
+		return ref
 
 	def setTarget(self, targetTaxon):
 		""" Назначить ссылку на таксон с соответствующим именем """

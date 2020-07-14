@@ -17,7 +17,7 @@ class WppModule(TaxonModule, WppTaxon):
 
 	def export(self, outContext):
 		writeContext = outContext.createFile(self.name + self.extension)
-		self.exportComment(outContext)
+		# self.exportComment(outContext)
 		# if self.importBlock:
 		# 	self.importBlock.export(writeContext)
 

@@ -1,4 +1,5 @@
-from core.TaxonExpression import TaxonConst
+from core.TaxonExpression import TaxonConst, TaxonNamed
+from out.lexems import Lex
 
 class TSConst(TaxonConst):
 
@@ -28,3 +29,7 @@ class TSConst(TaxonConst):
 		value = value.replace(quote, "\\" + quote)
 		value = value.replace('\n', '\\n').replace('\r', '\\r').replace('\t', '\\t')
 		return quote + value + quote
+
+class TSNamed(TaxonNamed):
+	def exportLexems(self, lexems, style):
+		lexems.append(Lex.varName(self.getTarget().getName()))

@@ -2,6 +2,7 @@ import unittest
 from Wpp.WppCore import WppCore
 from TS.TSCore import TSCore
 from TS.style import style
+from out.OutContextMemoryStream import OutContextMemoryStream
 
 class TestTSModule(unittest.TestCase):
 	def testClone(self):
@@ -34,3 +35,18 @@ class TestTSModule(unittest.TestCase):
 		code = tsModule.exportText(style)[0]
 		self.assertEqual(code, 'export const pi: number = 3.14;')
 
+	def testComment(self):
+		source = """
+# Header comment.
+# Second header line.
+var public const isActive: bool = true
+"""
+		expected = """
+// Header comment.
+// Second header line.
+export const isActive: boolean = true;
+"""
+		tsModule = TSCore.createModuleFromWpp(source, 'comment.wpp')
+		ctx = OutContextMemoryStream()
+		tsModule.exportContext(ctx, style)
+		self.assertEqual(str(ctx), expected.strip())

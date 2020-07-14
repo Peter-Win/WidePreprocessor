@@ -5,6 +5,7 @@ from Wpp.WppModule import WppModule
 from core.TaxonTypeExpr import TaxonTypeExpr
 from Wpp.types.WppTypeExprName import WppTypeExprName
 from Wpp.WppExpression import WppConst
+from out.OutContextMemoryStream import OutContextMemoryStream
 
 class TestWppVar(unittest.TestCase):
 
@@ -50,3 +51,13 @@ class TestWppVar(unittest.TestCase):
 		txValue = txVar.getValueTaxon()
 		self.assertIsInstance(txValue, WppConst)
 
+	def testComment(self):
+		source = """
+var const myPi: double = 3.14
+	# First comment line.
+	# Second line.
+""".strip()
+		module = WppCore.createMemModule(source, "comment.mem")
+		ctx = OutContextMemoryStream()
+		module.export(ctx)
+		self.assertEqual(str(ctx), source)
