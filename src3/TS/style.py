@@ -11,6 +11,8 @@ style = {
 		'binop': ' \v ',
 		'bodyBegin': ' \v\a\n',
 		'bodyEnd': '\r\v',
+		'bodyEnd+keyword': '\r\v \f',
+		'keyword+bracketBegin': '\v \f',
 		'colon': '\v ',
 		'instrDiv': '\v\n',
 		'itemDiv': '\v \b',

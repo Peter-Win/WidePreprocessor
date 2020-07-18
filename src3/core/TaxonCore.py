@@ -68,7 +68,7 @@ class TaxonCore(TaxonDict):
 			pos += 1
 		return currentTaxon
 
-	def findUp(self, name):
+	def findUp(self, name, caller):
 		""" Ядро ищет только среди непосредственно зарегистрированных по имени элементов.
 		Если в ядре указанного имени нет, значит поиск закончился неудачно.
 		"""

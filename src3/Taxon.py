@@ -44,19 +44,31 @@ class Taxon:
 		""" Возможно ли выполнить поиск вверх."""
 		return True
 
-	def findUp(self, name):
+	def findUp(self, name, caller):
 		""" Поиск вверх осуществляется для простых имен или для первого имени из пути с точками.
 		Операция может быть выполнена не всегда. Например, у класса может быть еще не инициализирован родитель или implements.
 		"""
 		if self.owner:
-			return self.owner.findUp(name)
+			return self.owner.findUp(name, self)
 		return None
+
+	def startFindUp(self, name):
+		return self.findUp(name, self)
 
 	def findOwnerByType(self, taxonType):
 		""" Поиск владельца с указанным типом, начиная с непосредственного владельца """
 		current = self.owner
 		while current:
 			if current.type == taxonType:
+				return current
+			current = current.owner
+		return None
+
+	def findOwnerByTypeEx(self, taxonTypeRef):
+		""" Поиск владельца с указанным типом, начиная с непосредственного владельца """
+		current = self.owner
+		while current:
+			if isinstance(current, taxonTypeRef):
 				return current
 			current = current.owner
 		return None
@@ -174,8 +186,17 @@ class Taxon:
 			j += 1
 		return self.items[j] if j < len(self.items) else None
 
+	def removeItem(self, item):
+		self.items.remove(item)
+
 	def findByType(self, typeName):
 		j = 0
 		while j < len(self.items) and self.items[j].type != typeName:
+			j += 1
+		return self.items[j] if j < len(self.items) else None
+
+	def findByTypeEx(self, typeObject):
+		j = 0
+		while j < len(self.items) and not isinstance(self.items[j], typeObject):
 			j += 1
 		return self.items[j] if j < len(self.items) else None

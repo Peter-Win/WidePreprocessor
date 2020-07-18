@@ -10,7 +10,8 @@ def readWpp(context, owner, baseLevel = 0):
 		if currentLevel + 1 == len(stack):
 			newTaxon = stack[-1].readBody(context)
 			if newTaxon:
-				newTaxon._location = context.createLocation()
+				if not newTaxon._location:
+					newTaxon._location = context.createLocation()
 				newTaxon.readHead(context)
 				postTaxon = stack[-1].addTaxon(newTaxon)
 				stack.append(postTaxon)

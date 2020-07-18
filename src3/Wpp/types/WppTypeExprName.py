@@ -17,7 +17,7 @@ class WppTypeExprName(TaxonTypeExprName, WppTaxon):
 				return self.taxon.isCanFindUp()
 			def exec(self):
 				typeName = self.taxon.typeName
-				txType = self.taxon.findUp(typeName)
+				txType = self.taxon.findUp(typeName, self)
 				if not txType:
 					self.taxon.throwError('Not found type "%s"' % typeName)
 				if not txType.isType():

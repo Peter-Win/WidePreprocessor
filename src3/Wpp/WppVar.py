@@ -77,21 +77,22 @@ class WppCommonVar(WppTaxon):
 		if errMsg:
 			self.throwError(errMsg)
 
-
-class WppVar(TaxonVar, WppCommonVar):
 	def export(self, outContext):
-		result = ['var'] + self.getExportAttrs() + [self.name + ':'] + [self.getTypeTaxon().exportString()]
+		result = [self.type] + self.getExportAttrs() + [self.name + ':'] + [self.getTypeTaxon().exportString()]
 		val = self.getValueTaxon()
 		if val:
 			result += ['=', val.exportString()]
 		outContext.writeln(' '.join(result))
 		self.exportComments(outContext)
 
+class WppVar(TaxonVar, WppCommonVar):
 	def onInit(self):
 		self.onCommonInit()
 
 class WppField(TaxonField):
 	pass
 
-class WppParam(TaxonParam):
-	pass
+class WppParam(TaxonParam, WppCommonVar):
+	def onInit(self):
+		self.onCommonInit()
+	

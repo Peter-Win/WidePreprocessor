@@ -56,7 +56,7 @@ class TestTaxonCore(unittest.TestCase):
 	def testFindUp(self):
 		core = TaxonCore.createInstance()
 		module = core.setRoot(TaxonDict('testRoot'))
-		tInt = module.findUp('double')
+		tInt = module.startFindUp('double')
 		self.assertEqual(tInt.name, 'double')
 		self.assertTrue(tInt.isType())
 

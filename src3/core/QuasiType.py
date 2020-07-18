@@ -59,6 +59,9 @@ class QuasiType:
 			return self.taxon.constType
 		return self.taxon.exportString()
 
+	def exportString(self):
+		return self.taxon.exportString()
+
 	@staticmethod
 	def combine(owner, slave):
 		quasiInfo = slave.buildQuasiType()

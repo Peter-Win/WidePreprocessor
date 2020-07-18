@@ -3,6 +3,8 @@ class Lex:
 	arrayEnd = (']', 'arrayEnd')
 	bodyBegin = ('{', 'bodyBegin')
 	bodyEnd = ('}', 'bodyEnd')
+	bracketBegin = ('(', 'bracketBegin')
+	bracketEnd = (')', 'bracketEnd')
 	colon = (':', 'colon')
 	instrDiv = (';', 'instrDiv')
 	itemDiv = (',', 'itemDiv')
@@ -22,6 +24,10 @@ class Lex:
 	@staticmethod
 	def fieldName(name):
 		return (name, 'fieldName')
+
+	@staticmethod
+	def funcName(name):
+		return (name, 'funcName')
 
 	@staticmethod
 	def keyword(name):

@@ -4,9 +4,19 @@ from TS.TSCore import TSCore
 from TS.style import style
 
 source = """
-typedef public Size = unsigned long
-var public const width: Size = 4
-var const len: size_t = width
+func public fullCheck: double
+	param a: double
+	param b: double
+	param c: double
+	param d: double
+	if a
+		return a
+	elif b
+		return b
+	elif c
+		return c
+	else
+		return d
 """
 
 print('-- Wpp')

@@ -42,8 +42,8 @@ class WppNamed(TaxonNamed, WppExpression):
 			def check(self):
 				return self.taxon.isCanFindUp()
 			def exec(self):
-				target = self.taxon.findUp(self.taxon.targetName)
+				target = self.taxon.startFindUp(self.taxon.targetName)
 				if not target:
-					self.taxon.throwError('Not found "%s"' %s (self.taxon.targetName))
+					self.taxon.throwError('Not found "%s"' % (self.taxon.targetName))
 				self.taxon.setTarget(target)
 		self.addTask(TaskBindTarget())

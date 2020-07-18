@@ -1,18 +1,27 @@
 from core.TaxonRef import TaxonRef
+from TS.body.TSBody import TSBody
+from TS.body.TSIf import TSIf
+from TS.body.TSReturn import TSReturn
 from TS.core.TSScalar import TSScalar
 from TS.TSComment import TSComment
 from TS.TSExpression import TSConst, TSNamed
+from TS.TSFunc import TSFunc
 from TS.TSModule import TSModule
 from TS.TSTypedef import TSTypedef
 from TS.TSTypeExpr import TSTypeExprName
-from TS.TSVar import TSVar
+from TS.TSVar import TSVar, TSParam
 
 TSTaxonList = [
 	TaxonRef,
+	TSBody,
 	TSComment,
 	TSConst,
+	TSFunc,
+	TSIf,
 	TSModule,
 	TSNamed,
+	TSParam,
+	TSReturn,
 	TSScalar,
 	TSTypedef,
 	TSTypeExprName,
