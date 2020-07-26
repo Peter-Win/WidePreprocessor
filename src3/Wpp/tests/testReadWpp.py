@@ -25,10 +25,14 @@ class Core(DemoTaxon):
 class Module(DemoTaxon):
 	type = 'module'
 	validSubTaxons = ('module', 'class')
+	def checkName(self, name):
+		return ''
 
 class Class(DemoTaxon):
 	type = 'class'
 	validSubTaxons = ()
+	def checkName(self, name):
+		return ''
 
 
 class TestReadWpp(unittest.TestCase):

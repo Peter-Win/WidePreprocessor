@@ -2,6 +2,7 @@ import unittest
 from Wpp.WppFunc import WppFunc
 from Wpp.WppCore import WppCore
 from out.OutContextMemoryStream import OutContextMemoryStream
+from core.ErrorTaxon import ErrorTaxon
 
 class TestWppFunc(unittest.TestCase):
 	def testParseHead(self):
@@ -53,3 +54,13 @@ func public empty: double
 		self.assertEqual(y.type, 'param')
 		self.assertEqual(y.name, 'y')
 
+	def testDuplicateParams(self):
+		source = """
+func public abcd: double
+	param abcd: int
+	param abcd: double
+	return abcd
+"""
+		with self.assertRaises(ErrorTaxon) as cm:
+			module = WppCore.createMemModule(source, 'dup.wpp')
+		self.assertEqual(cm.exception.args[0], 'Duplicate identifier "abcd"')

@@ -13,7 +13,7 @@ def readWpp(context, owner, baseLevel = 0):
 				if not newTaxon._location:
 					newTaxon._location = context.createLocation()
 				newTaxon.readHead(context)
-				postTaxon = stack[-1].addTaxon(newTaxon)
+				postTaxon = stack[-1].addTaxon(newTaxon, context)
 				stack.append(postTaxon)
 		else:
 			context.throwError('Invalid offset')

@@ -1,6 +1,7 @@
 from core.TaxonTypedef import TaxonTypedef
 from Wpp.WppTaxon import WppTaxon
 from Wpp.WppTypeExpr import WppTypeExpr
+from utils.nameCheck import checkUpperCamelCase
 
 class WppTypedef(TaxonTypedef, WppTaxon):
 
@@ -13,7 +14,7 @@ class WppTypedef(TaxonTypedef, WppTaxon):
 		self.name = name
 		self.attrs = attrs
 		self.items = []
-		self.addTaxon(WppTypeExpr.parse(typeExprCode, context))
+		self.addTaxon(WppTypeExpr.parse(typeExprCode, context), context)
 
 	@staticmethod
 	def parse(code):
@@ -29,6 +30,9 @@ class WppTypedef(TaxonTypedef, WppTaxon):
 		name = words[-1]
 		attrs = set(words[1:-1])
 		return (None, name, attrs, typeExprCode)
+
+	def checkName(self, name):
+		return checkUpperCamelCase(name, self.type)
 
 	def export(self, outContext):
 		result = ['typedef'] + self.getExportAttrs() + [self.name, '=', self.getTypeExpr().exportString()]

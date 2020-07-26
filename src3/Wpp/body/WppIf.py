@@ -23,8 +23,8 @@ class WppIf(TaxonIf, WppTaxon):
 			context.throwError('Required body taxon inside of conditional instruction')
 		return self.items[-1].readBody(context)
 
-	def addTaxon(self, taxon):
-		return self.items[-1].addTaxon(taxon)
+	def addTaxon(self, taxon, context):
+		return self.items[-1].addTaxon(taxon, context)
 
 	def export(self, outContext):
 		struct = self.getStructure()

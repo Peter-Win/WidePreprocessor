@@ -4,19 +4,17 @@ from TS.TSCore import TSCore
 from TS.style import style
 
 source = """
-func public fullCheck: double
-	param a: double
-	param b: double
-	param c: double
-	param d: double
-	if a
-		return a
-	elif b
-		return b
-	elif c
-		return c
-	else
-		return d
+func overload public dist: double
+	altName dist2
+	param x1: double
+	param y: double
+	return y
+func overload public dist: double
+	altName dist3
+	param x: double
+	param y: double
+	param z: double
+	return x
 """
 
 print('-- Wpp')

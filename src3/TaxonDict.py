@@ -17,3 +17,8 @@ class TaxonDict(Taxon):
 
 	def findItem(self, name):
 		return self.dict.get(name)
+
+	def removeItem(self, item):
+		if item.name:
+			del self.dict[item.name]
+		super().removeItem(item)

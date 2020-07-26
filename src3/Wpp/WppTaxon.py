@@ -3,7 +3,8 @@ from core.TaxonComment import TaxonComment
 class WppTaxon:
 	extension = 'wpp'
 
-	def addTaxon(self, taxon):
+	def addTaxon(self, taxon, context):
+		self.checkNewTaxon(taxon, context)
 		self.addItem(taxon)
 		return taxon
 
@@ -31,6 +32,26 @@ class WppTaxon:
 	validSubTaxons = ()
 	def isValidSubTaxon(self, taxonType):
 		return taxonType in self.validSubTaxons
+
+	def checkNewTaxon(self, taxon, context):
+		""" Проверить таксон перед его добавлением """
+		from Wpp.WppCore import WppCore
+		if taxon.name:
+			if taxon.name in WppCore.reservedWords:
+				context.throwError('The reserved word "%s" cannot be used as a name' % taxon.name)
+
+			msg = taxon.checkName(taxon.name)
+			if msg:
+				# Неподходящее имя для таксона. Например, переменные должнв использовать lowerCamelCase
+				context.throwError(msg)
+
+			dup = self.findItem(taxon.name)
+			if dup:
+				# Найден уже существующий элемент с таким же именем
+				self.checkDup(taxon, dup, context)
+
+	def checkDup(self, taxon, dup, context):
+		context.throwError('Duplicate identifier "%s"' % (taxon.name))
 
 	def getExportAttrs(self):
 		res = list(self.attrs)

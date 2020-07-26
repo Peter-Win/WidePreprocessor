@@ -31,8 +31,8 @@ class TSCore(TaxonCore):
 	def createFromSource(src):
 		tsCore = TSCore.createInstance()
 		tsModule = tsCore.setRoot(src.cloneAll(tsCore))
-		tsModule.initAll()
 		tsModule.initAllRefs()
+		tsModule.initAll()
 		tsCore.resolveTasks()
 		return tsModule
 

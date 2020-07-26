@@ -2,6 +2,7 @@ import unittest
 from Wpp.WppTypedef import WppTypedef
 from Wpp.WppCore import WppCore
 from out.OutContextMemoryStream import OutContextMemoryStream
+from core.ErrorTaxon import ErrorTaxon
 
 class TestWppTypedef(unittest.TestCase):
 	def testParse(self):
@@ -31,8 +32,14 @@ typedef public Size = unsigned long
 	# First comment line.
 	# Second line.
 """
-		module = WppCore.createMemModule(source, "сщььуте.wpp")
+		module = WppCore.createMemModule(source, "comment.wpp")
 		ctx = OutContextMemoryStream()
 		module.export(ctx)
 		self.assertEqual(str(ctx), source.strip())
+
+	def testInvalidName(self):
+		source = 'typedef public myType = unsigned int'
+		with self.assertRaises(ErrorTaxon) as cm:
+			module = WppCore.createMemModule(source, 'invalidName.wpp')
+		self.assertEqual(cm.exception.args[0], 'UpperCamelCase is required for typedef name "myType"')
 

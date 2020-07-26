@@ -11,10 +11,10 @@ class WppBody(TaxonBody, WppTaxon):
 			return lastTaxon
 		return super().readBody(context)
 
-	def addTaxon(self, taxon):
+	def addTaxon(self, taxon, context):
 		if len(self.items) > 0 and self.items[-1] == taxon:
 			return taxon
-		return super().addTaxon(taxon)
+		return super().addTaxon(taxon, context)
 
 	def export(self, outContext):
 		with outContext:

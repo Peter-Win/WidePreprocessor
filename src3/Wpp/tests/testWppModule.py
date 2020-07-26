@@ -3,6 +3,7 @@ from Wpp.WppCore import WppCore
 from Wpp.WppModule import WppModule
 from Wpp.Context import Context
 from out.OutContextMemoryStream import OutContextMemoryStream
+from core.ErrorTaxon import ErrorTaxon
 
 class TestWppModule(unittest.TestCase):
 	def testCreateInstance(self):
@@ -25,3 +26,14 @@ class TestWppModule(unittest.TestCase):
 		ctx = OutContextMemoryStream()
 		module.export(ctx)
 		self.assertEqual(str(ctx), source.strip())
+
+	def testDuplicate(self):
+		source = """
+var public abcd: double = 123
+func public abcd: double
+	return 123
+"""
+		with self.assertRaises(ErrorTaxon) as cm:
+			module = WppCore.createMemModule(source, 'dup.mem')
+		self.assertEqual(cm.exception.args[0], 'Duplicate identifier "abcd"')
+

@@ -6,6 +6,7 @@ from core.TaxonTypeExpr import TaxonTypeExpr
 from Wpp.types.WppTypeExprName import WppTypeExprName
 from Wpp.WppExpression import WppConst
 from out.OutContextMemoryStream import OutContextMemoryStream
+from core.ErrorTaxon import ErrorTaxon
 
 class TestWppVar(unittest.TestCase):
 
@@ -45,7 +46,7 @@ class TestWppVar(unittest.TestCase):
 
 	def testWithInitialValue(self):
 		source = 'var const myPi: double = 3.14'
-		module = WppCore.createMemModule(source, "varinit.mem")
+		module = WppCore.createMemModule(source, "varinit.wpp")
 		txVar = module.findItem('myPi')
 		self.assertIsInstance(txVar, WppVar)
 		txValue = txVar.getValueTaxon()
@@ -57,7 +58,19 @@ var const myPi: double = 3.14
 	# First comment line.
 	# Second line.
 """.strip()
-		module = WppCore.createMemModule(source, "comment.mem")
+		module = WppCore.createMemModule(source, "comment.wpp")
 		ctx = OutContextMemoryStream()
 		module.export(ctx)
 		self.assertEqual(str(ctx), source)
+
+	def testInvalidName(self):
+		source = "var public MyName: int = 0"
+		with self.assertRaises(ErrorTaxon) as cm:
+			module = WppCore.createMemModule(source, 'invalidName.wpp')
+		self.assertEqual(cm.exception.args[0], 'lowerCamelCase is required for var name "MyName"')
+
+	def testReservedName(self):
+		source = "var public this: int = 0"
+		with self.assertRaises(ErrorTaxon) as cm:
+			module = WppCore.createMemModule(source, 'reserved.wpp')
+		self.assertEqual(cm.exception.args[0], 'The reserved word "this" cannot be used as a name')

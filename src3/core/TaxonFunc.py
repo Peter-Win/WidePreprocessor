@@ -1,5 +1,8 @@
 """
-Если функция требует перегрузки, то добавляется атрибут overload
+Атрибуты
+ overload  Применяется для всех типов функций. Обязателен в случае использования перегрузки
+ public    - Для функций, находящихся в модуле означает признак экспорта из модуля.
+           - Для метода класса - квалификатор доступа.
 """
 from Taxon import Taxon
 from core.body.TaxonBody import TaxonBody
@@ -13,6 +16,11 @@ class TaxonFunc(Taxon):
 	def __init__(self, name=''):
 		super().__init__(name)
 		self.paramsMap = None
+
+	def getName(self):
+		# Перегруженные функции лишены имени, поэтому нужно брать имя из владельца
+		name = self.name if not self.isOverload() else self.owner.name
+		return self.transformName(name)
 
 	def getBody(self):
 		return self.findByType(TaxonBody.type)
@@ -49,3 +57,6 @@ class TaxonFunc(Taxon):
 		if param:
 			return param
 		return super().findUp(name, caller)
+
+	def isOverload(self):
+		return 'overload' in self.attrs

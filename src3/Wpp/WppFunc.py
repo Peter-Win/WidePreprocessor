@@ -2,15 +2,19 @@ from core.TaxonFunc import TaxonFunc
 from Wpp.WppTaxon import WppTaxon
 from Wpp.body.WppBody import WppBody
 from Wpp.WppTypeExpr import WppTypeExpr
+from utils.nameCheck import checkLowerCamelCase
 
 class WppFunc(TaxonFunc, WppTaxon):
 
-	validSubTaxons = ('param')
+	validSubTaxons = ('altName', 'param')
 	__slots__ = ('headReady')
 
 	def __init__(self, name=''):
 		super().__init__(name)
 		self.headReady = False
+
+	def checkName(self, name):
+		return checkLowerCamelCase(name, self.type)
 
 	@staticmethod
 	def parseHead(code):
@@ -38,30 +42,39 @@ class WppFunc(TaxonFunc, WppTaxon):
 	def readBody(self, context):
 		if not self.headReady:
 			# Первая стадия - чтение заголовка
-			# Используем реализацию предка, пока не возникнет ошибка
-			try:
+			word = context.getFirstWord()
+			if word in self.validSubTaxons:
 				taxon = super().readBody(context)
 				return taxon
-			except:
+			else:
 				self.headReady = True
 		return self.getBody().readBody(context)
 
-	def addTaxon(self, taxon):
+	def addTaxon(self, taxon, context):
 		if not self.headReady:
-			return super().addTaxon(taxon)
-		return self.getBody().addTaxon(taxon)
+			return super().addTaxon(taxon, context)
+		return self.getBody().addTaxon(taxon, context)
 
 	def export(self, outContext):
 		# Сначала экспорт заголовка функции
-		parts = [self.type] + self.getExportAttrs() + [self.name]
+		parts = [self.type] + self.getExportAttrs() + [self.getName()]
 		head = ' '.join(parts)
 		typeExpr = self.getResultTypeExpr()
 		if typeExpr:
 			head += ': ' + typeExpr.exportString()
 		outContext.writeln(head)
+		body = None
 		with outContext:
-			# Затем список параметров
-			for p in self.getParamsList():
-				p.export(outContext)
+			for item in self.items:
+				if item.type == WppBody.type:
+					body = item
+				elif item != typeExpr:
+					item.export(outContext)
+			# altName = TaxonAltName.getAltName(self)
+			# if altName:
+			# 	outContext.writeln('altName ' + altName)
+			# # Затем список параметров
+			# for p in self.getParamsList():
+			# 	p.export(outContext)
 		# И в конце тело функции
-		self.getBody().export(outContext)
+		body.export(outContext)

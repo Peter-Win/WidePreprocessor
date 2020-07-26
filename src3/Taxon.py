@@ -13,7 +13,16 @@ class Taxon:
 		self._location = None	# tuple(fileName, lineNumber, string)
 
 	def getName(self):
-		return self.core.getSafeName(self.name)
+		return self.transformName(self.name)
+
+	def transformName(self, srcName):
+		name = srcName
+		if 'useAltName' in self.attrs:
+			from core.TaxonAltName import TaxonAltName
+			name = TaxonAltName.getAltName(self)
+			if not name:
+				name = self.name
+		return self.core.getSafeName(name)
 
 	def isCore(self):
 		return self == self.core

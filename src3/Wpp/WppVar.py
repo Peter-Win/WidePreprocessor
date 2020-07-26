@@ -8,6 +8,7 @@ from Wpp.WppTypeExpr import WppTypeExpr
 from Wpp.WppExpression import WppExpression
 from Wpp.WppTaxon import WppTaxon
 from core.QuasiType import QuasiType
+from utils.nameCheck import checkLowerCamelCase
 
 class WppCommonVar(WppTaxon):
 	def commonVarInit(self, context, name, attrs, typeExpr, initialValue = None):
@@ -84,6 +85,9 @@ class WppCommonVar(WppTaxon):
 			result += ['=', val.exportString()]
 		outContext.writeln(' '.join(result))
 		self.exportComments(outContext)
+
+	def checkName(self, name):
+		return checkLowerCamelCase(name, self.type)
 
 class WppVar(TaxonVar, WppCommonVar):
 	def onInit(self):
