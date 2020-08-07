@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonConst, TaxonNamed
+from core.TaxonExpression import TaxonConst, TaxonNamed, TaxonCall
 from out.lexems import Lex
 
 class TSConst(TaxonConst):
@@ -33,3 +33,19 @@ class TSConst(TaxonConst):
 class TSNamed(TaxonNamed):
 	def exportLexems(self, lexems, style):
 		lexems.append(Lex.varName(self.getTarget().getName()))
+
+class TSCall(TaxonCall):
+	def exportLexems(self, lexems, style):
+		self.getCaller().exportLexems(lexems, style)
+		lexems.append(Lex.paramsBegin)
+		args = self.getArguments()
+		if len(args) > 0:
+			for arg in args:
+				arg.exportLexems(lexems, style)
+				lexems.append(Lex.paramDiv)
+			lexems[-1] = Lex.paramDivLast
+		lexems.append(Lex.paramsEnd)
+		# Данный таксон может быть отдельной строкой кода, если это вызов функции без использования результата
+		# В этом случае нужна точка с запятой
+		if self.owner.type == 'body':
+			lexems.append(Lex.instrDiv)

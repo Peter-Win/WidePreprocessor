@@ -23,6 +23,7 @@ class TaxonScalar(TaxonType):
 		('long', constMatchesInt, {'long': 'exact', 'int': 'upcast', 'short': 'upcast', 'int8': 'upcast'}, -9223372036854775808, 9223372036854775807),
 		('float', constMatchesFloat, {'float': 'exact'}, -3.4E+38, 3.4E+38),
 		('double', constMatchesFloat, {'double': 'exact', 'float': 'upcast'}, -1.7E+308, 1.7E+308),
+		('void', {}, {}, 0, 0),
 	)
 
 	def __init__(self, props):

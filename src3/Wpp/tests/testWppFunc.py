@@ -64,3 +64,16 @@ func public abcd: double
 		with self.assertRaises(ErrorTaxon) as cm:
 			module = WppCore.createMemModule(source, 'dup.wpp')
 		self.assertEqual(cm.exception.args[0], 'Duplicate identifier "abcd"')
+
+	def testWrongDefaults(self):
+		source = """
+func public wrongDefault
+	param first: int = 0
+	param second: int
+	param third: int = 0
+"""
+		with self.assertRaises(ErrorTaxon) as cm:
+			module = WppCore.createMemModule(source, 'defaultParam.wpp')
+		self.assertEqual(cm.exception.args[0], 'Default parameters should be last.')
+
+

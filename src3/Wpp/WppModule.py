@@ -16,7 +16,8 @@ class WppModule(TaxonModule, WppTaxon):
 		return checkLowerCamelCase(name, self.type)
 
 	def checkDup(self, taxon, dup, context):
-		WppFuncHelper.checkDup(taxon, dup, context)
+		if WppFuncHelper.checkDup(taxon, dup, context):
+			return
 		super().checkDup(taxon, dup, context)
 
 	def read(self, context):

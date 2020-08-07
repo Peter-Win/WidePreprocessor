@@ -5,7 +5,7 @@ from TS.body.TSIf import TSIf
 from TS.body.TSReturn import TSReturn
 from TS.core.TSScalar import TSScalar
 from TS.TSComment import TSComment
-from TS.TSExpression import TSConst, TSNamed
+from TS.TSExpression import TSConst, TSNamed, TSCall
 from TS.TSFunc import TSFunc
 from TS.TSModule import TSModule
 from TS.TSOverload import TSOverload
@@ -17,6 +17,7 @@ TSTaxonList = [
 	TaxonAltName,
 	TaxonRef,
 	TSBody,
+	TSCall,
 	TSComment,
 	TSConst,
 	TSFunc,

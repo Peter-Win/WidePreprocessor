@@ -18,6 +18,15 @@ func public myFunc: int
 			module = WppCore.createMemModule(source, 'overloadErr.wpp')
 		self.assertEqual(cm.exception.args[0], 'Use "overload" attribute for "myFunc"')
 
+	def testDefaultParams(self):
+		source = """
+func public overload myTest
+	param first: int = 0
+"""
+		with self.assertRaises(ErrorTaxon) as cm:
+			module = WppCore.createMemModule(source, 'defaultParam.wpp')
+		self.assertEqual(cm.exception.args[0], 'It is forbidden to use default parameters for an overloaded function.')
+
 	def testOverloadOk(self):
 		source = """
 func overload public myFunc: double

@@ -1,10 +1,16 @@
 from Taxon import Taxon
+from core.TaxonTypeExpr import TaxonTypeExpr
+from core.TaxonExpression import TaxonExpression
 
 class TaxonCommonVar(Taxon):
 	def getTypeTaxon(self):
-		return self.items[0] if len(self.items) >= 1 else None
+		# return self.items[0] if len(self.items) >= 1 else None
+		return self.findByTypeEx(TaxonTypeExpr)
+
 	def getValueTaxon(self):
-		return self.items[1] if len(self.items) >= 2 else None
+		# return self.items[1] if len(self.items) >= 2 else None
+		return self.findByTypeEx(TaxonExpression)
+
 	def buildQuasiType(self):
 		txType = self.getTypeTaxon()
 		return txType.buildQuasiType() if txType else None

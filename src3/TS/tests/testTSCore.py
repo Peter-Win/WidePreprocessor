@@ -17,4 +17,4 @@ class TestTSCore(unittest.TestCase):
 		ctx = OutContextMemoryStream()
 		tsModule.exportContext(ctx, style)
 		# transform byte into number
-		self.assertEqual(str(ctx), 'export const firstByte: number = 15;')
+		self.assertEqual(str(ctx), 'export const firstByte = 15;')

@@ -60,3 +60,7 @@ class TaxonFunc(Taxon):
 
 	def isOverload(self):
 		return 'overload' in self.attrs
+
+	def buildQuasiType(self):
+		resultExpr = self.getResultTypeExpr() or self.core.findItem('void')
+		return resultExpr.buildQuasiType()

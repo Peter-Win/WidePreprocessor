@@ -2,7 +2,7 @@ from core.body.TaxonBody import TaxonBody
 from Wpp.WppTaxon import WppTaxon
 
 class WppBody(TaxonBody, WppTaxon):
-	validSubTaxons = ('if', 'return', 'var')
+	validSubTaxons = ('if', 'return', 'var', 'call')
 
 	def readBody(self, context):
 		taxonType = context.getFirstWord()

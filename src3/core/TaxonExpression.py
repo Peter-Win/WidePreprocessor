@@ -3,7 +3,10 @@ from core.QuasiType import QuasiType
 from core.TaxonRef import TaxonRef
 
 class TaxonExpression(Taxon):
-	pass
+	__slots__ = ('prior')
+	def __init__(self):
+		super().__init__()
+		self.prior = 0
 
 class TaxonConst(TaxonExpression):
 	type = 'const'
@@ -65,3 +68,16 @@ class TaxonNamed(TaxonExpression):
 	def buildQuasiType(self):
 		target = self.getTarget()
 		return target.buildQuasiType() if target else None
+
+class TaxonCall(TaxonExpression):
+	type = 'call'
+			
+	def getCaller(self):
+		return self.items[0]
+
+	def changeCaller(self, caller):
+		self.items[0] = caller
+
+	def getArguments(self):
+		return self.items[1:]
+

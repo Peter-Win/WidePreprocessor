@@ -13,7 +13,7 @@ var const public bufferSize: size_t = 256
 		expected = """
 // This is comment.
 // Second line...
-export const bufferSize: number = 256;
+export const bufferSize = 256;
 """
 		tsModule = TSCore.createModuleFromWpp(source, 'comment.wpp')
 		ctx = OutContextMemoryStream()

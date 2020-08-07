@@ -3,6 +3,18 @@ from TS.TSTaxon import TSTaxon
 from out.lexems import Lex
 
 class TSVar(TaxonVar, TSTaxon):
+	def __init__(self):
+		super().__init__()
+		self.hiddenType = None
+
+	def onInit(self):
+		# Если тип переменной следует из выражения, его можно не указывать
+		val = self.getValueTaxon()
+		if val:
+			t = self.getTypeTaxon()
+			self.removeItem(t)
+			self.hiddenType = t
+
 	def exportLexems(self, lexems, rules):
 		self.exportComment(lexems, rules)
 		if self.owner.isModule() and 'public' in self.attrs:

@@ -4,7 +4,7 @@ from Wpp.body.WppIf import WppIf
 from Wpp.body.WppReturn import WppReturn
 from Wpp.WppAltName import WppAltName
 from Wpp.WppComment import WppComment
-from Wpp.WppExpression import WppConst, WppNamed
+from Wpp.WppExpression import WppConst, WppNamed, WppCall
 from Wpp.WppFunc import WppFunc
 from Wpp.WppModule import WppModule
 from Wpp.WppOverload import WppOverload
@@ -16,6 +16,7 @@ taxonsList = [
 	TaxonScalar,
 	WppAltName,
 	WppBody,
+	WppCall,
 	WppComment,
 	WppConst,
 	WppField,

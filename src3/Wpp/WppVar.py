@@ -99,4 +99,5 @@ class WppField(TaxonField):
 class WppParam(TaxonParam, WppCommonVar):
 	def onInit(self):
 		self.onCommonInit()
-	
+	def exportString(self):
+		return '%s: %s' % (self.getName(), self.getTypeTaxon().exportString())

@@ -55,6 +55,20 @@ class WppFunc(TaxonFunc, WppTaxon):
 			return super().addTaxon(taxon, context)
 		return self.getBody().addTaxon(taxon, context)
 
+	def onInit(self):
+		if self.isOverload():
+			# Еслм функция перегружена, то у нее нельзя использовать дефолтные параметры
+			for param in self.getParamsList():
+				if param.getValueTaxon():
+					param.throwError('It is forbidden to use default parameters for an overloaded function.')
+		else:
+			# Дефолтные параметры не должны смешиваться с обычными
+			prev = None
+			for param in self.getParamsList():
+				if prev and prev.getValueTaxon() and not param.getValueTaxon():
+					prev.throwError('Default parameters should be last.')
+				prev = param
+
 	def export(self, outContext):
 		# Сначала экспорт заголовка функции
 		parts = [self.type] + self.getExportAttrs() + [self.getName()]

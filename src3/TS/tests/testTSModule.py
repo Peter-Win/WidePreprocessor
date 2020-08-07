@@ -23,6 +23,8 @@ class TestTSModule(unittest.TestCase):
 		txVarDecl = tsModule.items[0]
 		self.assertEqual(txVarDecl.type, 'var')
 		txTypeExpr = txVarDecl.getTypeTaxon()
+		self.assertIsNone(txTypeExpr)
+		txTypeExpr = txVarDecl.hiddenType
 		self.assertEqual(txTypeExpr.type, '@typeExprName')
 		txType = txTypeExpr.getTypeTaxon()
 		self.assertEqual(txType.type, 'scalar')
@@ -33,7 +35,7 @@ class TestTSModule(unittest.TestCase):
 		self.assertEqual(txVal.type, 'const')
 
 		code = tsModule.exportText(style)[0]
-		self.assertEqual(code, 'export const pi: number = 3.14;')
+		self.assertEqual(code, 'export const pi = 3.14;')
 
 	def testComment(self):
 		source = """
@@ -44,7 +46,7 @@ var public const isActive: bool = true
 		expected = """
 // Header comment.
 // Second header line.
-export const isActive: boolean = true;
+export const isActive = true;
 """
 		tsModule = TSCore.createModuleFromWpp(source, 'comment.wpp')
 		ctx = OutContextMemoryStream()
