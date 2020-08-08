@@ -43,7 +43,7 @@ class WppFunc(TaxonFunc, WppTaxon):
 		if not self.headReady:
 			# Первая стадия - чтение заголовка
 			word = context.getFirstWord()
-			if word in self.validSubTaxons:
+			if word in self.validSubTaxons or word.startswith('#'):
 				taxon = super().readBody(context)
 				return taxon
 			else:

@@ -1,18 +1,18 @@
 from core.TaxonExpression import TaxonConst, TaxonNamed, TaxonCall
 from out.lexems import Lex
+from Python.PyTaxon import PyTaxon
 
-class TSConst(TaxonConst):
-
-	def exportLexems(self, lexems, style):
+class PyConst(TaxonConst):
+	def exportLexems(self, level, lexems, style):
 		lexems.append((self.toString(style), 'const'))
 
 	def toString(self, style):
 		if self.constType == 'string':
 			return self.makeString(self.value, style)
 		if self.constType == 'null':
-			return 'null'
+			return 'None'
 		if self.constType == 'bool':
-			return 'true' if self.value else 'false'
+			return 'True' if self.value else 'False'
 		if self.constType in ('int', 'fixed'):
 			return str(self.value)
 		if self.constType == 'float':
@@ -30,22 +30,25 @@ class TSConst(TaxonConst):
 		value = value.replace('\n', '\\n').replace('\r', '\\r').replace('\t', '\\t')
 		return quote + value + quote
 
-class TSNamed(TaxonNamed):
-	def exportLexems(self, lexems, style):
+class PyNamed(TaxonNamed):
+	def exportLexems(self, level, lexems, style):
 		lexems.append(Lex.varName(self.getTarget().getName()))
 
-class TSCall(TaxonCall):
-	def exportLexems(self, lexems, style):
-		self.getCaller().exportLexems(lexems, style)
-		lexems.append(Lex.paramsBegin)
+class PyCall(TaxonCall, PyTaxon):
+	def exportLexems(self, level, lexems, style):
+		line = []
+		self.getCaller().exportLexems(0, line, style)
+		line.append(Lex.paramsBegin)
 		args = self.getArguments()
 		if len(args) > 0:
 			for arg in args:
-				arg.exportLexems(lexems, style)
-				lexems.append(Lex.paramDiv)
-			lexems[-1] = Lex.paramDivLast
-		lexems.append(Lex.paramsEnd)
+				arg.exportLexems(0, line, style)
+				line.append(Lex.paramDiv)
+			line[-1] = Lex.paramDivLast
+		line.append(Lex.paramsEnd)
 		# Данный таксон может быть отдельной строкой кода, если это вызов функции без использования результата
 		# В этом случае нужна точка с запятой
 		if self.owner.type == 'body':
-			lexems.append(Lex.instrDiv)
+			self.exportLine(level, lexems, style, line)
+		else:
+			lexems += line

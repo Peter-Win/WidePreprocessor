@@ -16,23 +16,24 @@ class TaxonScalar(TaxonType):
 	"""
 	type = 'scalar'
 	propsList = (
-		('bool', {'bool': 'constExact'}, {'bool': 'exact'}, 0, 0),
-		('int8', constMatchesInt, {'int8': 'exact'}, -128, 127),
-		('short', constMatchesInt, {'short': 'exact', 'int8': 'upcast'}, -32768, 32767),
-		('int', constMatchesInt, {'int': 'exact', 'short': 'upcast', 'int8': 'upcast'}, -2147483648, 2147483647),
-		('long', constMatchesInt, {'long': 'exact', 'int': 'upcast', 'short': 'upcast', 'int8': 'upcast'}, -9223372036854775808, 9223372036854775807),
-		('float', constMatchesFloat, {'float': 'exact'}, -3.4E+38, 3.4E+38),
-		('double', constMatchesFloat, {'double': 'exact', 'float': 'upcast'}, -1.7E+308, 1.7E+308),
-		('void', {}, {}, 0, 0),
+		('bool', {'bool': 'constExact'}, {'bool': 'exact'}, 0, 0, False),
+		('int8', constMatchesInt, {'int8': 'exact'}, -128, 127, 0),
+		('short', constMatchesInt, {'short': 'exact', 'int8': 'upcast'}, -32768, 32767, 0),
+		('int', constMatchesInt, {'int': 'exact', 'short': 'upcast', 'int8': 'upcast'}, -2147483648, 2147483647, 0),
+		('long', constMatchesInt, {'long': 'exact', 'int': 'upcast', 'short': 'upcast', 'int8': 'upcast'}, -9223372036854775808, 9223372036854775807, 0),
+		('float', constMatchesFloat, {'float': 'exact'}, -3.4E+38, 3.4E+38, 0.0),
+		('double', constMatchesFloat, {'double': 'exact', 'float': 'upcast'}, -1.7E+308, 1.7E+308, 0.0),
+		('void', {}, {}, 0, 0, None),
 	)
 
 	def __init__(self, props):
-		name, matchConst, matchVar, minVal, maxVal = props
+		name, matchConst, matchVar, minVal, maxVal, defaultValue = props
 		super().__init__(name)
 		self.matchConst = matchConst
 		self.matchVar = matchVar
 		self.minValue = minVal
 		self.maxValue = maxVal
+		self.defaultValue = defaultValue
 
 	def getDebugStr(self):
 		return self.name
@@ -42,6 +43,17 @@ class TaxonScalar(TaxonType):
 
 	def exportString(self):
 		return self.name
+
+	def createDefaultValue(self, attrs):
+		if type(self.defaultValue) == bool:
+			tname = 'bool'
+		elif type(self.defaultValue) == float:
+			tname = 'float'
+		elif type(self.defaultValue) == int:
+			tname  = 'int'
+		else:
+			self.throwError('Invalid default value')
+		return self.creator('const')(tname, self.defaultValue)
 
 	def matchQuasiType(self, left, right): #TODO: Проверять диаазон констант
 		rightTaxon = right.taxon

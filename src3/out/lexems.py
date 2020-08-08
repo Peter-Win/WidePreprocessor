@@ -18,6 +18,11 @@ class Lex:
 	eol = ('\n', 'eol')
 
 	@staticmethod
+	def indent(level, rules):
+		offset = level * '\t' if rules['useTabs'] else (level * rules['tabSize']) * ' '
+		return (offset, 'space')
+
+	@staticmethod
 	def binop(name):
 		return (name, 'binop')
 

@@ -9,7 +9,7 @@ class TSCore(TaxonCore):
 	def getDebugStr(self):
 		return 'TSCore'
 
-	reservedWords = ('break', 'case', 'catch', 'class', 'const', 'continue',
+	reservedWords = {'break', 'case', 'catch', 'class', 'const', 'continue',
 		'debugger', 'default', 'delete', 'do',
 		'else', 'enum', 'export', 'extends', 'false', 'finally', 'for', 'function',
 		'if', 'import', 'in', 'instanceof', 'new', 'null',
@@ -19,7 +19,7 @@ class TSCore(TaxonCore):
 		'protected', 'public', 'static', 'yield',
 		'any', 'boolean', 'constructor', 'declare', 'get', 'module', 'require',
 		'number', 'set', 'string', 'symbol', 'type', 'from', 'of',
-		)
+		}
 
 	@staticmethod
 	def createModuleFromWpp(code, fileName):

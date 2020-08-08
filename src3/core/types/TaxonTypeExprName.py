@@ -24,3 +24,7 @@ class TaxonTypeExprName(TaxonTypeExpr):
 	def buildQuasiType(self):
 		typeTaxon = self.getTypeTaxon()
 		return QuasiType.combine(self, typeTaxon) if typeTaxon else None
+
+	def createDefaultValue(self):
+		qt = self.buildQuasiType()
+		return qt.taxon.createDefaultValue(qt.attrs)
