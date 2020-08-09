@@ -93,8 +93,9 @@ class WppVar(TaxonVar, WppCommonVar):
 	def onInit(self):
 		self.onCommonInit()
 
-class WppField(TaxonField):
-	pass
+class WppField(TaxonField, WppCommonVar):
+	def onInit(self):
+		self.onCommonInit()
 
 class WppParam(TaxonParam, WppCommonVar):
 	def onInit(self):

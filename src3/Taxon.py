@@ -32,6 +32,11 @@ class Taxon:
 
 	def isModule(self):
 		return False
+	def isClass(self):
+		return False
+
+	def isStatic(self):
+		return 'static' in self.attrs
 
 	def onInit(self):
 		""" Вызывается средой после загрузки всего проекта."""

@@ -84,11 +84,9 @@ class WppFunc(TaxonFunc, WppTaxon):
 					body = item
 				elif item != typeExpr:
 					item.export(outContext)
-			# altName = TaxonAltName.getAltName(self)
-			# if altName:
-			# 	outContext.writeln('altName ' + altName)
-			# # Затем список параметров
-			# for p in self.getParamsList():
-			# 	p.export(outContext)
 		# И в конце тело функции
 		body.export(outContext)
+
+class WppMethod(WppFunc):
+	type = 'method'
+	

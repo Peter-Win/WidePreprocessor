@@ -20,3 +20,6 @@ class PyTaxon:
 		for tx in rows:
 			self.exportLine(level, lexems, rules, [(tx, 'comment')])
 		self.exportLine(level, lexems, rules, [('\"\"\"', 'comment')])
+
+	def exportExternalComment(self, level, lexems, rules):
+		pass

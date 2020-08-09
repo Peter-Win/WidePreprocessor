@@ -32,7 +32,15 @@ class PyConst(TaxonConst):
 
 class PyNamed(TaxonNamed):
 	def exportLexems(self, level, lexems, style):
-		lexems.append(Lex.varName(self.getTarget().getName()))
+		target = self.getTarget()
+		if target.type == 'field':
+			# Для полей класса нужно использовать ссылку на экземпляр или класс
+			if not target.isStatic():
+				lexems.append(Lex.keyword('self'))
+			else:
+				lexems.append(Lex.className(target.owner.getName()))
+			lexems.append(Lex.dot)
+		lexems.append(Lex.varName(target.getName()))
 
 class PyCall(TaxonCall, PyTaxon):
 	def exportLexems(self, level, lexems, style):

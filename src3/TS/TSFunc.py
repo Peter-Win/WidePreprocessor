@@ -1,5 +1,6 @@
-from core.TaxonFunc import TaxonFunc
+from core.TaxonFunc import TaxonFunc, TaxonMethod
 from out.lexems import Lex
+from core.TaxonClass import TaxonClass
 
 class TSFunc(TaxonFunc):
 	def exportLexems(self, lexems, style):
@@ -26,3 +27,27 @@ class TSFunc(TaxonFunc):
 
 		self.getBody().exportLexems(lexems, style)
 		lexems.append(Lex.instrDiv)
+
+class TSMethod(TaxonMethod):
+	def exportLexems(self, lexems, style):
+		# access level
+		accessLevel = TaxonClass.getAccessLevelFor(self)
+		if accessLevel:
+			lexems += [Lex.keyword(accessLevel), Lex.space]
+		# static
+		if 'static' in self.attrs:
+			lexems += [Lex.keyword('static'), Lex.space]
+
+		lexems += [Lex.funcName(self.getName()), Lex.paramsBegin]
+		for param in self.getParamsList():
+			param.exportLexems(lexems, style)
+			lexems.append(Lex.paramDiv)
+		if lexems[-1] == Lex.paramDiv:
+			lexems[-1] = Lex.paramDivLast
+		lexems += [Lex.paramsEnd, Lex.colon]
+		typeExpr = self.getResultTypeExpr()
+		if typeExpr:
+			typeExpr.exportLexems(lexems, style)
+		else:
+			lexems.append(Lex.typeName('void'))
+		self.getBody().exportLexems(lexems, style)

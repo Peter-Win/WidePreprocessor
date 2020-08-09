@@ -32,7 +32,11 @@ class TSConst(TaxonConst):
 
 class TSNamed(TaxonNamed):
 	def exportLexems(self, lexems, style):
-		lexems.append(Lex.varName(self.getTarget().getName()))
+		target = self.getTarget()
+		# TODO: Здесь надо проверять, не является ли уже оно частью конструкции this. А так же static
+		if target.type == 'field':
+			lexems += [Lex.keyword('this'), Lex.dot]
+		lexems.append(Lex.varName(target.getName()))
 
 class TSCall(TaxonCall):
 	def exportLexems(self, lexems, style):

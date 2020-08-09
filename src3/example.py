@@ -25,34 +25,23 @@ def exportPy(module):
 	printCtx(outCtx)
 
 source = """
-var const public myInt: int = 22
-var const public myLong: long = -123456
-var public myFloat: float = 1.23
-var public myDouble: double = -1.23E+04
-var myTrue: bool = true
-var myFalse: bool = false
-var defInt: int
-var defULong: unsigned long
-var defFloat: float
-var defDouble: double
-var defBool: bool
+class public simple Point
+	# 2D coordinates
+	field public x: double
+		# field comment
+	field public y: double
+	field static flag: bool
+	method const isValid: bool
+		# method comment
+		if x
+			return true
+		elif y
+			return true
+		return false
 
-func public firstFunc: int
-	param x: int
-	param y: int = 100
-	# This is first function.
-	# Second line.
-	if x
-		return x
-	return y
-
-func public secondFunc: int
-	param x: int
-	return firstFunc(x)
-
-func public thirdFunc
-	param x: int
-	call firstFunc(x)
+	method static test: bool
+		param bUpdate: bool = false
+		return flag
 """
 
 print('-- Wpp')

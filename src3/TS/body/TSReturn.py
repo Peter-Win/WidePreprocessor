@@ -20,6 +20,6 @@ class TSReturn(TaxonReturn):
 	def onInit(self):
 		# Нужно различать короткий синтаксис без оператора return
 		# Для этого в body должен быть всего один элемент
-		if self.getResult() and isinstance(self.owner, TaxonBody) and isinstance(self.owner.owner, TaxonFunc) and len(self.owner.items) == 1:
+		if self.getResult() and isinstance(self.owner, TaxonBody) and self.owner.owner.type == 'func' and len(self.owner.items) == 1:
 			# В этом случае body получает атрибут shortForm, который учитывается при экспорте
 			self.owner.attrs.add('shortForm')

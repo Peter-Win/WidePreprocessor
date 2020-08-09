@@ -1,8 +1,13 @@
 """
 Атрибуты
+ abstract  Для нестатических методов. Не имеет тела функции.
+ const     Для нестатических методов. Означает, что метод не модифицирует никакие поля своего экземпляра
  overload  Применяется для всех типов функций. Обязателен в случае использования перегрузки
+ override  Этот метод переопределяет родительский.
  public    - Для функций, находящихся в модуле означает признак экспорта из модуля.
            - Для метода класса - квалификатор доступа.
+ static    Статический метод класса
+ virtual   Метод может быть переопределен потомками. В отличие от abstract, имеет свою реализацию.
 """
 from Taxon import Taxon
 from core.body.TaxonBody import TaxonBody
@@ -64,3 +69,6 @@ class TaxonFunc(Taxon):
 	def buildQuasiType(self):
 		resultExpr = self.getResultTypeExpr() or self.core.findItem('void')
 		return resultExpr.buildQuasiType()
+
+class TaxonMethod(TaxonFunc):
+	type = 'method'

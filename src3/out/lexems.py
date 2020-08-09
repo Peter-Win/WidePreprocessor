@@ -6,8 +6,10 @@ class Lex:
 	bracketBegin = ('(', 'bracketBegin')
 	bracketEnd = (')', 'bracketEnd')
 	colon = (':', 'colon')
+	dot = ('.', 'dot')
 	instrDiv = (';', 'instrDiv')
 	itemDiv = (',', 'itemDiv')
+	itemDivLast = ('', 'itemDivLast')
 	objBegin = ('{', 'objBegin')
 	objEnd = ('}', 'objEnd')
 	paramDiv = (',', 'paramDiv')
@@ -47,5 +49,18 @@ class Lex:
 		return (name, 'varName')
 
 	@staticmethod
+	def className(name):
+		return (name, 'className')
+
+	@staticmethod
 	def slashes(text):
 		return ('//'+text, 'comment')
+
+	@staticmethod
+	def stringRaw(value, rules):
+		return (Lex.quoted(value, rules), 'string')
+
+	@staticmethod
+	def quoted(value, rules):
+		q = "'" if rules['singleQuote'] else '"'
+		return '%s%s%s' % (q, value, q)

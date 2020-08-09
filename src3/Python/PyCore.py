@@ -15,6 +15,7 @@ class PyCore(TaxonCore):
 		'from', 'global', 'if', 'import', 'in', 'is', 'lambda',
 		'not', 'or', 'pass', 'print', 'raise', 'return', 'try',
 		'while', 'with', 'yield',
+		'self', # Хотя self не является ключевым словом в питоне, но здесь оно зарезервировано в качестве this
 	}
 
 	@staticmethod

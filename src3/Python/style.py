@@ -6,6 +6,7 @@ style = {
 	'cvt': {
 		'binop': ' \v ',
 		'paramDiv': '\v ',
+		'itemDiv': '\v ',
 	},
 	'vertCvt': {},
 }

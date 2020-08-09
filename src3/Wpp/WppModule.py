@@ -6,7 +6,7 @@ from utils.nameCheck import checkLowerCamelCase
 from Wpp.WppFuncHelper import WppFuncHelper
 
 class WppModule(TaxonModule, WppTaxon):
-	validSubTaxons = ('typedef', 'var', 'func')
+	validSubTaxons = ('typedef', 'var', 'func', 'class')
 	__slots__ = ('altNames')
 	def __init__(self, name=''):
 		super().__init__(name)

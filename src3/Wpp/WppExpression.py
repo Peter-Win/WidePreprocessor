@@ -3,6 +3,7 @@ from Wpp.parser.parseLexems import parseLexems
 from core.QuasiType import QuasiType
 from core.TaxonOverload import TaxonOverload
 from utils.drawTaxonTree import drawTaxonTree
+from Wpp.WppClassHelper import checkMemberAccess
 
 def fromLexems(lexems, pos, context):
 	# Заглушка 2
@@ -94,6 +95,8 @@ class WppNamed(TaxonNamed, WppExpression):
 				if not target:
 					self.taxon.throwError('Not found "%s"' % (self.taxon.targetName))
 				self.taxon.setTarget(target)
+				if target.type in {'field', 'method'}:
+					checkMemberAccess(self.taxon, target)
 		self.addTask(TaskBindTarget())
 
 class WppCall(TaxonCall, WppExpression):
