@@ -23,3 +23,11 @@ class PyTaxon:
 
 	def exportExternalComment(self, level, lexems, rules):
 		pass
+
+	def exportLexemsPrior(self, lexems, rules):
+		isBrackets = self.isNeedBrackets()
+		if isBrackets: 
+			lexems.append(Lex.bracketBegin)
+		self.exportLexems(0, lexems, rules)
+		if isBrackets:
+			lexems.append(Lex.bracketEnd)

@@ -112,9 +112,12 @@ class Taxon:
 		return path + [taxon.name if taxon.name else taxon.owner.items.index(taxon) for taxon in owners]
 
 
-	def addItem(self, item):
+	def addItem(self, item, pos = -1):
 		item.owner = self
-		self.items.append(item)
+		if pos < 0:
+			self.items.append(item)
+		else:
+			self.items.insert(pos, item)
 		item.setCore(self.core)
 		return item
 
@@ -214,3 +217,18 @@ class Taxon:
 		while j < len(self.items) and not isinstance(self.items[j], typeObject):
 			j += 1
 		return self.items[j] if j < len(self.items) else None
+
+	def getPrior(self):
+		if not hasattr(self, 'opcode'):
+			return 0
+		return self.core.priorMap[self.opcode]
+
+	def isNeedBrackets(self):
+		""" Требуется ли использовать скобки для выражения """
+		myPrior = self.getPrior()
+		if not myPrior:
+			return False
+		ownerPrior = self.owner.getPrior()
+		if not ownerPrior:
+			return False
+		return myPrior < ownerPrior

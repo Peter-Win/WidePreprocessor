@@ -1,54 +1,19 @@
-from core.TaxonExpression import TaxonConst, TaxonNamed, TaxonCall
+from core.TaxonExpression import TaxonCall, TaxonConst, TaxonMemberAccess, TaxonNamed, TaxonNew, TaxonThis, TaxonBinOp
+from core.TaxonRef import TaxonRef
 from Wpp.parser.parseLexems import parseLexems
+from Wpp.parser.buildNodes import buildNodes
 from core.QuasiType import QuasiType
 from core.TaxonOverload import TaxonOverload
 from utils.drawTaxonTree import drawTaxonTree
 from Wpp.WppClassHelper import checkMemberAccess
 
-def fromLexems(lexems, pos, context):
-	# Заглушка 2
-	value, lexType = lexems[pos]
-	v1, t1 = lexems[pos]
-	v2, t2 = lexems[pos+1] if pos +1 < len(lexems) else (None, None)
-	expr = None
-	if lexType == 'id':
-		if value in ('true', 'false', 'null'):
-			expr = WppConst.create(value)
-		elif v2 != '(':
-			expr = WppNamed(value)
-	elif lexType in ('int', 'float', 'fixed', 'string'):
-		expr = WppConst.create(value)
-	if expr:
-		return (expr, pos + 1)
-
-	if t1 == 'id' and v2 == '(':
-		expr = WppCall()
-		expr.addItem(WppNamed(v1))
-		pos += 2
-		if lexems[pos][0] == ')':
-			return (expr, pos + 1)
-		while True:
-			param, pos = fromLexems(lexems, pos, context)
-			expr.addItem(param)
-			v3, t3 = lexems[pos]
-			if v3 == ',':
-				pos += 1
-				continue
-			if v3 == ')':
-				return (expr, pos + 1)
-			break
-	context.throwError('Invalid expression: ' + ' '.join([v for v, t in lexems]))
-
 class WppExpression:
 	@staticmethod
 	def parse(expression, context):
-		# Пока что заглушка. Считаем, что все выражения являются константами либо именами
-		# if expression not in ('true', 'false', 'null') and expression[0].isalpha():
-		# 	return WppNamed(expression)
-		# return WppConst.create(expression)
 		lexems = parseLexems(expression, context)
-		expr, pos = fromLexems(lexems, 0, context)
-		return expr
+		lexems.append(('END','cmd'))
+		node, pos = buildNodes(lexems, 0, {'END'}, context)
+		return node.createTaxon(context)
 
 
 	def priorExportString(self, expr):
@@ -82,6 +47,17 @@ class WppConst(TaxonConst, WppExpression):
 	def exportString(self):
 		return self.srcValue
 
+class WppThis(TaxonThis, WppExpression):
+	def exportString(self):
+		return 'this'
+	def onInit(self):
+		# Здесь не нужно ничего ждать. Достаточно найти класс-владелец
+		from core.TaxonClass import TaxonClass
+		target = self.findOwnerByTypeEx(TaxonClass)
+		if not target:
+			self.throwError('Owner class not found for "this" expression');
+		self.setTarget(target)
+
 class WppNamed(TaxonNamed, WppExpression):
 	def exportString(self):
 		return self.targetName
@@ -98,6 +74,96 @@ class WppNamed(TaxonNamed, WppExpression):
 				if target.type in {'field', 'method'}:
 					checkMemberAccess(self.taxon, target)
 		self.addTask(TaskBindTarget())
+
+class WppMemberAccess(TaxonMemberAccess, WppExpression):
+	def exportString(self):
+		return '%s.%s' % (self.getLeft().exportString(), self.memberName)
+
+def checkAgrs(funcName, params, args):
+	nArgs = len(args)
+	nParams = len(params)
+	if nArgs > nParams:
+		return '%s takes %d argument but %d were given' % (funcName, nParams, nArgs)
+	if nArgs < nParams and not params[nArgs].getValueTaxon():
+		return  '%s missing required argument: "%s"' % (funcName, params[nArgs].getName())
+	for i, arg in enumerate(args):
+		result, errorMsg = QuasiType.matchTaxons(params[i], arg)
+		if errorMsg:
+			return errorMsg
+	return ''
+
+class WppNew(TaxonNew, WppExpression):
+	def exportString(self):
+		s = self.getCaller().getTarget().name
+		s += '(' + ', '.join([arg.exportString() for arg in self.getArguments()]) + ')'
+		return s
+
+	@staticmethod
+	def replace(callTaxon, target, args):
+		owner = callTaxon.owner
+		owner.items.remove(callTaxon)
+		newTaxon = owner.addItem(WppNew())
+		newTaxon._location = callTaxon._location
+		newTaxon.addItem(TaxonRef.fromTaxon(target))
+		for arg in args:
+			newTaxon.addItem(arg)
+		# Нужно найти конструктор, соответствующий списку аргументов
+		con = target.findConstructor()
+		if not con and len(args) == 0:
+			# Конструктора нет и список аргументов пуст
+			return
+		if con.type == 'constructor':
+			msg = checkAgrs('Constructor', con.getParamsList(), args)
+			if msg:
+				newTaxon.throwError(msg)
+			return
+		if con.type == 'overload':
+			suitable = TaxonOverload.findSuitablePure(args, con.items)
+			if not suitable:
+				newTaxon.throwError('Overloaded constructor is not ready');
+			if suitable == 'NoSuitable':
+				newTaxon.throwError('No suitable constructor found for %s(%s)' % (target.name, [a.buildQuasiType().getDebugStr() for a in args]));
+			newTaxon.overloadIndex = con.items.index(suitable)
+			return
+		tlist = ', '.join([t.buildQuasiType().exportString() for t in args])
+		newTaxon.throwError('No suitable constructor found for class %s with arguments (%s)' % (target.getName(), tlist));
+
+class WppBinOp(TaxonBinOp, WppExpression):
+	def readHead(self, context):
+		""" Бинарный оператор может использоваться, как самостоятельный элемент тела функции
+		Например: this.x = x0
+		Но делать здесь ничего не нужно, т.к. выражение уже создано в WppBody.readBody
+		"""
+		pass
+
+	def exportString(self):
+		return self.getDeclaration().exportBinOp(self)
+
+	def export(self, context):
+		""" Вариант, когда оператор используется как отдельная инструкция, н.р a = b + 1 """
+		context.writeln(self.exportString())
+
+	def onInit(self):
+		# Необходимо найти декларацию оператора
+		class TaskFindDecl:
+			def __init__(self):
+				self.leftQType = None
+				self.righQType = None
+			def check(self):
+				if not self.leftQType:
+					self.leftQType = self.taxon.getLeft().buildQuasiType()
+				if not self.righQType:
+					self.righQType = self.taxon.getRight().buildQuasiType()
+				return self.leftQType and self.righQType
+			def exec(self):
+				taxon = self.taxon
+				decl, errMsg = taxon.core.findBinOp(taxon.opcode, self.leftQType, self.righQType)
+				if errMsg:
+					taxon.throwError(errMsg)
+				if not decl:
+					taxon.throwError('Infalid binop "%s"' % taxon.opcode)
+				taxon.addItem(TaxonRef.fromTaxon(decl))
+		self.addTask(TaskFindDecl())
 
 class WppCall(TaxonCall, WppExpression):
 	__slots__ = ('quasiType')
@@ -168,21 +234,13 @@ class WppCall(TaxonCall, WppExpression):
 					newCaller = WppNamed(self.suitable.getName())
 					newCaller.setTarget(self.suitable)
 					self.taxon.changeCaller(newCaller)
+				elif target.type == 'class':
+					WppNew.replace(self.taxon, target, self.args)
 				else:
 					formalParams = target.getParamsList()
-					# Если фактических параметров больше, чем формальных, это ошибка
-					if len(self.args) > len(formalParams):
-						self.taxon.throwError('%s() takes %d argument but %d were given' % (target.getName(), len(formalParams), len(self.args)))
-					for i, param in enumerate(formalParams):
-						if i >= len(self.args):
-							if not param.getValueTaxon():
-								# Если фактических параметров меньше, чем нужно
-								self.taxon.throwError('%s() missing required argument: "%s"' % (target.getName(), param.getName()))
-						else:
-							# Проверять типы аргументов
-							result, errorMsg = QuasiType.matchTaxons(param, self.args[i])
-							if errorMsg:
-								self.taxon.throwError(errorMsg)
+					errMsg = checkAgrs('%s()' % target.getName(), formalParams, self.args)
+					if errMsg:
+						self.taxon.throwError(errMsg)
 				
 				self.taxon.quasiType = self.callerQT
 

@@ -1,5 +1,5 @@
 import unittest
-from Wpp.WppExpression import WppExpression, WppConst, WppNamed, WppCall
+from Wpp.WppExpression import WppExpression, WppConst, WppNamed, WppCall, WppThis
 from Wpp.Context import Context
 
 class TestWppExpression(unittest.TestCase):
@@ -58,3 +58,16 @@ class TestWppExpression(unittest.TestCase):
 		self.assertEqual(args[0].getCaller().targetName, 'func2')
 		self.assertEqual(args[1].getCaller().targetName, 'func3')
 		self.assertEqual(expr.buildQuasiType(), None)
+
+	def testThis(self):
+		ctx = Context.createFromMemory('')
+		expr = WppExpression.parse('this', ctx)
+		self.assertEqual(expr.type, 'this')
+
+	def testDot(self):
+		ctx = Context.createFromMemory('')
+		expr = WppExpression.parse('this.member', ctx)
+		self.assertEqual(expr.type, 'dot')
+		self.assertEqual(expr.memberName, 'member')
+
+

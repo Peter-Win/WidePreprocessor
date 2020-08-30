@@ -43,12 +43,14 @@ class WppFunc(TaxonFunc, WppTaxon):
 		if not self.headReady:
 			# Первая стадия - чтение заголовка
 			word = context.getFirstWord()
-			if word in self.validSubTaxons or word.startswith('#'):
-				taxon = super().readBody(context)
-				return taxon
+			if self.isValidSubTaxon(word) or word.startswith('#'):
+				return self.readHeadBody(context)
 			else:
 				self.headReady = True
 		return self.getBody().readBody(context)
+
+	def readHeadBody(self, context):
+		return super().readBody(context)
 
 	def addTaxon(self, taxon, context):
 		if not self.headReady:
@@ -71,12 +73,8 @@ class WppFunc(TaxonFunc, WppTaxon):
 
 	def export(self, outContext):
 		# Сначала экспорт заголовка функции
-		parts = [self.type] + self.getExportAttrs() + [self.getName()]
-		head = ' '.join(parts)
+		self.exportHead(outContext)
 		typeExpr = self.getResultTypeExpr()
-		if typeExpr:
-			head += ': ' + typeExpr.exportString()
-		outContext.writeln(head)
 		body = None
 		with outContext:
 			for item in self.items:
@@ -87,6 +85,30 @@ class WppFunc(TaxonFunc, WppTaxon):
 		# И в конце тело функции
 		body.export(outContext)
 
+	def exportHead(self, outContext):
+		parts = [self.type] + self.getExportAttrs() + [self.getName()]
+		head = ' '.join(parts)
+		typeExpr = self.getResultTypeExpr()
+		if typeExpr:
+			head += ': ' + typeExpr.exportString()
+		outContext.writeln(head)
+
 class WppMethod(WppFunc):
 	type = 'method'
-	
+
+class WppConstructor(WppFunc):
+	type = 'constructor'
+	def getName(self):
+		return 'constructor'
+	def readHead(self, context):
+		words = context.currentLine.split()
+		self.attrs = set(words[1:])
+		self.setBody(WppBody())
+	def isValidSubTaxon(self, taxonType):
+		if taxonType == 'autoinit':
+			return True
+		return super().isValidSubTaxon(taxonType)
+
+	def exportHead(self, outContext):
+		parts = [self.type] + self.getExportAttrs()
+		outContext.writeln(' '.join(parts))

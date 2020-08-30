@@ -10,7 +10,7 @@ def parseLexems(row, context):
 				state = 'id'
 			elif ch.isdigit():
 				state = 'int'
-			elif ch in '-+*/<>()[].,;!&|':
+			elif ch in '-+*/<>()[].,;!&|=':
 				state = 'cmd'
 			elif ch not in ' \t':
 				context.throwError('Invalid character "%s"' % ch)

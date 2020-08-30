@@ -1,12 +1,18 @@
 from core.TaxonClass import TaxonClass
 from Wpp.WppTaxon import WppTaxon
 from utils.nameCheck import checkUpperCamelCase
+from Wpp.WppFuncHelper import WppFuncHelper
 
 class WppClass(TaxonClass, WppTaxon):
-	validSubTaxons = ('field', 'method')
+	validSubTaxons = ('field', 'method', 'constructor')
 
 	def checkName(self, name):
 		return checkUpperCamelCase(name, self.type)
+
+	def checkDup(self, taxon, dup, context):
+		if WppFuncHelper.checkDup(taxon, dup, context):
+			return
+		super().checkDup(taxon, dup, context)
 
 	def findUp(self, name, caller):
 		# При поиске вверх нужно искать все таксоны класса
@@ -21,6 +27,12 @@ class WppClass(TaxonClass, WppTaxon):
 			context.throwError('Required class name')
 		self.name = words[-1]
 		self.attrs = set(words[1:-1])
+
+	def addTaxon(self, taxon, context):
+		res = WppFuncHelper.addTaxon(self, taxon, context)
+		if res:
+			return res
+		return super().addTaxon(taxon, context)
 
 	def export(self, outContext):
 		# Сначала экспорт заголовка класса

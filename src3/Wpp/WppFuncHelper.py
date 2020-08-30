@@ -18,6 +18,15 @@ class WppFuncHelper:
 		if not item.isOverload():
 			return None
 		# Overload found
+		if item.type == 'constructor':
+			# Перегруженый конструктор
+			con = owner.findConstructor()
+			if not con:
+				con = owner.addItem(WppOverload())
+				con.attrs.add('constructor')
+			con.addItem(item)
+			return con
+
 		overload = owner.findItem(item.name)
 		if not overload:
 			# первое вхождение перегруженной функции. требуется создать таксон управления перегрузкой

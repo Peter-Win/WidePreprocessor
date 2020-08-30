@@ -28,6 +28,10 @@ class WppTypeExprName(TaxonTypeExprName, WppTaxon):
 		if not self.getTypeTaxon():
 			self.addTask(TaskTypeFind())
 
+	def copyFieldsFrom(self, src):
+		super().copyFieldsFrom(src)
+		self.typeName = src.typeName
+
 	def exportString(self):
 		words = self.getExportAttrs() + [self.typeName]
 		return ' '.join(words)

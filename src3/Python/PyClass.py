@@ -23,7 +23,7 @@ class PyClass(TaxonClass, PyTaxon):
 		staticFields = []
 		fields = []
 		methods = []
-		constructors = []
+		
 		for member in self.getMembers():
 			if member.type == 'field':
 				if member.isStatic():
@@ -51,8 +51,11 @@ class PyClass(TaxonClass, PyTaxon):
 			self.exportLine(bodyLevel, lexems, style, line)
 
 		# Поля надо определить в конструкторе
-		if len(constructors) == 0:
+		con = self.findConstructor()
+		if con == None:
 			self.exportZeroConstructor(bodyLevel, lexems, style, fields)
+		else:
+			con.exportLexems(bodyLevel, lexems, style)
 
 		# Методы
 		for method in methods:
@@ -68,3 +71,4 @@ class PyClass(TaxonClass, PyTaxon):
 		self.exportLine(level, lexems, style, line)
 		for field in fields:
 			field.exportLexems(level + 1, lexems, style)
+

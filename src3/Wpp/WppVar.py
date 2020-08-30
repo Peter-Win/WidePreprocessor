@@ -3,7 +3,7 @@ var [public] <varName> : <typeExpression> [ = <initialValue]
 param [ref|ptr] <paramName: <typeExpression> [ = <defaultValue>]
 field [public|private|protected|static] <fieldName> : <typeExpression> [ = <initialValue>]
 """
-from core.TaxonVar import TaxonVar, TaxonField, TaxonParam
+from core.TaxonVar import TaxonAutoinit, TaxonVar, TaxonField, TaxonParam
 from Wpp.WppTypeExpr import WppTypeExpr
 from Wpp.WppExpression import WppExpression
 from Wpp.WppTaxon import WppTaxon
@@ -102,3 +102,40 @@ class WppParam(TaxonParam, WppCommonVar):
 		self.onCommonInit()
 	def exportString(self):
 		return '%s: %s' % (self.getName(), self.getTypeTaxon().exportString())
+
+class WppAutoinit(TaxonAutoinit, WppCommonVar):
+	def checkName(self, name):
+		return None
+	def readHead(self, context):
+		words = context.currentLine.strip().split()
+		if len(words) < 2:
+			context.throwError('Expected name of autoinit')
+		# Здесь пока нельзя искать поле в классе, т.к оно еще может быть не считано
+		self.name = words[-1]
+		self.attrs = set(words[1:-1])
+
+	def onInit(self):
+		classDecl = self.findOwnerByType('class')
+		if not classDecl:
+			self.throwError('Class declaration not found for autoinit "%s"' % self.name)
+		# Ищем только среди непосредственных членов класса, т.к инициализация членов родительского класса должна выполняться через его конструктор
+		fieldDecl = classDecl.findItem(self.name)
+		if not fieldDecl:
+			self.throwError('Field declaration not found for autoinit "%s"' % self.name)
+		if fieldDecl.type != 'field':
+			self.throwError('Autoinit should refer to a class field, not a %s.' % fieldDecl.type)
+		# Теперь надо подождать готовность типа поля, чтобы его можно было безопасно скопировать
+		class TaskFiedReady:
+			def check(self):
+				return fieldDecl.buildQuasiType()
+			def exec(self):
+				newTypeExpr = fieldDecl.getTypeTaxon().cloneAll(self.taxon)
+				newTypeExpr.initAllRefs()
+				newTypeExpr.initAll()
+				newTypeExpr.attrs |= self.taxon.attrs
+
+		self.addTask(TaskFiedReady())
+
+	def export(self, outContext):
+		parts = ['autoinit'] + self.getExportAttrs() + [self.name]
+		outContext.writeln(' '.join(parts))

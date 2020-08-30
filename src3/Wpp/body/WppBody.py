@@ -1,5 +1,6 @@
 from core.body.TaxonBody import TaxonBody
 from Wpp.WppTaxon import WppTaxon
+from Wpp.WppExpression import WppExpression
 
 class WppBody(TaxonBody, WppTaxon):
 	validSubTaxons = ('if', 'return', 'var', 'call')
@@ -9,7 +10,14 @@ class WppBody(TaxonBody, WppTaxon):
 		lastTaxon = self.items[-1] if len(self.items) > 0 else None
 		if taxonType in ('elif', 'else') and lastTaxon and lastTaxon.type == 'if':
 			return lastTaxon
-		return super().readBody(context)
+		if self.isValidSubTaxon(taxonType):
+			return super().readBody(context)
+		try:
+			expr = WppExpression.parse(context.currentLine.strip(), context)
+			expr.attrs.add('instruction')
+			return expr
+		except Exception as e:
+			return super().readBody(context)
 
 	def addTaxon(self, taxon, context):
 		if len(self.items) > 0 and self.items[-1] == taxon:

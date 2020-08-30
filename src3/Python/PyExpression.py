@@ -1,8 +1,8 @@
-from core.TaxonExpression import TaxonConst, TaxonNamed, TaxonCall
+from core.TaxonExpression import TaxonBinOp, TaxonConst, TaxonNamed, TaxonCall, TaxonNew, TaxonMemberAccess, TaxonThis
 from out.lexems import Lex
 from Python.PyTaxon import PyTaxon
 
-class PyConst(TaxonConst):
+class PyConst(TaxonConst, PyTaxon):
 	def exportLexems(self, level, lexems, style):
 		lexems.append((self.toString(style), 'const'))
 
@@ -30,7 +30,11 @@ class PyConst(TaxonConst):
 		value = value.replace('\n', '\\n').replace('\r', '\\r').replace('\t', '\\t')
 		return quote + value + quote
 
-class PyNamed(TaxonNamed):
+class PyThis(TaxonThis, PyTaxon):
+	def exportLexems(self, level, lexems, style):
+		lexems.append(Lex.keyword('self'))
+
+class PyNamed(TaxonNamed, PyTaxon):
 	def exportLexems(self, level, lexems, style):
 		target = self.getTarget()
 		if target.type == 'field':
@@ -55,8 +59,35 @@ class PyCall(TaxonCall, PyTaxon):
 			line[-1] = Lex.paramDivLast
 		line.append(Lex.paramsEnd)
 		# Данный таксон может быть отдельной строкой кода, если это вызов функции без использования результата
-		# В этом случае нужна точка с запятой
-		if self.owner.type == 'body':
+		if 'instruction' in self.attrs:
 			self.exportLine(level, lexems, style, line)
 		else:
 			lexems += line
+
+class PyNew(TaxonNew, PyTaxon):
+	def exportLexems(self, level, lexems, style):
+		lexems.append(Lex.keyword(self.getCaller().getTarget().getName()))
+		lexems.append(Lex.bracketBegin)
+		args = self.getArguments()
+		if len(args):
+			for arg in args:
+				arg.exportLexems(level, lexems, style)
+				lexems.append(Lex.paramDiv)
+			lexems[-1] = Lex.paramDivLast
+		lexems.append(Lex.bracketEnd)
+
+class PyBinOp(TaxonBinOp, PyTaxon):
+	def exportLexems(self, level, lexems, style):
+		line = []
+		self.getLeft().exportLexemsPrior(line, style)
+		line.append(Lex.binop(self.opcode))
+		self.getRight().exportLexemsPrior(line, style)
+		if 'instruction' in self.attrs:
+			self.exportLine(level, lexems, style, line)
+		else:
+			lexems += line
+
+class PyMemberAccess(TaxonMemberAccess, PyTaxon):
+	def exportLexems(self, level, lexems, style):
+		self.getLeft().exportLexemsPrior(lexems, style)
+		lexems += [Lex.dot, Lex.fieldName(self.memberName)]

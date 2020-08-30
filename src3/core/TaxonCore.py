@@ -2,6 +2,8 @@ from TaxonDict import TaxonDict
 from core.TaxonScalar import TaxonScalar
 from core.TaxonTypedef import TaxonTypedef
 from core.types.TaxonTypeExprName import TaxonTypeExprName
+from core.QuasiType import QuasiType
+from core.TaxonOpDecl import TaxonDeclBinOp
 
 class TaxonCore(TaxonDict):
 	type = 'core'
@@ -23,10 +25,14 @@ class TaxonCore(TaxonDict):
 		self.reservedWordsSet = {word for word in self.reservedWords}
 		from core.buildCoreTaxonsMap import buildCoreTaxonsMap
 		self.taxonMap = buildCoreTaxonsMap()
+		self.binOpMap = {} # dictionary opcode => TaxonDeclBinOp[]
+		self.priorMap = {} # opcode => priority
 
 	def init(self):
 		self.createScalar()
 		self.createAliases()
+		self.createPriorMap()
+		self.createOperatorsDecl()
 
 	def getSafeName(self, name):
 		# Если имя совпало с одним из ключевых слов, то добавить подчерк в конце
@@ -103,6 +109,7 @@ class TaxonCore(TaxonDict):
 		while len(self.tasks) > 0:
 			changed, newQueue = self.resolveTasksIteration()
 			if not changed:
+				print(newQueue)
 				self.throwError('Task list is not changed.')
 			self.tasks = newQueue
 
@@ -130,3 +137,43 @@ class TaxonCore(TaxonDict):
 	]
 	aliasesMap = None
 
+	# --------- Operators
+	def createPriorMap(self):
+		""" По-умолчанию используются приоритеты, указанные в списке операторов
+		Они соответствуют: WPP, JavaScript, TypeScript
+		"""
+		from core.operators import opsList
+		self.priorMap = {opcode:prior for opcode, name, opType, prior in opsList}
+
+
+	def findBinOp(self, opcode, leftPart, rightPart):
+		leftQType = leftPart.buildQuasiType()
+		rightQType = rightPart.buildQuasiType()
+		# Особый случай - оператор присваивания. Для дефольной реализации достаточно возможность привести правый тип к левому
+		if opcode == '=':
+			_, errMsg = QuasiType.matchTaxons(leftQType, rightQType)
+			if errMsg:
+				return None, errMsg
+			return self.declAssignBase, None
+		declList = self.binOpMap.get(opcode)
+		if not declList:
+			return None, 'Invalid operator %s' % opcode
+		# Пока ищем первое попавшееся совпадение
+		for decl in declList:
+			leftResult, rightResult = decl.matchTypes(leftQType, rightQType)
+			if leftResult and rightResult:
+				return decl, None
+		return None, 'Not found operator %s(%s, %s)' % (opcode, leftQType.getDebugStr(), rightQType.getDebugStr())
+
+	def createOperatorsDecl(self):
+		self.declAssignBase = self.addItem(self.creator('declAssignBase')())
+		for opcode, left, right, result in binOps:
+			opsList = self.binOpMap.setdefault(opcode, [])
+			opsList.append(self.addItem(TaxonDeclBinOp(opcode, self.findItem(left), self.findItem(right), self.findItem(result))))
+
+# opcode, left, right, result
+# сначала должны идти более специальные случаи, н.р. long + int8. т.к. иначе может сработать приведение типов, н.р. long + long
+binOps = [
+  ('+', 'double', 'double', 'double'),
+  ('*', 'double', 'double', 'double'),
+]

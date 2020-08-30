@@ -49,7 +49,7 @@ class QuasiType:
 		self.attrs = QuasiType.mixAttrs(self.attrs, attrs)
 
 	def getDebugStr(self):
-		attrsStr = Taxon.AttrsToStr(self.attrs)
+		attrsStr = Taxon.AttrsToStr([a for a in self.attrs if a not in {'public'}])
 		if attrsStr:
 			attrsStr += ' '
 		return attrsStr + self.taxon.getDebugStr()
@@ -83,5 +83,6 @@ class QuasiType:
 		if not result and not errorMsg:
 			rightSource = right.inst if hasattr(right, 'inst') else right
 			rightStr = rightSource.exportString() if hasattr(rightSource, 'exportString') else rightSource.getDebugStr()
-			errorMsg = 'Cannot convert from "%s:%s" to "%s"' % (rightStr, rightType.showType(), left.exportString())
+			# errorMsg = 'Cannot convert from "%s:%s" to "%s"' % (rightStr, rightType.showType(), left.exportString())
+			errorMsg = 'Cannot convert from "%s" to "%s"' % (rightType.getDebugStr(), left.exportString())
 		return result, errorMsg

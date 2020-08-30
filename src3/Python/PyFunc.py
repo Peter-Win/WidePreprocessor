@@ -1,4 +1,4 @@
-from core.TaxonFunc import TaxonFunc, TaxonMethod
+from core.TaxonFunc import TaxonFunc, TaxonMethod, TaxonConstructor
 from out.lexems import Lex
 from Python.PyTaxon import PyTaxon
 
@@ -37,3 +37,7 @@ class PyFunc(TaxonFunc, PyCommonFunc):
 
 class PyMethod(TaxonMethod, PyCommonFunc):
 	pass
+
+class PyConstructor(TaxonConstructor, PyCommonFunc):
+	def getName(self):
+		return '__init__'

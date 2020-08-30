@@ -1,6 +1,6 @@
-from core.TaxonVar import TaxonVar, TaxonParam, TaxonField
+from core.TaxonVar import TaxonVar, TaxonParam, TaxonField, TaxonAutoinit
 from Python.PyTaxon import PyTaxon
-from Python.PyExpression import PyConst
+from Python.PyExpression import PyConst, PyBinOp, PyNamed, PyThis, PyMemberAccess
 from out.lexems import Lex
 
 def forceValue(taxon):
@@ -37,3 +37,21 @@ class PyField(TaxonField, PyTaxon):
 		line = [Lex.keyword('self'), Lex.dot, Lex.varName(self.getName()), Lex.binop('=')]
 		self.getValueTaxon().exportLexems(0, line, style)
 		self.exportLine(level, lexems, style, line)
+
+class PyAutoinit(TaxonAutoinit, PyTaxon):
+	def onInit(self):
+		# Нужно вставить конструкцию self.param = param
+		body = self.owner.getBody()
+		pos = 0
+		while pos < len(body.items) and 'autoinit' in body.items[pos].attrs:
+			pos += 1
+		eq = body.addItem(PyBinOp('='), pos)
+		eq.attrs.add('instruction')
+		eq.attrs.add('autoinit')
+		left = eq.addItem(PyMemberAccess(self.getName()))
+		left.addItem(PyThis())
+		right = eq.addItem(PyNamed(self.getName()))
+		right.setTarget(self)
+
+	def exportLexems(self, level, lexems, style):
+		lexems.append(Lex.varName(self.getName()))

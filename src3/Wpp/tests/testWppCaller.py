@@ -90,4 +90,4 @@ var const x: double = funcIf(1.1, 2.2, 3.3)
 		with self.assertRaises(RuntimeError) as cm:
 			module = WppCore.createMemModule(source, 'invalidArg.wpp')
 		msg = cm.exception.args[0]
-		self.assertEqual(msg, 'Cannot convert from "1.1:fixed" to "cond: bool"')
+		self.assertEqual(msg, 'Cannot convert from "fixed(1.1)" to "cond: bool"')

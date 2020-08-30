@@ -32,7 +32,28 @@ class TaxonConst(TaxonExpression):
 		self.value = src.value
 		self.srcValue = src.srcValue
 
-class TaxonNamed(TaxonExpression):
+class TaxonThis(TaxonExpression):
+	type = 'this'
+	def getRef(self):
+		""" Always returns reference """
+		ref = self.findByType(TaxonRef.type)
+		if not ref:
+			ref = self.addItem(TaxonRef())
+		return ref
+
+	def setTarget(self, targetTaxon):
+		""" Назначить ссылку на таксон с соответствующим именем """
+		self.getRef().setTarget(targetTaxon)
+
+	def getTarget(self):
+		""" can return None, if referense is not initialized """
+		return self.getRef().getTarget()
+
+	def buildQuasiType(self):
+		target = self.getTarget()
+		return target.buildQuasiType() if target else None
+
+class TaxonNamed(TaxonThis):
 	""" Any named entities: variables, functions, types etc
 	Example: var x: int = calc(first) - here calc and first are named expressions
 	Не используется поле name, т.к. это не имя данного таксона. Алгоритм поиска должен находить по имени только исходный объект.
@@ -50,28 +71,10 @@ class TaxonNamed(TaxonExpression):
 	def getDebugStr(self):
 		return '->%s' % (self.targetName)
 
-	def getRef(self):
-		""" Always returns reference """
-		ref = self.findByType(TaxonRef.type)
-		if not ref:
-			ref = self.addItem(TaxonRef())
-		return ref
-
-	def setTarget(self, targetTaxon):
-		""" Назначить ссылку на таксон с соответствующим именем """
-		self.getRef().setTarget(targetTaxon)
-
-	def getTarget(self):
-		""" can return Npne, if referense is not initialized """
-		return self.getRef().getTarget()
-
-	def buildQuasiType(self):
-		target = self.getTarget()
-		return target.buildQuasiType() if target else None
 
 class TaxonCall(TaxonExpression):
 	type = 'call'
-			
+	opcode = 'call'
 	def getCaller(self):
 		return self.items[0]
 
@@ -81,3 +84,77 @@ class TaxonCall(TaxonExpression):
 	def getArguments(self):
 		return self.items[1:]
 
+class TaxonNew(TaxonCall):
+	type = 'new'
+	opcode = 'new'
+	__slots__ = ('overloadIndex')
+	def __init__(self):
+		super().__init__()
+		self.overloadIndex = 0
+		
+	def buildQuasiType(self):
+		# В отличие от функций, new всегда отдает свой класс, независимо от списка параметров
+		return self.getCaller().getTarget().buildQuasiType()
+	def copyFieldsFrom(self, src):
+		super().copyFieldsFrom(src)
+		self.overloadIndex = src.overloadIndex
+
+class TaxonMemberAccess(TaxonExpression):
+	type = 'dot'
+	opcode = '.'
+	__slots__ = ('memberName')
+	def __init__(self, memberName=''):
+		super().__init__()
+		self.memberName = memberName
+
+	def copyFieldsFrom(self, src):
+		super().copyFieldsFrom(src)
+		self.memberName = src.memberName
+
+	def getLeft(self):
+		return self.items[0]
+
+	def getTarget(self):
+		leftQt = self.getLeft().buildQuasiType()
+		if not leftQt:
+			return None
+		#TODO: пока очень простые случаи. Не учитывается наследование. Нужно переделать на findDown
+		return leftQt.taxon.findItem(self.memberName)
+
+	def buildQuasiType(self):
+		target = self.getTarget()
+		return target.buildQuasiType() if target else None
+
+class TaxonBinOp(TaxonExpression):
+	""" items
+	0: left argument
+	1: right argument
+	2: (after onInit) reference to operator declaration
+	"""
+	type = 'binop'
+	__slots__ = ('opcode')
+	def __init__(self, opcode=''):
+		super().__init__()
+		self.opcode = opcode
+
+	def copyFieldsFrom(self, src):
+		super().copyFieldsFrom(src)
+		self.opcode = src.opcode
+
+	def getLeft(self):
+		return self.items[0]
+
+	def getRight(self):
+		return self.items[1]
+
+	def getDeclaration(self):
+		if len(self.items) < 3:
+			return None
+		ref = self.items[2].getTarget()
+		return ref
+
+	def buildQuasiType(self):
+		decl = self.getDeclaration()
+		if not decl:
+			return None
+		return decl.buildQuasiType(self)

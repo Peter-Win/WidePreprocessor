@@ -10,10 +10,10 @@ class TaxonDict(Taxon):
 		super().copyFieldsFrom(src)
 		self.dict = src.dict.copy()
 
-	def addItem(self, item):
+	def addItem(self, item, pos = -1):
 		if item.name:
 			self.dict[item.name] = item
-		return super().addItem(item)
+		return super().addItem(item, pos)
 
 	def findItem(self, name):
 		return self.dict.get(name)

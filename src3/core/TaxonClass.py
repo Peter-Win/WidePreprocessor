@@ -19,15 +19,25 @@
  - Не поддерживается утиная типизация. То есть одинаковый состав полей не позволяет приводить один тип к другому. Важны только родственные отношения.
 
 Для доступа к своим членам класса из методов не требуется использование this.
+
+Простые классы используются для математических объектов. Для них можно определять операторы.
+Важное отличие: копирование простых объектов происходит по значению, а не по ссылке. Как в C++
+Поэтому параметры с простыми объектами желательно объявлять с атрибутами const ref
 """
 from TaxonDict import TaxonDict
+from core.QuasiType import QuasiType
 
 class TaxonClass(TaxonDict):
 	type = 'class'
 
 	def isClass(self):
 		return True
+	def isType(self):
+		return True
 
+	def getDebugStr(self):
+		return '%s %s' % (self.type, self.getName())
+		
 	def getExtends(self):
 		for taxon in self.items:
 			if 'extends' in taxon.attrs:
@@ -51,3 +61,26 @@ class TaxonClass(TaxonDict):
 		for level in ['public', 'private', 'protected']:
 			if level in taxon.attrs:
 				return level
+
+	def buildQuasiType(self):
+		return QuasiType(self)
+
+	def matchQuasiType(self, left, right):
+		rightTaxon = right.taxon
+		if right.taxon == left.taxon:
+			return 'exact', None
+		return None, None
+
+	def findConstructor(self):
+		"""
+		Возможно три разных результата:
+		None, если конструктора нет
+		type == 'constructor', если у класса один конструктор
+		type == 'overload', если несколько конструкторов
+		"""
+		for taxon in self.items:
+			if taxon.type == 'constructor':
+				return taxon
+			if taxon.type == 'overload' and 'constructor' in taxon.attrs:
+				return taxon
+		return None

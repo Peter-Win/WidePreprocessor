@@ -25,23 +25,31 @@ def exportPy(module):
 	printCtx(outCtx)
 
 source = """
-class public simple Point
-	# 2D coordinates
-	field public x: double
-		# field comment
-	field public y: double
-	field static flag: bool
-	method const isValid: bool
-		# method comment
-		if x
-			return true
-		elif y
-			return true
-		return false
-
-	method static test: bool
-		param bUpdate: bool = false
-		return flag
+var const a: double = 1
+var const b: double = 2
+# var const c: double = a + b * 3
+# var const d: double = (a + b) * c
+# var const e: double = a + (b * c)
+"""
+source1 = """
+class simple Point
+	field x: double
+	field y: double
+	constructor
+		autoinit x
+		autoinit y
+"""
+source1 = """
+class simple Point
+	field x: double
+	field y: double
+	constructor overload
+		autoinit x
+		autoinit y
+	constructor overload
+		param pt: const ref Point
+		x = pt.x
+		y = pt.y
 """
 
 print('-- Wpp')
@@ -49,8 +57,10 @@ module = WppCore.createMemModule(source, 'example.wpp')
 outCtx = OutContextMemoryStream()
 module.export(outCtx);
 print(str(outCtx))
-print('')
-exportTS(module)
 
 print('')
 exportPy(module)
+
+print('')
+exportTS(module)
+

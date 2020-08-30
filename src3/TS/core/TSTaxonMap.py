@@ -1,4 +1,5 @@
 from core.TaxonAltName import TaxonAltName
+from core.TaxonOpDecl import TaxonDeclAssignBase
 from core.TaxonRef import TaxonRef
 from TS.body.TSBody import TSBody
 from TS.body.TSIf import TSIf
@@ -16,6 +17,7 @@ from TS.TSVar import TSField, TSVar, TSParam
 
 TSTaxonList = [
 	TaxonAltName,
+	TaxonDeclAssignBase,
 	TaxonRef,
 	TSBody,
 	TSCall,

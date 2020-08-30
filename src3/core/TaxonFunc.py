@@ -11,7 +11,7 @@
 """
 from Taxon import Taxon
 from core.body.TaxonBody import TaxonBody
-from core.TaxonVar import TaxonParam
+from core.TaxonVar import TaxonParam, TaxonAutoinit
 from core.TaxonTypeExpr import TaxonTypeExpr
 
 class TaxonFunc(Taxon):
@@ -31,7 +31,7 @@ class TaxonFunc(Taxon):
 		return self.findByType(TaxonBody.type)
 
 	def getParamsList(self):
-		return [taxon for taxon in self.items if taxon.type == TaxonParam.type]
+		return [taxon for taxon in self.items if taxon.type in {TaxonParam.type, TaxonAutoinit.type}]
 
 	def getResultTypeExpr(self):
 		return self.findByTypeEx(TaxonTypeExpr)
@@ -72,3 +72,6 @@ class TaxonFunc(Taxon):
 
 class TaxonMethod(TaxonFunc):
 	type = 'method'
+
+class TaxonConstructor(TaxonFunc):
+	type = 'constructor'
