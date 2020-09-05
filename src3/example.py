@@ -25,31 +25,23 @@ def exportPy(module):
 	printCtx(outCtx)
 
 source = """
-var const a: double = 1
-var const b: double = 2
-# var const c: double = a + b * 3
-# var const d: double = (a + b) * c
-# var const e: double = a + (b * c)
-"""
-source1 = """
 class simple Point
-	field x: double
-	field y: double
-	constructor
-		autoinit x
-		autoinit y
-"""
-source1 = """
-class simple Point
-	field x: double
-	field y: double
+	field public x: double
+	field public y: double
 	constructor overload
+		x = 0
+		y = 0
+	constructor overload
+		altName initPoint
 		autoinit x
 		autoinit y
 	constructor overload
-		param pt: const ref Point
-		x = pt.x
-		y = pt.y
+		altName copyPoint
+		param src: const ref Point
+		x = src.x
+		y = src.y
+var const first: Point = Point(1, 2)
+var const second: Point = Point(first)
 """
 
 print('-- Wpp')

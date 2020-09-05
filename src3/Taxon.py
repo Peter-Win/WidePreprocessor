@@ -232,3 +232,18 @@ class Taxon:
 		if not ownerPrior:
 			return False
 		return myPrior < ownerPrior
+
+	def replaceTaxon(self, taxon):
+		owner = self.owner
+		index = owner.items.index(self)
+		owner.removeItem(self)
+		owner.addItem(taxon, index)
+		taxon._location = self._location
+		for item in self.items:
+			taxon.addItem(item)
+		return taxon
+
+	def walk(self, func):
+		func(self)
+		for item in self.items:
+			item.walk(func)

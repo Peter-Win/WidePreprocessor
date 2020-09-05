@@ -9,10 +9,12 @@ class TaxonAltName(Taxon):
 		self.altName = name
 
 	@staticmethod
-	def getAltName(taxon):
+	def getAltName(taxon, subjectName=''):
 		for item in taxon.items:
 			if item.type == TaxonAltName.type:
 				return item.altName
+		if subjectName:
+			taxon.throwError('altName is required for %s' % (subjectName))
 
 	def copyFieldsFrom(self, src):
 		super().copyFieldsFrom(src)

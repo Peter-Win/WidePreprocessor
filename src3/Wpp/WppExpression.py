@@ -99,7 +99,7 @@ class WppNew(TaxonNew, WppExpression):
 		return s
 
 	@staticmethod
-	def replace(callTaxon, target, args):
+	def replaceExt(callTaxon, target, args):
 		owner = callTaxon.owner
 		owner.items.remove(callTaxon)
 		newTaxon = owner.addItem(WppNew())
@@ -235,7 +235,7 @@ class WppCall(TaxonCall, WppExpression):
 					newCaller.setTarget(self.suitable)
 					self.taxon.changeCaller(newCaller)
 				elif target.type == 'class':
-					WppNew.replace(self.taxon, target, self.args)
+					WppNew.replaceExt(self.taxon, target, self.args)
 				else:
 					formalParams = target.getParamsList()
 					errMsg = checkAgrs('%s()' % target.getName(), formalParams, self.args)

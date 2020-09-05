@@ -107,12 +107,16 @@ class WppAutoinit(TaxonAutoinit, WppCommonVar):
 	def checkName(self, name):
 		return None
 	def readHead(self, context):
-		words = context.currentLine.strip().split()
+		""" autoinit name [= value] """
+		chunks = context.currentLine.strip().split('=', 1)
+		words = chunks[0].split()
 		if len(words) < 2:
 			context.throwError('Expected name of autoinit')
 		# Здесь пока нельзя искать поле в классе, т.к оно еще может быть не считано
 		self.name = words[-1]
 		self.attrs = set(words[1:-1])
+		if len(chunks) == 2:
+			self.addItem(WppExpression.parse(chunks[1], context))
 
 	def onInit(self):
 		classDecl = self.findOwnerByType('class')
@@ -133,9 +137,24 @@ class WppAutoinit(TaxonAutoinit, WppCommonVar):
 				newTypeExpr.initAllRefs()
 				newTypeExpr.initAll()
 				newTypeExpr.attrs |= self.taxon.attrs
+				# Проверить соответствие типа для initialValue
+				if self.taxon.getValueTaxon():
+					self.taxon.addTask(TaskCheckType())
+		class TaskCheckType:
+			def check(self):
+				self.left = self.taxon.getTypeTaxon().buildQuasiType()
+				self.right = self.taxon.getValueTaxon().buildQuasiType()
+				return self.left and self.right
+			def exec(self):
+				res, err = QuasiType.matchTaxons(self.left, self.right)
+				if err:
+					self.taxon.throwError(err)
 
 		self.addTask(TaskFiedReady())
 
 	def export(self, outContext):
 		parts = ['autoinit'] + self.getExportAttrs() + [self.name]
+		val = self.getValueTaxon()
+		if val:
+			parts += ['=', val.exportString()]
 		outContext.writeln(' '.join(parts))

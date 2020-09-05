@@ -55,3 +55,7 @@ class PyAutoinit(TaxonAutoinit, PyTaxon):
 
 	def exportLexems(self, level, lexems, style):
 		lexems.append(Lex.varName(self.getName()))
+		val = self.getValueTaxon()
+		if val:
+			lexems.append(Lex.binop('='))
+			val.exportLexems(0, lexems, style)

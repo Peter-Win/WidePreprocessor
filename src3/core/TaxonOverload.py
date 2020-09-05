@@ -4,11 +4,11 @@ from core.QuasiType import QuasiType
 class TaxonOverload(Taxon):
 	type = 'overload'
 
-	def addItem(self, taxon):
+	def addItem(self, taxon, pos = -1):
 		# При включении в ovrtload функция лишается имени. Иначе появляются проблемы при построении пути getPathExt
 		# Компенсация имени производится в TaxonFunc.getName()
 		taxon.name = ''
-		super().addItem(taxon)
+		super().addItem(taxon, pos)
 
 	@staticmethod
 	def findSuitablePure(qtArguments, functions):

@@ -4,10 +4,10 @@ from Wpp.WppOverload import WppOverload
 class WppFuncHelper:
 	@staticmethod
 	def checkDup(taxon, dup, context):
-		if taxon.type == 'func' and taxon.isOverload() and dup.type == 'overload':
+		if isinstance(taxon, TaxonFunc) and taxon.isOverload() and dup.type == 'overload':
 			return True
 		""" Проверка дублирования имени. Необходимо встроить в функцию checkDup модуля или класса """
-		if taxon.type == 'func' and dup.type in {'func', 'overload'}:
+		if isinstance(taxon, TaxonFunc) and dup.type in {'func', 'method', 'overload'}:
 			context.throwError('Use "overload" attribute for "%s"' % (taxon.name))
 
 

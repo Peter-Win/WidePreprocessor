@@ -1,6 +1,7 @@
 from core.TaxonExpression import TaxonBinOp, TaxonConst, TaxonNamed, TaxonCall, TaxonNew, TaxonMemberAccess, TaxonThis
 from out.lexems import Lex
 from Python.PyTaxon import PyTaxon
+from core.TaxonAltName import TaxonAltName
 
 class PyConst(TaxonConst, PyTaxon):
 	def exportLexems(self, level, lexems, style):
@@ -35,15 +36,12 @@ class PyThis(TaxonThis, PyTaxon):
 		lexems.append(Lex.keyword('self'))
 
 class PyNamed(TaxonNamed, PyTaxon):
+	def onInit(self):
+		from utils.forceThis import forceThis
+		forceThis(self)
+
 	def exportLexems(self, level, lexems, style):
 		target = self.getTarget()
-		if target.type == 'field':
-			# Для полей класса нужно использовать ссылку на экземпляр или класс
-			if not target.isStatic():
-				lexems.append(Lex.keyword('self'))
-			else:
-				lexems.append(Lex.className(target.owner.getName()))
-			lexems.append(Lex.dot)
 		lexems.append(Lex.varName(target.getName()))
 
 class PyCall(TaxonCall, PyTaxon):
@@ -66,7 +64,14 @@ class PyCall(TaxonCall, PyTaxon):
 
 class PyNew(TaxonNew, PyTaxon):
 	def exportLexems(self, level, lexems, style):
-		lexems.append(Lex.keyword(self.getCaller().getTarget().getName()))
+		target = self.getCaller().getTarget()
+		constr = target.findConstructor()
+		newLex = [Lex.className(target.getName())]
+		if constr and constr.type == 'overload':
+			realConstr = constr.items[self.overloadIndex]
+			if realConstr.isStatic():
+				newLex += [Lex.dot, Lex.funcName(TaxonAltName.getAltName(realConstr))]
+		lexems += newLex
 		lexems.append(Lex.bracketBegin)
 		args = self.getArguments()
 		if len(args):

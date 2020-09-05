@@ -1,6 +1,7 @@
 import unittest
 from Wpp.WppCore import WppCore
 from out.OutContextMemoryStream import OutContextMemoryStream
+from core.ErrorTaxon import ErrorTaxon
 
 class TestWppConstructor(unittest.TestCase):
 	def testSimple(self):
@@ -40,6 +41,40 @@ var pt: Point = Point(1.11, 2.22)
 		x = con.findItem('x')
 		self.assertEqual(x.getTypeTaxon().exportString(), 'double')
 		self.assertEqual(x.buildQuasiType().getDebugStr(), 'double')
+
+	def testAutoinitDefault(self):
+		source = """
+class simple Point
+	field public x: double
+	field public y: double
+	constructor
+		autoinit x = 0.0
+		autoinit y = 0.0
+var p0: Point = Point()
+var p1: Point = Point(1)
+var p2: Point = Point(1.11, 2.22)
+"""
+		module = WppCore.createMemModule(source, 'autoinitDeflt.wpp')
+		ctx = OutContextMemoryStream()
+		module.export(ctx)
+		self.assertEqual(str(ctx), module.strPack(source))
+
+
+	def testAutoinitError(self):
+		source = """
+class simple Point
+	field public x: int
+	field public y: int
+	constructor
+		autoinit x = 0.0
+		autoinit y = 0.0
+var p0: Point = Point()
+var p1: Point = Point(1)
+var p2: Point = Point(1, 2)
+"""
+		with self.assertRaises(ErrorTaxon) as cm:
+			module = WppCore.createMemModule(source, 'autoinitErr.wpp')
+		self.assertEqual(cm.exception.args[0], 'Cannot convert from "fixed(0.0)" to "int"')
 
 	def testOverload(self):
 		source = """

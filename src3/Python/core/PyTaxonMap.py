@@ -1,3 +1,4 @@
+from core.TaxonAltName import TaxonAltName
 from core.TaxonComment import TaxonComment
 from core.TaxonOpDecl import TaxonDeclAssignBase
 from core.TaxonRef import TaxonRef
@@ -7,9 +8,10 @@ from Python.body.PyBody import PyBody
 from Python.body.PyIf import PyIf
 from Python.body.PyReturn import PyReturn
 from Python.PyClass import PyClass
-from Python.PyExpression import PyBinOp, PyConst, PyNamed, PyCall, PyNew, PyMemberAccess
+from Python.PyExpression import PyBinOp, PyConst, PyNamed, PyCall, PyNew, PyMemberAccess, PyThis
 from Python.PyFunc import PyConstructor, PyFunc, PyMethod
 from Python.PyModule import PyModule
+from Python.PyOverload import PyOverload
 from Python.PyVar import PyAutoinit, PyParam, PyVar, PyField
 
 PyTaxonList = [
@@ -28,9 +30,12 @@ PyTaxonList = [
 	PyModule,
 	PyNamed,
 	PyNew,
+	PyOverload,
 	PyParam,
 	PyReturn,
+	PyThis,
 	PyVar,
+	TaxonAltName,
 	TaxonComment,
 	TaxonDeclAssignBase,
 	TaxonRef,
