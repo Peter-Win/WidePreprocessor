@@ -56,6 +56,9 @@ class TaxonClass(TaxonDict):
 		# Все члены класса обязательно поименованы
 		return [taxon for taxon in self.items if taxon.name]
 
+	def getFields(self):
+		return [taxon for taxon in self.getMembers() if taxon.type == 'field']
+
 	@staticmethod
 	def getAccessLevelFor(taxon):
 		for level in ['public', 'private', 'protected']:
@@ -84,3 +87,25 @@ class TaxonClass(TaxonDict):
 			if taxon.type == 'overload' and 'constructor' in taxon.attrs:
 				return taxon
 		return None
+
+	def isAllFieldsInit(self):
+		""" True, если все поля имеют значения """
+		for field in self.getFields():
+			if not field.getValueTaxon():
+				return False
+		return True
+
+	def isNeedAutoConstructor(self):
+		""" True, если требуется неявный конструктор 
+		Например, в TypeScript или Java достаточно указать начальные значения полей класса и можно не писать конструктор.
+		А в Python, Ruby или C++ нужно сгенерировать конструктор без парметров с явной инициализацией полей.
+		"""
+		if len(self.getFields()) == 0:
+			return False
+		con = self.findConstructor()
+		if not con or con.type != 'overload':
+			return False
+		for taxon in con.items:
+			if len(taxon.getParamsList()) == 0:
+				return False
+		return True

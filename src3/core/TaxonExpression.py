@@ -75,6 +75,15 @@ class TaxonNamed(TaxonThis):
 class TaxonCall(TaxonExpression):
 	type = 'call'
 	opcode = 'call'
+	__slots__ = ('overloadKey')
+	def __init__(self):
+		super().__init__()
+		self.overloadKey = None
+
+	def copyFieldsFrom(self, src):
+		super().copyFieldsFrom(src)
+		self.overloadKey = src.overloadKey
+
 	def getCaller(self):
 		return self.items[0]
 
@@ -87,17 +96,10 @@ class TaxonCall(TaxonExpression):
 class TaxonNew(TaxonCall):
 	type = 'new'
 	opcode = 'new'
-	__slots__ = ('overloadIndex')
-	def __init__(self):
-		super().__init__()
-		self.overloadIndex = 0
 		
 	def buildQuasiType(self):
 		# В отличие от функций, new всегда отдает свой класс, независимо от списка параметров
 		return self.getCaller().getTarget().buildQuasiType()
-	def copyFieldsFrom(self, src):
-		super().copyFieldsFrom(src)
-		self.overloadIndex = src.overloadIndex
 
 class TaxonMemberAccess(TaxonExpression):
 	type = 'dot'

@@ -1,10 +1,9 @@
 import unittest
-from Python.PyCore import PyCore
-from Python.style import style
+from TS.TSCore import TSCore
+from TS.style import style
 from out.OutContextMemoryStream import OutContextMemoryStream
-from core.ErrorTaxon import ErrorTaxon
 
-class TestPyConstructor(unittest.TestCase):
+class TestTSConstructor(unittest.TestCase):
 	def testEmpty(self):
 		source = """
 class simple Point
@@ -13,14 +12,13 @@ var const pt: Point = Point()
 var const x: double = pt.x
 """
 		expect = """
-class Point:
-	__slots__ = ('x')
-	def __init__(self):
-		self.x = 0
-pt = Point()
-x = pt.x
+class Point {
+    public x = 0;
+}
+const pt = new Point();
+const x = pt.x;
 """
-		module = PyCore.createModuleFromWpp(source, 'empty.wpp')
+		module = TSCore.createModuleFromWpp(source, 'empty.wpp')
 		ctx = OutContextMemoryStream()
 		module.exportContext(ctx, style)
 		self.assertEqual(str(ctx), module.strPack(expect))
@@ -39,15 +37,18 @@ var const pt: Point = Point(22, 44)
 var const x: double = pt.x
 """
 		expect = """
-class Point:
-	__slots__ = ('x', 'y')
-	def __init__(self, x0, y0):
-		self.x = x0
-		self.y = y0
-pt = Point(22, 44)
-x = pt.x
+class Point {
+    public x: number;
+    public y: number;
+    constructor(x0: number, y0: number) {
+        this.x = x0;
+        this.y = y0;
+    }
+}
+const pt = new Point(22, 44);
+const x = pt.x;
 """
-		module = PyCore.createModuleFromWpp(source, 'empty.wpp')
+		module = TSCore.createModuleFromWpp(source, 'single.wpp')
 		ctx = OutContextMemoryStream()
 		module.exportContext(ctx, style)
 		self.assertEqual(str(ctx), module.strPack(expect))
@@ -64,15 +65,18 @@ var const pt: Point = Point(22, 44)
 var const x: double = pt.x
 """
 		expect = """
-class Point:
-	__slots__ = ('x', 'y')
-	def __init__(self, x, y):
-		self.x = x
-		self.y = y
-pt = Point(22, 44)
-x = pt.x
+class Point {
+    public x: number;
+    public y: number;
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+}
+const pt = new Point(22, 44);
+const x = pt.x;
 """
-		module = PyCore.createModuleFromWpp(source, 'autoinit.wpp')
+		module = TSCore.createModuleFromWpp(source, 'autoinit.wpp')
 		ctx = OutContextMemoryStream()
 		module.exportContext(ctx, style)
 		self.assertEqual(str(ctx), module.strPack(expect))
@@ -90,19 +94,23 @@ var const pt1: Point = Point(1)
 var const pt2: Point = Point(1, 2)
 """
 		expect = """
-class Point:
-	__slots__ = ('x', 'y')
-	def __init__(self, x = 0, y = 0):
-		self.x = x
-		self.y = y
-pt0 = Point()
-pt1 = Point(1)
-pt2 = Point(1, 2)
+class Point {
+    public x: number;
+    public y: number;
+    constructor(x = 0, y = 0) {
+        this.x = x;
+        this.y = y;
+    }
+}
+const pt0 = new Point();
+const pt1 = new Point(1);
+const pt2 = new Point(1, 2);
 """
-		module = PyCore.createModuleFromWpp(source, 'defaultParams.wpp')
+		module = TSCore.createModuleFromWpp(source, 'defaultParams.wpp')
 		ctx = OutContextMemoryStream()
 		module.exportContext(ctx, style)
 		self.assertEqual(str(ctx), module.strPack(expect))
+
 
 	def testOverload(self):
 		source = """
@@ -121,53 +129,36 @@ class simple Point
 		param src: const ref Point
 		x = src.x
 		y = src.y
+var const org: Point = Point()
 var const first: Point = Point(1, 2)
 var const second: Point = Point(first)
 """
 		expected = """
-class Point:
-	__slots__ = ('x', 'y')
-	def __init__(self):
-		self.x = 0
-		self.y = 0
-	@staticmethod
-	def initPoint(x, y):
-		_inst = Point()
-		_inst.x = x
-		_inst.y = y
-		return _inst
-	@staticmethod
-	def copyPoint(src):
-		_inst = Point()
-		_inst.x = src.x
-		_inst.y = src.y
-		return _inst
-first = Point.initPoint(1, 2)
-second = Point.copyPoint(first)
+class Point {
+    public x: number;
+    public y: number;
+    constructor() {
+        this.x = 0;
+        this.y = 0;
+    }
+    static initPoint(x: number, y: number): Point {
+        const _inst = new Point();
+        _inst.x = x;
+        _inst.y = y;
+        return _inst;
+    }
+    static copyPoint(src: Point): Point {
+        const _inst = new Point();
+        _inst.x = src.x;
+        _inst.y = src.y;
+        return _inst;
+    }
+}
+const org = new Point();
+const first = Point.initPoint(1, 2);
+const second = Point.copyPoint(first);
 """
-		module = PyCore.createModuleFromWpp(source, 'overload.wpp')
+		module = TSCore.createModuleFromWpp(source, 'overload.wpp')
 		ctx = OutContextMemoryStream()
 		module.exportContext(ctx, style)
 		self.assertEqual(str(ctx), module.strPack(expected))
-
-	def testDefaultFieldValues(self):
-		source = """
-class simple Point
-	field x: double = 100
-	field y: double = 200
-	constructor overload
-		altName initPoint
-		autoinit x
-		autoinit y
-	constructor overload
-		altName copyPoint
-		param src: const ref Point
-		x = src.x
-		y = src.y
-var a: Point = Point()
-var b: Point = Point(1, 2)
-var c: Point = Point(b)
-"""
-		with self.assertRaises(ErrorTaxon) as cm:
-			module = PyCore.createModuleFromWpp(source, 'defaultFieldValues.wpp')
-		self.assertEqual(cm.exception.args[0], 'No suitable constructor found for Point()')

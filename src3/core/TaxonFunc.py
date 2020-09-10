@@ -16,11 +16,16 @@ from core.TaxonTypeExpr import TaxonTypeExpr
 
 class TaxonFunc(Taxon):
 	type = 'func'
-	__slots__ = ('paramsMap')
+	__slots__ = ('paramsMap', 'overloadKey')
 
 	def __init__(self, name=''):
 		super().__init__(name)
 		self.paramsMap = None
+		self.overloadKey = None
+
+	def copyFieldsFrom(self, src):
+		super().copyFieldsFrom(src)
+		self.overloadKey = src.overloadKey
 
 	def getName(self):
 		# Перегруженные функции лишены имени, поэтому нужно брать имя из владельца

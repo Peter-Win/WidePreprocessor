@@ -9,6 +9,7 @@ class PyClass(TaxonClass, PyTaxon):
 	- Используется __slots__ для фиксации полей
 	- Запрещена перегрузка методов
 	"""
+
 	def exportLexems(self, level, lexems, style):
 		line = [Lex.keyword('class'), Lex.space, Lex.className(self.getName())]
 		# TODO: (parent)
@@ -55,6 +56,8 @@ class PyClass(TaxonClass, PyTaxon):
 		if con == None:
 			self.exportZeroConstructor(bodyLevel, lexems, style, fields)
 		else:
+			if self.isNeedAutoConstructor():
+				self.exportZeroConstructor(bodyLevel, lexems, style, fields)
 			con.exportLexems(bodyLevel, lexems, style)
 
 		# Методы

@@ -11,7 +11,7 @@ style = {
 		'binop': ' \v ',
 		'bodyBegin': ' \v\a\n',
 		'bodyEnd': '\r\v',
-		'bodyEnd+keyword': '\r\v \f',
+		'bodyEnd+keyword': '\r\v\n\f',
 		'keyword+bracketBegin': '\v \f',
 		'colon': '\v ',
 		'instrDiv': '\v\n',

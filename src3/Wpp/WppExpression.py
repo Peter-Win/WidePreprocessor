@@ -122,8 +122,13 @@ class WppNew(TaxonNew, WppExpression):
 			if not suitable:
 				newTaxon.throwError('Overloaded constructor is not ready');
 			if suitable == 'NoSuitable':
-				newTaxon.throwError('No suitable constructor found for %s(%s)' % (target.name, [a.buildQuasiType().getDebugStr() for a in args]));
-			newTaxon.overloadIndex = con.items.index(suitable)
+				# Здесь возможен специальный случвй - все поля имеют дефолтные значения и используется неявный конструктор без праметров
+				# Но будем считать, что в случае переопределения конструктора нужно явно определить конструктор без параметров
+				# if len(args) == 0 and target.isAllFieldsInit():
+				# 	return
+				newTaxon.throwError('No suitable constructor found for %s(%s)' % (target.name, ', '.join(
+					[a.buildQuasiType().getDebugStr() for a in args])));
+			newTaxon.overloadKey = con.getOverloadKey(suitable)
 			return
 		tlist = ', '.join([t.buildQuasiType().exportString() for t in args])
 		newTaxon.throwError('No suitable constructor found for class %s with arguments (%s)' % (target.getName(), tlist));

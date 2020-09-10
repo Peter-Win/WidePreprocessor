@@ -1,7 +1,7 @@
 from core.TaxonFunc import TaxonFunc, TaxonMethod, TaxonConstructor
 from out.lexems import Lex
 from Python.PyTaxon import PyTaxon
-from core.TaxonAltName import TaxonAltName
+from utils.makeStaticConstructor import makeStaticConstructor
 
 class PyCommonFunc(PyTaxon):
 	def exportLexems(self, level, lexems, style):
@@ -46,8 +46,8 @@ class PyConstructor(TaxonConstructor, PyCommonFunc):
 	def getName(self):
 		if 'useAltName' in self.attrs:
 			return super().getName()
-		if self.isNeedRebuild():
-			return '_' + TaxonAltName.getAltName(self)
+		# if self.isNeedRebuild():
+		# 	return '_' + TaxonAltName.getAltName(self)
 		return '__init__'
 
 
@@ -58,7 +58,8 @@ class PyConstructor(TaxonConstructor, PyCommonFunc):
 				def check(self):
 					return True
 				def exec(self):
-					self.taxon.rebuild()
+					# self.taxon.rebuild()
+					makeStaticConstructor(self.taxon)
 			self.addTask(TaskWait())
 
 	def rebuild(self):

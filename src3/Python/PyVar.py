@@ -40,18 +40,19 @@ class PyField(TaxonField, PyTaxon):
 
 class PyAutoinit(TaxonAutoinit, PyTaxon):
 	def onInit(self):
+		self.createStdImplementation()
 		# Нужно вставить конструкцию self.param = param
-		body = self.owner.getBody()
-		pos = 0
-		while pos < len(body.items) and 'autoinit' in body.items[pos].attrs:
-			pos += 1
-		eq = body.addItem(PyBinOp('='), pos)
-		eq.attrs.add('instruction')
-		eq.attrs.add('autoinit')
-		left = eq.addItem(PyMemberAccess(self.getName()))
-		left.addItem(PyThis())
-		right = eq.addItem(PyNamed(self.getName()))
-		right.setTarget(self)
+		# body = self.owner.getBody()
+		# pos = 0
+		# while pos < len(body.items) and 'autoinit' in body.items[pos].attrs:
+		# 	pos += 1
+		# eq = body.addItem(PyBinOp('='), pos)
+		# eq.attrs.add('instruction')
+		# eq.attrs.add('autoinit')
+		# left = eq.addItem(PyMemberAccess(self.getName()))
+		# left.addItem(PyThis())
+		# right = eq.addItem(PyNamed(self.getName()))
+		# right.setTarget(self)
 
 	def exportLexems(self, level, lexems, style):
 		lexems.append(Lex.varName(self.getName()))

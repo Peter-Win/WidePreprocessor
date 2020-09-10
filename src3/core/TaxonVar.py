@@ -53,3 +53,20 @@ class TaxonAutoinit(TaxonCommonVar):
 	    this.myValue = myValue                                 }
 	"""
 	type = 'autoinit'
+
+	def createStdImplementation(self):
+		"""
+		Standard implementation of autoinit: insert into body expression this.name = name
+		Suitable languages: Python, TypeScript, PHP
+		"""
+		body = self.owner.getBody()
+		pos = 0
+		while pos < len(body.items) and 'autoinit' in body.items[pos].attrs:
+			pos += 1
+		eq = body.addItem(self.creator('binop')('='), pos)
+		eq.attrs.add('instruction')
+		eq.attrs.add('autoinit')
+		left = eq.addItem(self.creator('dot')(self.getName()))
+		left.addItem(self.creator('this')())
+		right = eq.addItem(self.creator('named')(self.getName()))
+		right.setTarget(self)

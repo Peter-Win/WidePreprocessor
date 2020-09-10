@@ -7,33 +7,39 @@ from TS.body.TSReturn import TSReturn
 from TS.core.TSScalar import TSScalar
 from TS.TSClass import TSClass
 from TS.TSComment import TSComment
-from TS.TSExpression import TSConst, TSNamed, TSCall
-from TS.TSFunc import TSFunc, TSMethod
+from TS.TSExpression import TSConst, TSNamed, TSCall, TSNew, TSMemberAccess, TSBinOp, TSThis
+from TS.TSFunc import TSConstructor, TSFunc, TSMethod
 from TS.TSModule import TSModule
 from TS.TSOverload import TSOverload
 from TS.TSTypedef import TSTypedef
 from TS.TSTypeExpr import TSTypeExprName
-from TS.TSVar import TSField, TSVar, TSParam
+from TS.TSVar import TSAutoinit, TSField, TSVar, TSParam
 
 TSTaxonList = [
 	TaxonAltName,
 	TaxonDeclAssignBase,
 	TaxonRef,
+	TSAutoinit,
+	TSBinOp,
 	TSBody,
 	TSCall,
-	TSClass,
 	TSComment,
 	TSConst,
+	TSConstructor,
+	TSClass,
 	TSField,
 	TSFunc,
 	TSIf,
+	TSMemberAccess,
 	TSMethod,
 	TSModule,
 	TSNamed,
+	TSNew,
 	TSOverload,
 	TSParam,
 	TSReturn,
 	TSScalar,
+	TSThis,
 	TSTypedef,
 	TSTypeExprName,
 	TSVar,

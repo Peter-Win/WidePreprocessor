@@ -16,6 +16,9 @@ class TSOverload(TaxonOverload):
 		for taxon in self.items:
 			altName = TaxonAltName.getAltName(taxon)
 			if not altName:
+				# Если перегружаются конструкторы, то altName не требуется для конструктора без параметров
+				if taxon.type == 'constructor' and len(taxon.getParamsList()) == 0:
+					continue
 				taxon.throwError('altName is required for overloaded %s' % (taxon.getDebugStr()))
 			taxon.attrs.add('useAltName')
 

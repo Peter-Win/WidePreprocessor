@@ -100,10 +100,10 @@ var const b: Point = Point(a)
 		a = module.findItem('a')
 		newA = a.getValueTaxon()
 		self.assertEqual(newA.type, 'new')
-		self.assertEqual(newA.overloadIndex, 0)
+		self.assertEqual(newA.overloadKey, 1)
 
 		b = module.findItem('b')
-		self.assertEqual(b.getValueTaxon().overloadIndex, 1)
+		self.assertEqual(b.getValueTaxon().overloadKey, 2)
 
 		ctx = OutContextMemoryStream()
 		module.export(ctx)

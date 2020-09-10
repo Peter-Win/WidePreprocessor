@@ -1,4 +1,4 @@
-from core.TaxonVar import TaxonVar, TaxonParam, TaxonField
+from core.TaxonVar import TaxonVar, TaxonParam, TaxonField, TaxonAutoinit
 from TS.TSTaxon import TSTaxon
 from out.lexems import Lex
 from core.TaxonClass import TaxonClass
@@ -26,8 +26,8 @@ def exportVar(var, lexems, rules):
 
 
 class TSVar(TaxonVar, TSTaxon):
-	def __init__(self):
-		super().__init__()
+	def __init__(self, name = ''):
+		super().__init__(name)
 		self.hiddenType = None
 
 	def onInit(self):
@@ -63,3 +63,17 @@ class TSParam(TaxonParam, TSTaxon):
 
 	def exportLexems(self, lexems, rules):
 		exportVar(self, lexems, rules)
+
+class TSAutoinit(TaxonAutoinit, TSTaxon):
+	def onInit(self):
+		self.createStdImplementation()
+
+	def exportLexems(self, lexems, rules):
+		lexems.append(Lex.varName(self.getName()))
+		val = self.getValueTaxon()
+		if val:
+			lexems.append(Lex.binop('='))
+			val.exportLexems(lexems, rules)
+		else:
+			lexems.append(Lex.colon)
+			self.getTypeTaxon().exportLexems(lexems, rules)

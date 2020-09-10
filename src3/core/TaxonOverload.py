@@ -10,6 +10,25 @@ class TaxonOverload(Taxon):
 		taxon.name = ''
 		super().addItem(taxon, pos)
 
+	def getImplementationByKey(self, overloadKey):
+		for item in self.items:
+			if item.overloadKey == overloadKey:
+				return item
+		self.throwError('Not found overload key %s' % overloadKey)
+
+	def getOverloadKey(self, item):
+		if item.overloadKey:
+			return item.overloadKey
+		maxKey = 0
+		for tx in self.items:
+			if tx.overloadKey:
+				maxKey = max(maxKey, tx.overloadKey)
+		for tx in self.items:
+			if not tx.overloadKey:
+				maxKey += 1
+				tx.overloadKey = maxKey
+		return item.overloadKey
+
 	@staticmethod
 	def findSuitablePure(qtArguments, functions):
 		"""

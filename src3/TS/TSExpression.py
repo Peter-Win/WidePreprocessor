@@ -1,5 +1,13 @@
-from core.TaxonExpression import TaxonConst, TaxonNamed, TaxonCall
+from core.TaxonExpression import TaxonConst, TaxonNamed, TaxonCall, TaxonNew, TaxonMemberAccess, TaxonBinOp, TaxonThis
 from out.lexems import Lex
+
+def exportLexemsPrior(taxon, lexems, rules):
+	isBrackets = taxon.isNeedBrackets()
+	if isBrackets: 
+		lexems.append(Lex.bracketBegin)
+	taxon.exportLexems(lexems, rules)
+	if isBrackets:
+		lexems.append(Lex.bracketEnd)
 
 class TSConst(TaxonConst):
 
@@ -31,11 +39,12 @@ class TSConst(TaxonConst):
 		return quote + value + quote
 
 class TSNamed(TaxonNamed):
+	def onInit(self):
+		# Выполнить подстановку this к неявно вызываемым членам класса
+		from utils.forceThis import forceThis
+		forceThis(self)
 	def exportLexems(self, lexems, style):
 		target = self.getTarget()
-		# TODO: Здесь надо проверять, не является ли уже оно частью конструкции this. А так же static
-		if target.type == 'field':
-			lexems += [Lex.keyword('this'), Lex.dot]
 		lexems.append(Lex.varName(target.getName()))
 
 class TSCall(TaxonCall):
@@ -51,5 +60,47 @@ class TSCall(TaxonCall):
 		lexems.append(Lex.paramsEnd)
 		# Данный таксон может быть отдельной строкой кода, если это вызов функции без использования результата
 		# В этом случае нужна точка с запятой
-		if self.owner.type == 'body':
+		if 'instruction' in self.attrs:
 			lexems.append(Lex.instrDiv)
+
+class TSNew(TaxonNew):
+	def exportLexems(self, lexems, style):
+		target = self.getCaller().getTarget()
+		lexTargetName = Lex.className(target.getName())
+		bNew = True
+		if self.overloadKey:
+			# Static constructor
+			conOver = target.findConstructor()
+			realConstr = conOver.getImplementationByKey(self.overloadKey)
+			if realConstr.isStatic():
+				lexems += [lexTargetName, Lex.dot, Lex.funcName(realConstr.getName())]
+				bNew = False
+		if bNew:
+			lexems += [Lex.keyword('new'), Lex.space, lexTargetName]
+		lexems.append(Lex.paramsBegin)
+		args = self.getArguments()
+		if len(args) > 0:
+			for arg in args:
+				arg.exportLexems(lexems, style)
+				lexems.append(Lex.paramDiv)
+			lexems[-1] = Lex.paramDivLast
+		lexems.append(Lex.paramsEnd)
+
+class TSMemberAccess(TaxonMemberAccess):
+	def exportLexems(self, lexems, style):
+		self.getLeft().exportLexems(lexems, style)
+		lexems += [Lex.dot, Lex.fieldName(self.memberName)]
+
+class TSBinOp(TaxonBinOp):
+	def exportLexems(self, lexems, style):
+		line = []
+		exportLexemsPrior(self.getLeft(), line, style)
+		line.append(Lex.binop(self.opcode))
+		exportLexemsPrior(self.getRight(), line, style)
+		lexems += line
+		if 'instruction' in self.attrs:
+			lexems.append(Lex.instrDiv)
+			
+class TSThis(TaxonThis):
+	def exportLexems(self, lexems, rules):
+		lexems.append(Lex.keyword('this'))

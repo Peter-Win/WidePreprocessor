@@ -68,9 +68,12 @@ class PyNew(TaxonNew, PyTaxon):
 		constr = target.findConstructor()
 		newLex = [Lex.className(target.getName())]
 		if constr and constr.type == 'overload':
-			realConstr = constr.items[self.overloadIndex]
-			if realConstr.isStatic():
-				newLex += [Lex.dot, Lex.funcName(TaxonAltName.getAltName(realConstr))]
+			if not self.overloadKey:
+				pass
+			else:
+				realConstr = constr.getImplementationByKey(self.overloadKey)
+				if realConstr.isStatic():
+					newLex += [Lex.dot, Lex.funcName(TaxonAltName.getAltName(realConstr))]
 		lexems += newLex
 		lexems.append(Lex.bracketBegin)
 		args = self.getArguments()

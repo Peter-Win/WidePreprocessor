@@ -1,6 +1,8 @@
-from core.TaxonFunc import TaxonFunc, TaxonMethod
+from core.TaxonFunc import TaxonFunc, TaxonMethod, TaxonConstructor
 from out.lexems import Lex
 from core.TaxonClass import TaxonClass
+from core.TaxonAltName import TaxonAltName
+from utils.makeStaticConstructor import makeStaticConstructor
 
 class TSFunc(TaxonFunc):
 	def exportLexems(self, lexems, style):
@@ -28,26 +30,56 @@ class TSFunc(TaxonFunc):
 		self.getBody().exportLexems(lexems, style)
 		lexems.append(Lex.instrDiv)
 
-class TSMethod(TaxonMethod):
-	def exportLexems(self, lexems, style):
-		# access level
-		accessLevel = TaxonClass.getAccessLevelFor(self)
-		if accessLevel:
-			lexems += [Lex.keyword(accessLevel), Lex.space]
-		# static
-		if 'static' in self.attrs:
-			lexems += [Lex.keyword('static'), Lex.space]
+def exportMethod(method, lexems, style):
+	# access level
+	accessLevel = TaxonClass.getAccessLevelFor(method)
+	if accessLevel:
+		lexems += [Lex.keyword(accessLevel), Lex.space]
+	isConstructor = method.type == 'constructor'
+	# static
+	if method.isStatic():
+		lexems += [Lex.keyword('static'), Lex.space]
+		isConstructor = False
 
-		lexems += [Lex.funcName(self.getName()), Lex.paramsBegin]
-		for param in self.getParamsList():
-			param.exportLexems(lexems, style)
-			lexems.append(Lex.paramDiv)
-		if lexems[-1] == Lex.paramDiv:
-			lexems[-1] = Lex.paramDivLast
-		lexems += [Lex.paramsEnd, Lex.colon]
-		typeExpr = self.getResultTypeExpr()
+	if isConstructor:
+		lexems.append(Lex.keyword('constructor'))
+	else:
+		lexems.append(Lex.funcName(method.getName()))
+			
+	lexems.append(Lex.paramsBegin)
+	for param in method.getParamsList():
+		param.exportLexems(lexems, style)
+		lexems.append(Lex.paramDiv)
+	if lexems[-1] == Lex.paramDiv:
+		lexems[-1] = Lex.paramDivLast
+	lexems.append(Lex.paramsEnd)
+	if not isConstructor:
+		lexems.append(Lex.colon)
+		typeExpr = method.getResultTypeExpr()
 		if typeExpr:
 			typeExpr.exportLexems(lexems, style)
-		else:
+		else :
 			lexems.append(Lex.typeName('void'))
-		self.getBody().exportLexems(lexems, style)
+	method.getBody().exportLexems(lexems, style)
+
+class TSMethod(TaxonMethod):
+	def exportLexems(self, lexems, style):
+		exportMethod(self, lexems, style)
+
+class TSConstructor(TaxonConstructor):
+	def isNeedRebuild(self):
+		return 'overload' in self.attrs and len(self.getParamsList()) > 0
+
+	def onInit(self):
+		if self.isNeedRebuild():
+			# Нужно подождать, пока таксоны типа PyNamed выполнят замену field на self.field
+			class TaskWait:
+				def check(self):
+					return True
+				def exec(self):
+					makeStaticConstructor(self.taxon)
+			self.addTask(TaskWait())
+
+
+	def exportLexems(self, lexems, style):
+		exportMethod(self, lexems, style)

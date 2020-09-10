@@ -26,6 +26,14 @@ def exportPy(module):
 
 source = """
 class simple Point
+	field public x: double = 0
+var const pt: Point = Point()
+var const x: double = pt.x
+"""
+
+
+source1 = """
+class simple Point
 	field public x: double
 	field public y: double
 	constructor overload
