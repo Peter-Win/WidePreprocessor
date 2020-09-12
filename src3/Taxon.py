@@ -124,6 +124,16 @@ class Taxon:
 	def isValid(self):
 		return True
 
+	def isReady(self):
+		return True
+	def isReadyAll(self):
+		if not self.isReady():
+			return False
+		for item in self.items:
+			if not item.isReadyAll():
+				return False
+		return True
+
 	def setCore(self, core):
 		if not core:
 			return

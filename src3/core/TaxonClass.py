@@ -39,15 +39,35 @@ class TaxonClass(TaxonDict):
 		return '%s %s' % (self.type, self.getName())
 		
 	def getExtends(self):
-		for taxon in self.items:
-			if 'extends' in taxon.attrs:
-				return taxon
-		return None
+		return self.findByType('extends')
+	def getParent(self):
+		""" Использовать при условии, что таксон isReady """
+		ext = self.getExtends()
+		return ext.getParent() if ext else None
 
-	def setExtends(self, classTaxon):
-		ref = TaxonRef.fromTaxon(classTaxon)
-		ref.attrs.add('extends')
-		self.addItem(ref)
+	def isReady(self):
+		ext = self.getExtends()
+		if not ext:
+			return True
+		parent = ext.getParent()
+		if not parent:
+			return False
+		return parent.isReady()
+	def findParentByName(self, name):
+		""" Эта функция дает правильный результат только при условии, что класс isReady """
+		if name == self.getName():
+			return self
+		parent = self.getParent()
+		return parent.findParentByName(name) if parent else None
+
+	def findMember(self, name):
+		""" При условии isReady или buildQuasiType """
+		member = self.findItem(name)
+		if not member:
+			parent = self.getParent()
+			if parent:
+				member = parent.findMember(name)
+		return member
 
 	def getImplements(self):
 		pass
@@ -64,15 +84,42 @@ class TaxonClass(TaxonDict):
 		for level in ['public', 'private', 'protected']:
 			if level in taxon.attrs:
 				return level
+		if taxon.type == 'field':
+			return 'private'
 
 	def buildQuasiType(self):
-		return QuasiType(self)
+		if self.isReady():
+			return QuasiType(self)
+		return None
 
 	def matchQuasiType(self, left, right):
 		rightTaxon = right.taxon
 		if right.taxon == left.taxon:
 			return 'exact', None
+		parent = right.taxon.findParentByName(left.taxon.getName())
+		if parent:
+			return 'upcast', None
 		return None, None
+
+	def findUp(self, name, caller):
+		member = self.findMember(name)
+		if member:
+			return member
+		return super().findUp(name, caller)
+
+	@staticmethod
+	def checkAccess(caller, member):
+		accessLevel = TaxonClass.getAccessLevelFor(member)
+		if not accessLevel or accessLevel == 'public':
+			return
+		ownerClass = member.findOwnerByTypeEx(TaxonClass)
+		callerClass = caller.findOwnerByTypeEx(TaxonClass)
+		if callerClass == ownerClass:
+			return
+		if accessLevel == 'private':
+			caller.throwError('Member "%s" is private and only accesible within %s "%s"' % (member.getName(), ownerClass.type, ownerClass.getName()))
+		if not callerClass or not callerClass.findParentByName(ownerClass.getName()):
+			caller.throwError('Member "%s" is protected and only accesible within %s "%s" and its subclasses' % (member.getName(), ownerClass.type, ownerClass.getName()))
 
 	def findConstructor(self):
 		"""

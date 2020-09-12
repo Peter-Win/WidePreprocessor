@@ -120,8 +120,10 @@ class TaxonMemberAccess(TaxonExpression):
 		leftQt = self.getLeft().buildQuasiType()
 		if not leftQt:
 			return None
-		#TODO: пока очень простые случаи. Не учитывается наследование. Нужно переделать на findDown
-		return leftQt.taxon.findItem(self.memberName)
+		member = leftQt.taxon.findMember(self.memberName)
+		if not member:
+			self.throwError('"%s" %s has no member "%s"' % (leftQt.taxon.getName(), leftQt.taxon.type, self.memberName))
+		return member
 
 	def buildQuasiType(self):
 		target = self.getTarget()

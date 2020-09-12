@@ -1,4 +1,5 @@
 from core.TaxonFunc import TaxonFunc
+from core.TaxonClass import TaxonClass
 
 def checkMemberAccess(source, target):
 	"""
@@ -17,3 +18,5 @@ def checkMemberAccess(source, target):
 	# Если target не является статическим, а source принадлежит статическому члену, это ошибка
 	if not target.isStatic() and sourceMethod and sourceMethod.isStatic():
 		source.throwError('Non-static %s "%s" cannot be referenced from the static "%s"' % (target.type, target.getName(), sourceMethod.getName()))
+
+	TaxonClass.checkAccess(source, target)

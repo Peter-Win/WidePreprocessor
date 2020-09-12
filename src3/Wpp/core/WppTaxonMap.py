@@ -8,6 +8,7 @@ from Wpp.WppAltName import WppAltName
 from Wpp.WppComment import WppComment
 from Wpp.WppClass import WppClass
 from Wpp.WppExpression import WppConst, WppNamed, WppCall
+from Wpp.WppExtends import WppExtends
 from Wpp.WppFunc import WppFunc, WppMethod, WppConstructor
 from Wpp.WppModule import WppModule
 from Wpp.WppOverload import WppOverload
@@ -27,6 +28,7 @@ taxonsList = [
 	WppConst,
 	WppConstructor,
 	WppClass,
+	WppExtends,
 	WppField,
 	WppFunc,
 	WppIf,

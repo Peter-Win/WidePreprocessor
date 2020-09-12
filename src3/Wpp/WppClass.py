@@ -4,7 +4,10 @@ from utils.nameCheck import checkUpperCamelCase
 from Wpp.WppFuncHelper import WppFuncHelper
 
 class WppClass(TaxonClass, WppTaxon):
-	validSubTaxons = ('field', 'method', 'constructor')
+	validSubTaxons = {'field', 'method', 'constructor', 'extends'}
+
+	def exportString(self):
+		return self.getName()
 
 	def checkName(self, name):
 		return checkUpperCamelCase(name, self.type)
@@ -32,6 +35,8 @@ class WppClass(TaxonClass, WppTaxon):
 		res = WppFuncHelper.addTaxon(self, taxon, context)
 		if res:
 			return res
+		if taxon.type == 'extends' and self.getExtends():
+			context.throwError('Only one parent class is allowed.')
 		return super().addTaxon(taxon, context)
 
 	def export(self, outContext):

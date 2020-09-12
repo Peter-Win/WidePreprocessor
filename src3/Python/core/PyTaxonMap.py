@@ -1,5 +1,6 @@
 from core.TaxonAltName import TaxonAltName
 from core.TaxonComment import TaxonComment
+from core.TaxonExtends import TaxonExtends
 from core.TaxonOpDecl import TaxonDeclAssignBase
 from core.TaxonRef import TaxonRef
 from core.TaxonScalar import TaxonScalar
@@ -38,6 +39,7 @@ PyTaxonList = [
 	TaxonAltName,
 	TaxonComment,
 	TaxonDeclAssignBase,
+	TaxonExtends,
 	TaxonRef,
 	TaxonScalar,
 	TaxonTypeExprName,

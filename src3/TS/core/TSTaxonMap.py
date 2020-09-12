@@ -5,7 +5,7 @@ from TS.body.TSBody import TSBody
 from TS.body.TSIf import TSIf
 from TS.body.TSReturn import TSReturn
 from TS.core.TSScalar import TSScalar
-from TS.TSClass import TSClass
+from TS.TSClass import TSClass, TSExtends
 from TS.TSComment import TSComment
 from TS.TSExpression import TSConst, TSNamed, TSCall, TSNew, TSMemberAccess, TSBinOp, TSThis
 from TS.TSFunc import TSConstructor, TSFunc, TSMethod
@@ -27,6 +27,7 @@ TSTaxonList = [
 	TSConst,
 	TSConstructor,
 	TSClass,
+	TSExtends,
 	TSField,
 	TSFunc,
 	TSIf,

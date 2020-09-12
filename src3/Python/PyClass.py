@@ -2,6 +2,7 @@ from core.TaxonClass import TaxonClass
 from Python.PyTaxon import PyTaxon
 from out.lexems import Lex
 
+
 class PyClass(TaxonClass, PyTaxon):
 	"""
 	Конструкция питоновского класса несколько отличается от WPP. Поэтому потребуется приличное количество преобразований.
@@ -12,7 +13,9 @@ class PyClass(TaxonClass, PyTaxon):
 
 	def exportLexems(self, level, lexems, style):
 		line = [Lex.keyword('class'), Lex.space, Lex.className(self.getName())]
-		# TODO: (parent)
+		parent = self.getParent()
+		if parent:
+			line += [Lex.bracketBegin, Lex.className(parent.getName()), Lex.bracketEnd]
 		# Интерфейсы включать нет смысла, т.к в питоне утиная типизация, а наличие реализуемых методов проверяется в WPP
 		line.append(Lex.colon)
 		self.exportLine(level, lexems, style, line)
@@ -24,6 +27,9 @@ class PyClass(TaxonClass, PyTaxon):
 		staticFields = []
 		fields = []
 		methods = []
+
+		if len(self.getMembers()) == 0:
+			self.exportLine(bodyLevel, lexems, style, [Lex.keyword('pass')])
 		
 		for member in self.getMembers():
 			if member.type == 'field':

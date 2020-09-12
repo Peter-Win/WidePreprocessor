@@ -6,6 +6,7 @@ from core.QuasiType import QuasiType
 from core.TaxonOverload import TaxonOverload
 from utils.drawTaxonTree import drawTaxonTree
 from Wpp.WppClassHelper import checkMemberAccess
+from core.TaxonClass import TaxonClass
 
 class WppExpression:
 	@staticmethod
@@ -76,6 +77,14 @@ class WppNamed(TaxonNamed, WppExpression):
 		self.addTask(TaskBindTarget())
 
 class WppMemberAccess(TaxonMemberAccess, WppExpression):
+	def onInit(self):
+		class TaskCheckAccess:
+			def check(self):
+				self.member = self.taxon.getTarget()
+				return self.member
+			def exec(self):
+				TaxonClass.checkAccess(self.taxon, self.member)
+		self.addTask(TaskCheckAccess())
 	def exportString(self):
 		return '%s.%s' % (self.getLeft().exportString(), self.memberName)
 
