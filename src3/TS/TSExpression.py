@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonConst, TaxonNamed, TaxonCall, TaxonNew, TaxonMemberAccess, TaxonBinOp, TaxonThis
+from core.TaxonExpression import TaxonConst, TaxonNamed, TaxonCall, TaxonNew, TaxonMemberAccess, TaxonBinOp, TaxonThis, TaxonSuper
 from out.lexems import Lex
 
 def exportLexemsPrior(taxon, lexems, rules):
@@ -104,3 +104,10 @@ class TSBinOp(TaxonBinOp):
 class TSThis(TaxonThis):
 	def exportLexems(self, lexems, rules):
 		lexems.append(Lex.keyword('this'))
+
+class TSSuper(TaxonSuper):
+	def exportLexems(self, lexems, rules):
+		if self.isConstructor():
+			lexems.append(Lex.keyword('super'))
+		elif self.isOverride():
+			lexems += [Lex.keyword('super'), Lex.dot, Lex.funcName(self.getTarget().getName())]

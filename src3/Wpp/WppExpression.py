@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonCall, TaxonConst, TaxonMemberAccess, TaxonNamed, TaxonNew, TaxonThis, TaxonBinOp
+from core.TaxonExpression import TaxonCall, TaxonConst, TaxonMemberAccess, TaxonNamed, TaxonNew, TaxonThis, TaxonBinOp, TaxonSuper
 from core.TaxonRef import TaxonRef
 from Wpp.parser.parseLexems import parseLexems
 from Wpp.parser.buildNodes import buildNodes
@@ -142,6 +142,70 @@ class WppNew(TaxonNew, WppExpression):
 		tlist = ', '.join([t.buildQuasiType().exportString() for t in args])
 		newTaxon.throwError('No suitable constructor found for class %s with arguments (%s)' % (target.getName(), tlist));
 
+class WppSuper(TaxonSuper, WppExpression):
+	""" Использование super в WPP отличается от других языков.
+	Есть только два случая, где его можно использовать:
+	1. В конструкторе. Здесь super используется так же, как в Java или TypeScript.
+	2. В виртуальной функции для вызова точно такой же функции базового класса. Причем, имя функции не указывается.
+	Python                            TypeScript                             WPP
+	def myMethod(self, context):        myMethod(context: Context): void {   method myMethod
+		super().onInit(context)             super.onInit(context)                param context: Context
+		                                                                         super(context)
+	"""
+	def exportString(self):
+		return 'super'
+	def onInit(self):
+		from core.TaxonFunc import TaxonFunc
+		superType = ''
+		ownerFunc = self.findOwnerByTypeEx(TaxonFunc)
+		if ownerFunc:
+			if ownerFunc.type == 'constructor':
+				superType = ownerFunc.type
+			elif ownerFunc.type == 'method' and 'override' in ownerFunc.attrs:
+				superType = 'override'
+		if not superType:
+			self.throwError('Super calls are not permitted outside constructors or overrided methods')
+		self.attrs.add(superType)
+		ownerClass = ownerFunc.findOwnerByTypeEx(TaxonClass)
+		if not ownerClass:
+			# Вообще такого быть не должно, но на всякий случай проверяем
+			self.throwError('Owner class not found for %s' % ownerFunc.getName())
+		ext = ownerClass.getExtends()
+		if not ext:
+			self.throwError('"super" can only be referenced in a derived class')
+
+		if self.isOverride():
+			funcName = ownerFunc.name
+			class TaskFindFunc:
+				def check(self):
+					return ownerClass.buildQuasiType()
+				def exec(self):
+					parent = ext.getParent();
+					target = parent.findMember(funcName)
+					if not target:
+						self.taxon.throwError('Method "%s" does not exist on %s "%s"' % (funcName, parent.type, parent.getName()))
+					self.taxon.setTarget(target)
+			self.addTask(TaskFindFunc())
+		else:
+			class TaskFindConstructor:
+				def __init__(self, ext):
+					self.ext = ext
+				def check(self):
+					return self.ext.isReady()
+				def exec(self):
+					parent = self.ext.getParent()
+					parentCon = parent.findConstructor()
+					if parentCon:
+						self.taxon.setTarget(parentCon)
+						return
+					ext = parent.getExtends()
+					if ext:
+						self.taxon.addTask(TaskFindConstructor(ext))
+					else:
+						# Обращение к неявному конструктору без параметров
+						self.taxon.throwError('Hidden constructor')
+			self.addTask(TaskFindConstructor(ext))
+
 class WppBinOp(TaxonBinOp, WppExpression):
 	def readHead(self, context):
 		""" Бинарный оператор может использоваться, как самостоятельный элемент тела функции
@@ -192,7 +256,8 @@ class WppCall(TaxonCall, WppExpression):
 
 	def readHead(self, context):
 		""" Вызов функции из кода блока без использования возвращаемого результата """
-		exprCode = context.currentLine.split(' ', 1)[1].strip()
+		return
+		exprCode = context.currentLine.strip()
 		expr = WppExpression.parse(exprCode, context)
 		# drawTaxonTree(expr)
 		# Скопировать подчиненные элементы из созданного выражения к себе
@@ -200,7 +265,7 @@ class WppCall(TaxonCall, WppExpression):
 			self.addItem(item)
 
 	def export(self, outContext):
-		outContext.writeln('call ' + self.exportString())
+		outContext.writeln(self.exportString())
 
 	def buildQuasiType(self):
 		return self.quasiType

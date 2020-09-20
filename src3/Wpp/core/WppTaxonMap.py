@@ -7,7 +7,7 @@ from Wpp.body.WppReturn import WppReturn
 from Wpp.WppAltName import WppAltName
 from Wpp.WppComment import WppComment
 from Wpp.WppClass import WppClass
-from Wpp.WppExpression import WppConst, WppNamed, WppCall
+from Wpp.WppExpression import WppConst, WppNamed, WppCall, WppSuper
 from Wpp.WppExtends import WppExtends
 from Wpp.WppFunc import WppFunc, WppMethod, WppConstructor
 from Wpp.WppModule import WppModule
@@ -38,6 +38,7 @@ taxonsList = [
 	WppOverload,
 	WppParam,
 	WppReturn,
+	WppSuper,
 	WppTypedef,
 	WppTypeExprName,
 	WppVar,

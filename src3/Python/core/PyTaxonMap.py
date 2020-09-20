@@ -9,7 +9,7 @@ from Python.body.PyBody import PyBody
 from Python.body.PyIf import PyIf
 from Python.body.PyReturn import PyReturn
 from Python.PyClass import PyClass
-from Python.PyExpression import PyBinOp, PyConst, PyNamed, PyCall, PyNew, PyMemberAccess, PyThis
+from Python.PyExpression import PyBinOp, PyConst, PyNamed, PyCall, PyNew, PyMemberAccess, PyThis, PySuper
 from Python.PyFunc import PyConstructor, PyFunc, PyMethod
 from Python.PyModule import PyModule
 from Python.PyOverload import PyOverload
@@ -34,6 +34,7 @@ PyTaxonList = [
 	PyOverload,
 	PyParam,
 	PyReturn,
+	PySuper,
 	PyThis,
 	PyVar,
 	TaxonAltName,

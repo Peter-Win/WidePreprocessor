@@ -101,6 +101,15 @@ class TaxonNew(TaxonCall):
 		# В отличие от функций, new всегда отдает свой класс, независимо от списка параметров
 		return self.getCaller().getTarget().buildQuasiType()
 
+class TaxonSuper(TaxonThis):
+	type = 'super'
+	def isConstructor(self):
+		return 'constructor' in self.attrs
+	def isOverride(self):
+		return 'override' in self.attrs
+	def getDebugStr(self):
+		return 'super'
+
 class TaxonMemberAccess(TaxonExpression):
 	type = 'dot'
 	opcode = '.'

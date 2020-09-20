@@ -61,7 +61,7 @@ class TaxonAutoinit(TaxonCommonVar):
 		"""
 		body = self.owner.getBody()
 		pos = 0
-		while pos < len(body.items) and 'autoinit' in body.items[pos].attrs:
+		while pos < len(body.items) and ('autoinit' in body.items[pos].attrs or isSuper(body.items[pos])):
 			pos += 1
 		eq = body.addItem(self.creator('binop')('='), pos)
 		eq.attrs.add('instruction')
@@ -70,3 +70,6 @@ class TaxonAutoinit(TaxonCommonVar):
 		left.addItem(self.creator('this')())
 		right = eq.addItem(self.creator('named')(self.getName()))
 		right.setTarget(self)
+
+def isSuper(taxon):
+	return taxon.type == 'call' and taxon.getCaller().type == 'super'

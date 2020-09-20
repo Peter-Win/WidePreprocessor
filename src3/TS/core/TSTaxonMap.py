@@ -7,7 +7,7 @@ from TS.body.TSReturn import TSReturn
 from TS.core.TSScalar import TSScalar
 from TS.TSClass import TSClass, TSExtends
 from TS.TSComment import TSComment
-from TS.TSExpression import TSConst, TSNamed, TSCall, TSNew, TSMemberAccess, TSBinOp, TSThis
+from TS.TSExpression import TSConst, TSNamed, TSCall, TSNew, TSMemberAccess, TSBinOp, TSThis, TSSuper
 from TS.TSFunc import TSConstructor, TSFunc, TSMethod
 from TS.TSModule import TSModule
 from TS.TSOverload import TSOverload
@@ -40,6 +40,7 @@ TSTaxonList = [
 	TSParam,
 	TSReturn,
 	TSScalar,
+	TSSuper,
 	TSThis,
 	TSTypedef,
 	TSTypeExprName,

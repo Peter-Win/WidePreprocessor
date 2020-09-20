@@ -1,4 +1,4 @@
-from core.TaxonExpression import TaxonBinOp, TaxonConst, TaxonNamed, TaxonCall, TaxonNew, TaxonMemberAccess, TaxonThis
+from core.TaxonExpression import TaxonBinOp, TaxonConst, TaxonNamed, TaxonCall, TaxonNew, TaxonMemberAccess, TaxonThis, TaxonSuper
 from out.lexems import Lex
 from Python.PyTaxon import PyTaxon
 from core.TaxonAltName import TaxonAltName
@@ -99,3 +99,10 @@ class PyMemberAccess(TaxonMemberAccess, PyTaxon):
 	def exportLexems(self, level, lexems, style):
 		self.getLeft().exportLexemsPrior(lexems, style)
 		lexems += [Lex.dot, Lex.fieldName(self.memberName)]
+
+class PySuper(TaxonSuper, PyTaxon):
+	def exportLexems(self, level, lexems, style):
+		if self.isConstructor():
+			lexems += [Lex.keyword('super'), Lex.bracketBegin, Lex.bracketEnd, Lex.dot, Lex.funcName('__init__')]
+		elif self.isOverride():
+			lexems += [Lex.keyword('super'), Lex.bracketBegin, Lex.bracketEnd, Lex.dot, Lex.funcName(self.getTarget().getName())]

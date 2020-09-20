@@ -165,7 +165,10 @@ class Taxon:
 		 """
 		if not self.core:
 			self.throwError('Invalid core for %s:%s' % (self.type, self.getDebugStr()))
-		return self.core.taxonMap[typeId]
+		result = self.core.taxonMap.get(typeId)
+		if not result:
+			self.throwError('Taxon type "%s" is not present in %s' % (typeId, self.core.getDebugStr()))
+		return result
 
 	def cloneAll(self, dstOwner):
 		newInst = self.clone(dstOwner)

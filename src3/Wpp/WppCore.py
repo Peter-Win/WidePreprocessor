@@ -10,7 +10,7 @@ class WppCore(TaxonCore):
 	def getDebugStr(self):
 		return 'WppCore'
 
-	reservedWords = ('Array', 'class', 'false', 'interface', 'Map', 'null', 'Set', 'this', 'true')
+	reservedWords = ('Array', 'class', 'false', 'instanceof', 'interface', 'Map', 'null', 'Set', 'super', 'this', 'true')
 
 	def createRootModule(self, context):
 		""" Создать корневой модуль

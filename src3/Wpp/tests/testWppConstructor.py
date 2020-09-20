@@ -108,3 +108,21 @@ var const b: Point = Point(a)
 		ctx = OutContextMemoryStream()
 		module.export(ctx)
 		self.assertEqual(str(ctx), module.strPack(source))
+
+	def testSuperError(self):
+		source = """
+class Parent
+	field public primary: int
+	constructor
+		autoinit primary = 11
+class Child
+	extends Parent
+	field secondary: int
+	constructor
+		param prim: int
+		autoinit secondary
+		primary = prim
+"""
+		with self.assertRaises(ErrorTaxon) as cm:
+			module = WppCore.createMemModule(source, 'superErr.wpp')
+		self.assertEqual(cm.exception.args[0], '"super" must be called in first line')

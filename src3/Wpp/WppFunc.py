@@ -95,6 +95,40 @@ class WppFunc(TaxonFunc, WppTaxon):
 
 class WppMethod(WppFunc):
 	type = 'method'
+	def onInit(self):
+		super().onInit()
+		ownerClass = self.findOwnerByType('class')
+		if not ownerClass:
+			self.throwError('The method must belong to some class')
+		ext = ownerClass.getExtends()
+		if ext:
+			# Необходимо дождаться готовности класса и проверить наличие членов с таким же именем
+			class TaskWaitClass:
+				def check(self):
+					return ownerClass.isReady()
+				def exec(self):
+					self.taxon.checkDerived(ext.getParent())
+			self.addTask(TaskWaitClass())
+		else:
+			if 'override' in self.attrs:
+				self.throwError('The overridden function can only be in derived class')
+	def checkDerived(self, ownerClass):
+		dup = ownerClass.findMember(self.name)
+		if dup:
+			# Найден член класса с таким же именем. 
+			parent = dup.owner
+			if dup.type != 'method':
+				# Переопределять можно только методы
+				self.throwError('Parent class "%s" already has a %s "%s"' % (parent.name, dup.type, dup.name))
+			if 'override' not in self.attrs:
+				self.throwError('Parent class "%s" already has a %s "%s". Attribute "override" must be used.' % (parent.name, dup.type, dup.name))
+			if not ('virtual' in dup.attrs or 'override' in dup.attrs):
+				self.throwError('Parent class "%s" already has a non-virtual method "%s"' % (parent.name, dup.name))
+		else:
+			if 'override' in self.attrs:
+				self.throwError('No virtual function "%s" found in parent classes' % self.name)
+	 
+
 
 class WppConstructor(WppFunc):
 	type = 'constructor'
@@ -112,3 +146,18 @@ class WppConstructor(WppFunc):
 	def exportHead(self, outContext):
 		parts = [self.type] + self.getExportAttrs()
 		outContext.writeln(' '.join(parts))
+
+	def onInit(self):
+		super().onInit()
+		# проверка наличия super
+		ownerClass = self.findOwnerByType('class')
+		ext = ownerClass.getExtends()
+		if ext:
+			# Это значит, что класс имеет родителя. То есть, нужен вызов super
+			isSuper = False
+			body = self.getBody()
+			if len(body.items) > 0 and body.items[0].type == 'call':
+				isSuper = body.items[0].getCaller().type == 'super'
+			if not isSuper:
+				self.throwError('"super" must be called in first line')
+			

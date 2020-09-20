@@ -25,10 +25,17 @@ def exportPy(module):
 	printCtx(outCtx)
 
 source = """
-class simple Point
-	field public x: double = 0
-var const pt: Point = Point()
-var const x: double = pt.x
+class Parent
+	field first: int
+	constructor
+		autoinit first
+class Child
+	extends Parent
+	field second: double
+	constructor
+		param first: int
+		autoinit second
+		super(first)
 """
 
 

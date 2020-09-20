@@ -174,6 +174,8 @@ class TaxonCore(TaxonDict):
 # opcode, left, right, result
 # сначала должны идти более специальные случаи, н.р. long + int8. т.к. иначе может сработать приведение типов, н.р. long + long
 binOps = [
+  ('+', 'int', 'int', 'int'),
   ('+', 'double', 'double', 'double'),
+  ('*', 'int', 'int', 'int'),
   ('*', 'double', 'double', 'double'),
 ]

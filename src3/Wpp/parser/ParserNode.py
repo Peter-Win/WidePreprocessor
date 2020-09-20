@@ -41,12 +41,14 @@ class ParserNode:
 		return s
 
 	def createTaxon(self, context):
-		from Wpp.WppExpression import WppConst, WppNamed, WppCall, WppThis, WppMemberAccess, WppBinOp
+		from Wpp.WppExpression import WppConst, WppNamed, WppCall, WppThis, WppMemberAccess, WppBinOp, WppSuper
 		if self.txType == 'const':
 			return WppConst.create(self.value)
 		if self.txType == 'named':
 			if self.value == 'this':
 				return WppThis()
+			if self.value == 'super':
+				return WppSuper()
 			return WppNamed(self.value)
 		if self.txType == 'call':
 			taxon = WppCall()
