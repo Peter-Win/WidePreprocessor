@@ -7,6 +7,8 @@ class TaxonExpression(Taxon):
 	def __init__(self):
 		super().__init__()
 		self.prior = 0
+	def canBeModified(self):
+		return False
 
 class TaxonConst(TaxonExpression):
 	type = 'const'
@@ -69,7 +71,14 @@ class TaxonNamed(TaxonThis):
 		self.targetName = src.targetName
 
 	def getDebugStr(self):
-		return '->%s' % (self.targetName)
+		target = self.getTarget()
+		if not target:
+			return '->%s' % (self.targetName)
+		return target.getDebugStr()
+
+	def canBeModified(self):
+		target = self.getTarget()
+		return target.canBeModified()
 
 
 class TaxonCall(TaxonExpression):
@@ -137,6 +146,9 @@ class TaxonMemberAccess(TaxonExpression):
 	def buildQuasiType(self):
 		target = self.getTarget()
 		return target.buildQuasiType() if target else None
+
+	def canBeModified(self):
+		return self.getTarget().canBeModified()
 
 class TaxonBinOp(TaxonExpression):
 	""" items

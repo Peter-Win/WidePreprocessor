@@ -18,6 +18,16 @@ class TaxonCommonVar(Taxon):
 	def exportString(self):
 		return '%s %s: %s' % (self.type, self.getName(), self.getTypeTaxon().exportString())
 
+	def canBeModified(self):
+		return 'const' not in self.attrs
+
+	def getDebugStr(self):
+		res = [self.type]
+		if 'const' in self.attrs:
+			res.append('const')
+		res.append(self.getName())
+		return ' '.join(res)
+
 
 class TaxonVar(TaxonCommonVar):
 	""" Классическая переменная.

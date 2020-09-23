@@ -35,9 +35,9 @@ class PyCore(TaxonCore):
 		return pyModule
 
 	def createDeclBinOp(self, originalOpcode, modifiedOpcode, qtLeft, qtRight, qtResult):
-		if originalOpcode == '/' and TaxonScalar.isInt(qtLeft.taxon) and TaxonScalar.isInt(qtRight.taxon):
+		if originalOpcode in ('/', '/=') and TaxonScalar.isInt(qtLeft.taxon) and TaxonScalar.isInt(qtRight.taxon):
 			# 1. В Питоне целочисленное деление //
-			modifiedOpcode = '//'
+			modifiedOpcode = '/' + originalOpcode
 		elif originalOpcode == '&&':
 			# 2. Логические операции and и or
 			modifiedOpcode = 'and'

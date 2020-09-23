@@ -33,3 +33,13 @@ var const b: int = a + 1
 			module = WppCore.createMemModule(source, 'unsignedArithErr.wpp')
 		self.assertEqual(cm.exception.args[0], 'Cant cast unsigned to signed')
 
+	def testConstAssignErr(self):
+		source = """
+func test
+	var const a: unsigned int = 1
+	a += 1
+"""
+		with self.assertRaises(ErrorTaxon) as cm:
+			module = WppCore.createMemModule(source, 'constAssignErr.wpp')
+		self.assertEqual(cm.exception.args[0], 'Expression "var const a" cannot be modified')
+

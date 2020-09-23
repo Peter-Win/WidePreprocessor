@@ -241,7 +241,16 @@ class WppBinOp(TaxonBinOp, WppExpression):
 				if not decl:
 					taxon.throwError('Invalid binop "%s"' % taxon.opcode)
 				taxon.addItem(TaxonRef.fromTaxon(decl))
+				taxon.check()
 		self.addTask(TaskFindDecl())
+
+	def check(self):
+		from core.operators import isAssignOp
+		if isAssignOp(self.opcode):
+			left = self.getLeft()
+			left.attrs.add('modified')
+			if not left.canBeModified():
+				self.throwError('Expression "%s" cannot be modified' % (left.getDebugStr()))
 
 class WppCall(TaxonCall, WppExpression):
 	__slots__ = ('quasiType')

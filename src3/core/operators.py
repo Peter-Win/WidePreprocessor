@@ -49,3 +49,6 @@ opsList = [
 
 opcodeMap = {item[0]:item for item in opsList}
 nameMap = {item[1]:item for item in opsList}
+
+def isAssignOp(opcode):
+	return opcode[-1] == '=' and opcode not in ('!=', '<=', '>=', '==')

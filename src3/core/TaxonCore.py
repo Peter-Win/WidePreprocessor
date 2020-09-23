@@ -187,12 +187,15 @@ class TaxonCore(TaxonDict):
 		return TaxonDeclBinOp(originalOpcode, modifiedOpcode, qtLeft, qtRight, qtResult)
 
 arithOps = ['+', '-', '*', '/', '%']
+arithAssigns = ['+=', '-=', '*=', '/=', '%=']
 cmpOps = ['==', '!=', '<', '>', '<=', '>=']
 arithTypes = ['int8', 'unsigned int8', 'short', 'unsigned short', 'int', 'unsigned int', 'long', 'unsigned long', 'float', 'double']
 def _arithOpList(opcode):
 	return [(opcode, t, t, t) for t in arithTypes] 
 def _cmpOpList(opcode):
 	return [(opcode, t, t, 'bool') for t in arithTypes]
+def _arithAssignsList(opcode):
+	return [(opcode, t, t, 'void') for t in arithTypes]
 
 # opcode, left, right, result
 # сначала должны идти более специальные случаи, н.р. long + int8. т.к. иначе может сработать приведение типов, н.р. long + long
@@ -208,3 +211,5 @@ for op in arithOps:
 	binOps += _arithOpList(op)
 for op in cmpOps:
 	binOps += _cmpOpList(op)
+for op in arithAssigns:
+	binOps += _arithAssignsList(op)

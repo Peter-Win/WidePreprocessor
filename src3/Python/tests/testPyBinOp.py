@@ -66,3 +66,19 @@ resOr = a < 0 or a > 10
 		ctx = OutContextMemoryStream()
 		module.exportContext(ctx, style)
 		self.assertEqual(str(ctx), module.strPack(expected))
+
+	def testIntDivAssign(self):
+		source = """
+func test
+	var a: int = 10
+	a /= 2
+"""
+		expected = """
+def test():
+	a = 10
+	a //= 2
+"""
+		module = PyCore.createModuleFromWpp(source, 'intDivAssign.wpp')
+		ctx = OutContextMemoryStream()
+		module.exportContext(ctx, style)
+		self.assertEqual(str(ctx), module.strPack(expected))
