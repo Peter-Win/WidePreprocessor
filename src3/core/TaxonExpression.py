@@ -166,8 +166,14 @@ class TaxonBinOp(TaxonExpression):
 		ref = self.items[2].getTarget()
 		return ref
 
+	def getOpcode(self):
+		""" Для опертора присваивания декларация всегда None """
+		decl = self.getDeclaration()
+		return decl.opcode if decl else self.opcode
+
 	def buildQuasiType(self):
 		decl = self.getDeclaration()
 		if not decl:
 			return None
 		return decl.buildQuasiType(self)
+

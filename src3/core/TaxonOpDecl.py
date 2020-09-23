@@ -19,6 +19,7 @@ from core.QuasiType import QuasiType
 class TaxonDeclAssignBase(Taxon):
 	""" Базовый оператор присваивания """
 	type = 'declAssignBase'
+	opcode = '='
 
 	def exportBinOp(self, binop):
 		return '%s = %s' % (binop.getLeft().exportString(), binop.getRight().exportString())
@@ -32,8 +33,12 @@ def priorExport(subTaxon):
 
 class TaxonDeclBinOp(Taxon):
 	type = 'declBinOp'
-	def __init__(self, opcode, leftType, rightType, resultType):
-		super().__init__('%s %s, %s' % (opcode, leftType.exportString(), rightType.exportString()))
+	def __init__(self, originalOpcode, modifiedOpcode, leftType, rightType, resultType):
+		""" Имя таксона включает исходный код операции, чтобы в любом ядре имена совпадали
+		Иначе не получится клонировать, т.к. там сопоставляется имя
+		"""
+		super().__init__('%s %s, %s' % (originalOpcode, leftType.getDebugStr(), rightType.getDebugStr()))
+		self.opcode = modifiedOpcode
 		self.leftType = leftType
 		self.rightType = rightType
 		self.resultType = resultType
@@ -42,7 +47,7 @@ class TaxonDeclBinOp(Taxon):
 		return self.resultType.buildQuasiType()
 
 	def exportBinOp(self, binop):
-		return '%s %s %s' % (priorExport(binop.getLeft()), binop.opcode, priorExport(binop.getRight()))
+		return '%s %s %s' % (priorExport(binop.getLeft()), self.opcode, priorExport(binop.getRight()))
 
 	def matchTypes(self, leftQt, rightQt):
 		leftRes, leftErr = QuasiType.matchTaxons(self.leftType, leftQt)

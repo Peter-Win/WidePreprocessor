@@ -168,14 +168,43 @@ class TaxonCore(TaxonDict):
 	def createOperatorsDecl(self):
 		self.declAssignBase = self.addItem(self.creator('declAssignBase')())
 		for opcode, left, right, result in binOps:
+			decl = self.addItem(self.createDeclBinOp(opcode, opcode, self.mkQt(left), self.mkQt(right), self.mkQt(result)))
 			opsList = self.binOpMap.setdefault(opcode, [])
-			opsList.append(self.addItem(TaxonDeclBinOp(opcode, self.findItem(left), self.findItem(right), self.findItem(result))))
+			opsList.append(decl)
+
+	def printOps(self):
+		for id in self.binOpMap:
+			print(id)
+			opsList = self.binOpMap[id]
+			for op in opsList:
+				print('  ', op.name, '=>', op.opcode) 
+
+	def mkQt(self, typeName):
+		words = typeName.split()
+		return QuasiType(self.findItem(words[-1]), set(words[0:-1]))
+
+	def createDeclBinOp(self, originalOpcode, modifiedOpcode, qtLeft, qtRight, qtResult):
+		return TaxonDeclBinOp(originalOpcode, modifiedOpcode, qtLeft, qtRight, qtResult)
+
+arithOps = ['+', '-', '*', '/', '%']
+cmpOps = ['==', '!=', '<', '>', '<=', '>=']
+arithTypes = ['int8', 'unsigned int8', 'short', 'unsigned short', 'int', 'unsigned int', 'long', 'unsigned long', 'float', 'double']
+def _arithOpList(opcode):
+	return [(opcode, t, t, t) for t in arithTypes] 
+def _cmpOpList(opcode):
+	return [(opcode, t, t, 'bool') for t in arithTypes]
 
 # opcode, left, right, result
 # сначала должны идти более специальные случаи, н.р. long + int8. т.к. иначе может сработать приведение типов, н.р. long + long
 binOps = [
-  ('+', 'int', 'int', 'int'),
-  ('+', 'double', 'double', 'double'),
-  ('*', 'int', 'int', 'int'),
-  ('*', 'double', 'double', 'double'),
+  ('&&', 'bool', 'bool', 'bool'),
+  ('||', 'bool', 'bool', 'bool'),
+  ('<<', 'int', 'unsigned int', 'int'),
+  ('<<', 'unsigned int', 'unsigned int', 'unsigned int'),
+  ('>>', 'int', 'unsigned int', 'int'),
+  ('>>', 'unsigned int', 'unsigned int', 'unsigned int'),
 ]
+for op in arithOps:
+	binOps += _arithOpList(op)
+for op in cmpOps:
+	binOps += _cmpOpList(op)

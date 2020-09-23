@@ -23,3 +23,46 @@ e = a + b * c
 		ctx = OutContextMemoryStream()
 		module.exportContext(ctx, style)
 		self.assertEqual(str(ctx), module.strPack(expected))
+
+	def testIntDiv(self):
+		source = """
+var const fres: double = 10.0 / 2.0
+var const ires: int = 10 / 2
+var const la: long = 10
+var const lb: long = 2
+var const lres: long = la / lb
+var const ua: unsigned int = 10
+var const ub: unsigned int = 2
+var const ures: unsigned int = ua / ub
+"""
+		expected = """
+fres = 10.0 / 2.0
+ires = 10 // 2
+la = 10
+lb = 2
+lres = la // lb
+ua = 10
+ub = 2
+ures = ua // ub
+"""
+		module = PyCore.createModuleFromWpp(source, 'intDiv.wpp')
+		ctx = OutContextMemoryStream()
+		module.exportContext(ctx, style)
+		self.assertEqual(str(ctx), module.strPack(expected))
+		# module.core.printOps()
+
+	def testLogic(self):
+		source = """
+var const a: int = 5
+var const resAnd: bool = a > 0 && a < 10
+var const resOr: bool = a < 0 || a > 10
+"""
+		expected = """
+a = 5
+resAnd = a > 0 and a < 10
+resOr = a < 0 or a > 10
+"""
+		module = PyCore.createModuleFromWpp(source, 'logic.wpp')
+		ctx = OutContextMemoryStream()
+		module.exportContext(ctx, style)
+		self.assertEqual(str(ctx), module.strPack(expected))

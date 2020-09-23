@@ -56,3 +56,4 @@ class TestWppConst(unittest.TestCase):
 		c = WppConst('int', 1234)
 		qt = c.buildQuasiType()
 		self.assertEqual(qt.taxon, c)
+

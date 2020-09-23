@@ -1,3 +1,5 @@
+multiCmd = {'==', '!=', '<=', '>=', '&&', '||', '**', '<<', '>>'}
+
 def parseLexems(row, context):
 	j = 0
 	lexems = []
@@ -49,7 +51,11 @@ def parseLexems(row, context):
 			if value == '-' and ch.isdigit():
 				state = 'int'
 				continue
-			# TODO: пока 1 символ
+			multiCase = value + ch
+			if multiCase in multiCmd:
+				value = multiCase
+				j += 1
+				continue
 			lexems.append((value, state))
 			state = 'space'
 			continue

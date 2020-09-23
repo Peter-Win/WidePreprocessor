@@ -25,38 +25,12 @@ def exportPy(module):
 	printCtx(outCtx)
 
 source = """
-class Parent
-	field first: int
-	constructor
-		autoinit first
-class Child
-	extends Parent
-	field second: double
-	constructor
-		param first: int
-		autoinit second
-		super(first)
-"""
-
-
-source1 = """
-class simple Point
-	field public x: double
-	field public y: double
-	constructor overload
-		x = 0
-		y = 0
-	constructor overload
-		altName initPoint
-		autoinit x
-		autoinit y
-	constructor overload
-		altName copyPoint
-		param src: const ref Point
-		x = src.x
-		y = src.y
-var const first: Point = Point(1, 2)
-var const second: Point = Point(first)
+var const s: int = 128
+var const u: unsigned int = 128
+var const sl: int = s << 2
+var const ul: unsigned int = u << 2
+var const sr: int = s >> 2
+var const ur: unsigned int = u >> 2
 """
 
 print('-- Wpp')

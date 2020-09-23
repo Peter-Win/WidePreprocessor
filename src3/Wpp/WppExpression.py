@@ -239,7 +239,7 @@ class WppBinOp(TaxonBinOp, WppExpression):
 				if errMsg:
 					taxon.throwError(errMsg)
 				if not decl:
-					taxon.throwError('Infalid binop "%s"' % taxon.opcode)
+					taxon.throwError('Invalid binop "%s"' % taxon.opcode)
 				taxon.addItem(TaxonRef.fromTaxon(decl))
 		self.addTask(TaskFindDecl())
 

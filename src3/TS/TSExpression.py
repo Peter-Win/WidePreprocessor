@@ -95,7 +95,7 @@ class TSBinOp(TaxonBinOp):
 	def exportLexems(self, lexems, style):
 		line = []
 		exportLexemsPrior(self.getLeft(), line, style)
-		line.append(Lex.binop(self.opcode))
+		line.append(Lex.binop(self.getOpcode()))
 		exportLexemsPrior(self.getRight(), line, style)
 		lexems += line
 		if 'instruction' in self.attrs:

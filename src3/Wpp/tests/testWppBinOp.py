@@ -1,5 +1,6 @@
 import unittest
 from Wpp.WppCore import WppCore
+from core.ErrorTaxon import ErrorTaxon
 
 class TestWppBinOp(unittest.TestCase):
 	def testArith(self):
@@ -21,4 +22,14 @@ var const d: double = (a + b) * c
 		valD = d.getValueTaxon()
 		self.assertEqual(valD.opcode, '*')
 		self.assertEqual(valD.exportString(), '(a + b) * c')
+
+
+	def testUnsignedArithErr(self):
+		source = """
+var const a: unsigned int = 1
+var const b: int = a + 1
+"""
+		with self.assertRaises(ErrorTaxon) as cm:
+			module = WppCore.createMemModule(source, 'unsignedArithErr.wpp')
+		self.assertEqual(cm.exception.args[0], 'Cant cast unsigned to signed')
 

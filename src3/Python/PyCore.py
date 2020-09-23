@@ -1,4 +1,5 @@
 from core.TaxonCore import TaxonCore
+from core.TaxonScalar import TaxonScalar
 
 class PyCore(TaxonCore):
 	def init(self):
@@ -32,4 +33,16 @@ class PyCore(TaxonCore):
 		pyModule.initAll()
 		pyCore.resolveTasks()
 		return pyModule
+
+	def createDeclBinOp(self, originalOpcode, modifiedOpcode, qtLeft, qtRight, qtResult):
+		if originalOpcode == '/' and TaxonScalar.isInt(qtLeft.taxon) and TaxonScalar.isInt(qtRight.taxon):
+			# 1. В Питоне целочисленное деление //
+			modifiedOpcode = '//'
+		elif originalOpcode == '&&':
+			# 2. Логические операции and и or
+			modifiedOpcode = 'and'
+		elif originalOpcode == '||':
+			modifiedOpcode = 'or'
+
+		return super().createDeclBinOp(originalOpcode, modifiedOpcode, qtLeft, qtRight, qtResult)
 

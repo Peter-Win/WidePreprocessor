@@ -34,9 +34,9 @@ class QuasiType:
 
 	@staticmethod
 	def mixAttrs(parentAttrs, childAttrs):
-		if not childAttrs:
-			return parentAttrs
 		result = parentAttrs.copy()
+		if not childAttrs:
+			return result
 		for childA in childAttrs:
 			if 'unsigned' == childA:
 				result.add('unsigned')

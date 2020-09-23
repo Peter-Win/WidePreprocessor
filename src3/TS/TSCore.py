@@ -41,3 +41,13 @@ class TSCore(TaxonCore):
 		'byte': 'number',
 		'uint8': 'number',
 	}
+
+	def createDeclBinOp(self, originalOpcode, modifiedOpcode, qtLeft, qtRight, qtResult):
+		if originalOpcode == '==':
+			modifiedOpcode = '==='
+		elif originalOpcode == '!=':
+			modifiedOpcode = '!=='
+		elif originalOpcode == '>>':
+			if qtLeft.getDebugStr() == 'unsigned int' and qtRight.getDebugStr() == 'unsigned int':
+				modifiedOpcode = '>>>'
+		return super().createDeclBinOp(originalOpcode, modifiedOpcode, qtLeft, qtRight, qtResult)

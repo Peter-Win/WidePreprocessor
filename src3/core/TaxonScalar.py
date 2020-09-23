@@ -26,6 +26,12 @@ class TaxonScalar(TaxonType):
 		('void', {}, {}, 0, 0, None),
 	)
 
+	@staticmethod
+	def isInt(taxon):
+		if isinstance(taxon, TaxonScalar):
+			return taxon.name in {'int8', 'short', 'int', 'long'}
+		return False
+
 	def __init__(self, props):
 		name, matchConst, matchVar, minVal, maxVal, defaultValue = props
 		super().__init__(name)
@@ -66,6 +72,11 @@ class TaxonScalar(TaxonType):
 					return None, 'The value "%s" is outside the range of "%s"' % (rightTaxon.value, left.getDebugStr())
 			return result, None
 		if isinstance(rightTaxon, TaxonScalar):
+			# Prevent signed/unsigned cast
+			if 'unsigned' not in left.attrs and 'unsigned' in right.attrs:
+				return None, 'Cant cast unsigned to signed'
+			if 'unsigned' in left.attrs and 'unsigned' not in right.attrs:
+				return None, 'Cant cast signed to unsigned'
 			result = self.matchVar.get(right.taxon.name)
 			return result, None
 		return None, None

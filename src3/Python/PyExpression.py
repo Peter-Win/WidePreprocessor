@@ -88,7 +88,7 @@ class PyBinOp(TaxonBinOp, PyTaxon):
 	def exportLexems(self, level, lexems, style):
 		line = []
 		self.getLeft().exportLexemsPrior(line, style)
-		line.append(Lex.binop(self.opcode))
+		line.append(Lex.binop(self.getOpcode()))
 		self.getRight().exportLexemsPrior(line, style)
 		if 'instruction' in self.attrs:
 			self.exportLine(level, lexems, style, line)
