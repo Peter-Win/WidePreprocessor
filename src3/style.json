@@ -1,0 +1,24 @@
+{
+    "useTabs": false,
+    "tabSize": 4,
+    "vertCvt": {
+        "paramDivLast": ",\n"
+    },
+    "cvt": {
+        "paramsEnd": "\r\u000b",
+        "binop": " \u000b ",
+        "paramDiv": "\u000b \b",
+        "bodyEnd": "\r\u000b",
+        "bodyBegin": " \u000b\u0007\n",
+        "instrDiv": "\u000b\n",
+        "ternop": " \u000b ",
+        "paramsBegin": "\u000b\u0007",
+        "paramsBegin+paramsEnd": "\u000b\f",
+        "colon": "\u000b ",
+        "itemDiv": "\u000b \b",
+        "keyword+bracketBegin": "\u000b \f",
+        "bodyEnd+keyword": "\r\u000b\n\f"
+    },
+    "printWidth": 120,
+    "singleQuote": true
+}

@@ -96,6 +96,8 @@ class TaxonClass(TaxonDict):
 		rightTaxon = right.taxon
 		if right.taxon == left.taxon:
 			return 'exact', None
+		if not rightTaxon.isClass():
+			return None, None
 		parent = right.taxon.findParentByName(left.taxon.getName())
 		if parent:
 			return 'upcast', None

@@ -12,6 +12,7 @@ from Python.PyClass import PyClass
 from Python.PyExpression import PyBinOp, PyConst, PyNamed, PyCall, PyNew, PyMemberAccess, PyThis, PySuper
 from Python.PyFunc import PyConstructor, PyFunc, PyMethod
 from Python.PyModule import PyModule
+from Python.PyOpDecl import PyDeclBinOp
 from Python.PyOverload import PyOverload
 from Python.PyVar import PyAutoinit, PyParam, PyVar, PyField
 
@@ -23,6 +24,7 @@ PyTaxonList = [
 	PyClass,
 	PyConst,
 	PyConstructor,
+	PyDeclBinOp,
 	PyField,
 	PyFunc,
 	PyIf,

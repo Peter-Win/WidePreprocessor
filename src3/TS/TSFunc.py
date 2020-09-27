@@ -1,4 +1,4 @@
-from core.TaxonFunc import TaxonFunc, TaxonMethod, TaxonConstructor
+from core.TaxonFunc import TaxonFunc, TaxonMethod, TaxonConstructor, TaxonOperator
 from out.lexems import Lex
 from core.TaxonClass import TaxonClass
 from core.TaxonAltName import TaxonAltName
@@ -66,6 +66,26 @@ class TSMethod(TaxonMethod):
 	def exportLexems(self, lexems, style):
 		exportMethod(self, lexems, style)
 
+class TSOperator(TaxonOperator):
+	def getName(self):
+		from core.operators import opcodeMap
+		from core.TaxonAltName import TaxonAltName
+		name = TaxonAltName.getAltName(self)
+		if not name:
+			descr = opcodeMap[self.name]
+			name = descr[1]
+		return name
+	def exportLexems(self, lexems, style):
+		exportMethod(self, lexems, style)
+	def exportBinOp(self, binOp, style):
+		lexems = []
+		binOp.getLeft().exportLexems(lexems, style)
+		lexems += [Lex.dot, Lex.funcName(self.getName()), Lex.bracketBegin]
+		binOp.getRight().exportLexems(lexems, style)
+		lexems.append(Lex.bracketEnd)
+		return lexems
+
+
 class TSConstructor(TaxonConstructor):
 	def isNeedRebuild(self):
 		return 'overload' in self.attrs and len(self.getParamsList()) > 0
@@ -79,7 +99,6 @@ class TSConstructor(TaxonConstructor):
 				def exec(self):
 					makeStaticConstructor(self.taxon)
 			self.addTask(TaskWait())
-
 
 	def exportLexems(self, lexems, style):
 		exportMethod(self, lexems, style)

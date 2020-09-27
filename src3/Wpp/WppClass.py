@@ -4,7 +4,7 @@ from utils.nameCheck import checkUpperCamelCase
 from Wpp.WppFuncHelper import WppFuncHelper
 
 class WppClass(TaxonClass, WppTaxon):
-	validSubTaxons = {'field', 'method', 'constructor', 'extends'}
+	validSubTaxons = {'constructor', 'extends', 'field', 'method', 'operator'}
 
 	def exportString(self):
 		return self.getName()

@@ -1,0 +1,353 @@
+<!doctype html>
+<html>
+<head>
+<style>
+.code {font-family: Courier;}
+.dot-space {color: #AAA;}
+.tab {display: inline-block; width: 30px;}
+.keyword {color: blue;}
+.className {font-weight: bold;}
+.const {color: #B0B;}
+.funcName {color: #090;}
+.fieldName {color: orange;}
+.varName {color: brown;}
+</style>
+<script>
+window.onload = function() {
+	var codeElem = document.getElementById('code');
+	function createElem(tag, owner, attrs, text) {
+		elem = document.createElement(tag);
+		owner.appendChild(elem);
+		attrs && Object.keys(attrs).forEach(function(key) {
+			elem.setAttribute(key, attrs[key]);
+		});
+		if (text) elem.innerHTML = text;
+		return elem;
+	}
+	var curLineElem, curLine, curWordElem, curCmd;
+	function createLine() {
+		curLine = '';
+		curLineElem = createElem('div', codeElem);
+		curWordElem = null;
+	}
+	function outCharExt(level, chrExt) {
+		if (!curLine) {
+			for (var i=0; i<level; i++) {
+				createElem('span', curLineElem, {'class': 'tab'});
+				if (style.useTabs) {
+					curLine += '\t';
+				} else {
+					for (var j=0; j<style.tabSize; j++) curLine += ' ';
+				}
+			}
+		}
+		var ch = chrExt[0], cmd = chrExt[1];
+		if (ch==' ') { ch='·'; cmd='dot-space'; }
+		if (!curWordElem || curCmd !== cmd) {
+			curCmd = cmd;
+			curWordElem = createElem('span', curLineElem, {'class': cmd});
+		}
+		curWordElem.innerHTML += ch; // Это медленно
+	}
+	function makeStrExt(str, cls, value, cmd, nextValue, nextCmd) {
+		var src = str.split(''), dst = [];
+		function insert(v, c) {
+			for (var j=0; j<v.length; j++) {
+				dst.push([v[j], c]);
+			}
+		}
+		var n=0;
+		for (var i=0; i<src.length; i++) {
+			var c = src[i];
+			if (c == '\v') {
+				if (n===0) {
+					insert(value, cmd);
+				} else if (n===1) {
+					insert(nextValue, nextCmd);
+				}
+				n++;
+			} else {
+				dst.push([c, cls])
+			}
+		}
+		return dst;
+	}
+	function applyStyle(pos, isVertical) {
+		// Возвращает строку, содержащую escape-символы [n,a,b,r] и приращение позиции
+		var lexem = lexems[pos];
+		var rule, value = lexem[0], cmd = lexem[1];
+		if (pos < lexems.length - 1) {
+			var nextLexem = lexems[pos+1];
+			var nextValue=nextLexem[0], nextCmd=nextLexem[1]
+			// Пара имеет приоритет выше, чем одиночное правило
+			var pairKey = cmd + '+' + nextCmd;
+			rule = style.cvt[pairKey];
+			if (rule) {
+				return [makeStrExt(rule, '', value, cmd, nextValue, nextCmd), 2];
+			}
+		}
+		rule = style.cvt[cmd];
+		if (rule) {
+			return [makeStrExt(rule, '', value, cmd, '', ''), 1];
+		}
+		return [makeStrExt(value, cmd), 1];
+	}
+	function formatLexems(pos, level) {
+		createLine();
+		var localLevel = level;
+		var upState = null;
+		while (pos < lexems.length) {
+			var pair = applyStyle(pos, localLevel == level);
+			var value = pair[0], deltaPos=pair[1];
+			var prevPos = pos;
+			pos += deltaPos;
+			for (var i=0; i<value.length; i++) {
+				var chrExt = value[i];
+				var c = chrExt[0];
+				switch (c) {
+				case '\n':
+					createLine();
+					break;
+				case '\r':
+					c = value[++i][0];
+					if (c=='U') { level++ }
+					else if (c=='D') {level--}
+					break;
+				default:
+					outCharExt(level, chrExt);
+					break;
+				}
+			}
+		}
+	}
+	formatLexems(0, 0);
+}	
+</script>
+</head>
+<body>
+<div id="code" class="code"></div>
+<script>
+var style = {
+    "printWidth": 120,
+    "useTabs": false,
+    "vertCvt": {
+        "paramDivLast": ",\n"
+    },
+    "singleQuote": true,
+    "tabSize": 4,
+    "cvt": {
+        // "itemDiv": "",
+        // "bodyEnd+keyword": "",
+        // "keyword+bracketBegin": "",
+        // "paramsBegin+paramsEnd": "",
+        "colon": "\v ",
+        "paramsEnd": "\v",
+        "binop": " \v ",
+        "binop+bodyBegin": " \v \v\n\rU", // .=>.{
+        // "paramsBegin": "",
+        "bodyBegin": " \v\n\rU",
+        "bodyEnd": "\n\rD\v\n",
+        "bodyEnd+instrDiv": "\n\rD\v\v\n",
+        // "ternop": "",
+        "paramDiv": "\v ",
+        "instrDiv": "\v\n"
+    }
+}
+var style1 = {
+    "printWidth": 120,
+    "useTabs": false,
+    "vertCvt": {
+        "paramDivLast": ",\n"
+    },
+    "singleQuote": true,
+    "tabSize": 4,
+    "cvt": {
+        "itemDiv": "\u000b \b",
+        "bodyEnd+keyword": "\r\u000b\n\f",
+        "bodyEnd": "\r\u000b",
+        "keyword+bracketBegin": "\u000b \f",
+        "paramsBegin+paramsEnd": "\u000b\f",
+        "colon": "\u000b ",
+        "paramsEnd": "\r\u000b",
+        "binop": " \u000b ",
+        "paramsBegin": "\u000b\u0007",
+        "bodyBegin": " \u000b\u0007\n",
+        "ternop": " \u000b ",
+        "paramDiv": "\u000b \b",
+        "instrDiv": "\u000b\n"
+    }
+}
+var lexems = 
+[
+  ["class", "keyword"],
+  [" ", "space"],
+  ["Point", "className"],
+  ["{", "bodyBegin"],
+  ["public", "keyword"],
+  [" ", "space"],
+  ["x", "fieldName"],
+  [":", "colon"],
+  ["number", "typeName"],
+  [";", "instrDiv"],
+  ["public", "keyword"],
+  [" ", "space"],
+  ["y", "fieldName"],
+  [":", "colon"],
+  ["number", "typeName"],
+  [";", "instrDiv"],
+  ["public", "keyword"],
+  [" ", "space"],
+  ["static", "keyword"],
+  [" ", "space"],
+  ["eps", "fieldName"],
+  ["=", "binop"],
+  ["0.001", "const"],
+  [";", "instrDiv"],
+  ["constructor", "keyword"],
+  ["(", "paramsBegin"],
+  ["x", "varName"],
+  ["=", "binop"],
+  ["0", "const"],
+  [",", "paramDiv"],
+  ["y", "varName"],
+  ["=", "binop"],
+  ["0", "const"],
+  ["", "paramDivLast"],
+  [")", "paramsEnd"],
+  ["{", "bodyBegin"],
+  ["this", "keyword"],
+  [".", "dot"],
+  ["x", "fieldName"],
+  ["=", "binop"],
+  ["x", "varName"],
+  [";", "instrDiv"],
+  ["this", "keyword"],
+  [".", "dot"],
+  ["y", "fieldName"],
+  ["=", "binop"],
+  ["y", "varName"],
+  [";", "instrDiv"],
+  ["}", "bodyEnd"],
+  ["add", "funcName"],
+  ["(", "paramsBegin"],
+  ["right", "varName"],
+  [":", "colon"],
+  ["Point", "typeName"],
+  ["", "paramDivLast"],
+  [")", "paramsEnd"],
+  [":", "colon"],
+  ["Point", "typeName"],
+  ["{", "bodyBegin"],
+  ["return", "keyword"],
+  [" ", "space"],
+  ["new", "keyword"],
+  [" ", "space"],
+  ["Point", "className"],
+  ["(", "paramsBegin"],
+  ["this", "keyword"],
+  [".", "dot"],
+  ["x", "fieldName"],
+  ["+", "binop"],
+  ["right", "varName"],
+  [".", "dot"],
+  ["x", "fieldName"],
+  [",", "paramDiv"],
+  ["this", "keyword"],
+  [".", "dot"],
+  ["y", "fieldName"],
+  ["+", "binop"],
+  ["right", "varName"],
+  [".", "dot"],
+  ["y", "fieldName"],
+  ["", "paramDivLast"],
+  [")", "paramsEnd"],
+  [";", "instrDiv"],
+  ["}", "bodyEnd"],
+  ["static", "keyword"],
+  [" ", "space"],
+  ["is0", "funcName"],
+  ["(", "paramsBegin"],
+  ["value", "varName"],
+  [":", "colon"],
+  ["number", "typeName"],
+  ["", "paramDivLast"],
+  [")", "paramsEnd"],
+  [":", "colon"],
+  ["boolean", "typeName"],
+  ["{", "bodyBegin"],
+  ["return", "keyword"],
+  [" ", "space"],
+  ["value", "varName"],
+  ["<", "binop"],
+  ["this", "keyword"],
+  [".", "dot"],
+  ["eps", "fieldName"],
+  [";", "instrDiv"],
+  ["}", "bodyEnd"],
+  ["}", "bodyEnd"],
+  ["const", "keyword"],
+  [" ", "space"],
+  ["init", "funcName"],
+  ["=", "binop"],
+  ["(", "paramsBegin"],
+  [")", "paramsEnd"],
+  [":", "colon"],
+  ["void", "typeName"],
+  ["=>", "binop"],
+  ["{", "bodyBegin"],
+  ["const", "keyword"],
+  [" ", "space"],
+  ["a", "varName"],
+  ["=", "binop"],
+  ["new", "keyword"],
+  [" ", "space"],
+  ["Point", "className"],
+  ["(", "paramsBegin"],
+  ["11", "const"],
+  [",", "paramDiv"],
+  ["22", "const"],
+  ["", "paramDivLast"],
+  [")", "paramsEnd"],
+  [";", "instrDiv"],
+  ["const", "keyword"],
+  [" ", "space"],
+  ["b", "varName"],
+  ["=", "binop"],
+  ["a", "varName"],
+  [".", "dot"],
+  ["add", "funcName"],
+  ["(", "bracketBegin"],
+  ["new", "keyword"],
+  [" ", "space"],
+  ["Point", "className"],
+  ["(", "paramsBegin"],
+  ["0", "const"],
+  [",", "paramDiv"],
+  ["-1", "const"],
+  ["", "paramDivLast"],
+  [")", "paramsEnd"],
+  [")", "bracketEnd"],
+  [";", "instrDiv"],
+  ["}", "bodyEnd"],
+  [";", "instrDiv"],
+  ["const", "keyword"],
+  [" ", "space"],
+  ["main", "funcName"],
+  ["=", "binop"],
+  ["(", "paramsBegin"],
+  [")", "paramsEnd"],
+  [":", "colon"],
+  ["void", "typeName"],
+  ["=>", "binop"],
+  ["{", "bodyBegin"],
+  ["init", "varName"],
+  ["(", "paramsBegin"],
+  [")", "paramsEnd"],
+  [";", "instrDiv"],
+  ["}", "bodyEnd"],
+  [";", "instrDiv"]
+];
+
+</script>
+</body>
+</html>

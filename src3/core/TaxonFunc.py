@@ -78,5 +78,10 @@ class TaxonFunc(Taxon):
 class TaxonMethod(TaxonFunc):
 	type = 'method'
 
+class TaxonOperator(TaxonFunc):
+	type = 'operator'
+	def getOpcode(self):
+		return self.name
+
 class TaxonConstructor(TaxonFunc):
 	type = 'constructor'

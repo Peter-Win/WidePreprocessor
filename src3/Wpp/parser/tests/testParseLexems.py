@@ -16,8 +16,10 @@ class TestParseLexems(unittest.TestCase):
 		self.assertEqual(parseLexems('[1, 2]', ctx), [('[', 'cmd'), ('1', 'int'), (',', 'cmd'), ('2', 'int'), (']', 'cmd')])
 		self.assertEqual(parseLexems('-1.234E-06*x', ctx), [('-1.234E-06', 'float'), ('*', 'cmd'), ('x', 'id')])
 		self.assertEqual(parseLexems('max(a, 1.5)', ctx), [('max', 'id'), ('(', 'cmd'), ('a', 'id'), (',','cmd'), ('1.5','fixed'), (')','cmd')])
+		self.assertEqual(parseLexems('One() + 20', ctx), [('One','id'), ('(','cmd'), (')','cmd'), ('+','cmd'), ('20', 'int')])
 
 	def testMultiCmd(self):
 		ctx = Context.createFromMemory('')
 		self.assertEqual(parseLexems('==', ctx), [('==', 'cmd')])
 		self.assertEqual(parseLexems('<<>>', ctx), [('<<', 'cmd'), ('>>', 'cmd')])
+

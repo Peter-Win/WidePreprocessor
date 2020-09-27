@@ -127,8 +127,19 @@ class WppMethod(WppFunc):
 		else:
 			if 'override' in self.attrs:
 				self.throwError('No virtual function "%s" found in parent classes' % self.name)
-	 
 
+class WppOperator(WppMethod):
+	type = 'operator'
+	def checkName(self, name):
+		from core.operators import opcodeMap
+		opDef = opcodeMap.get(name)
+		if not opDef:
+			return 'Invalid operator name "%s"' % name
+		code, altName, opType, prior = opDef
+		if opType not in ('binop', 'unop'):
+			return 'Unable to override "%s" operator' % name
+	def getOpcode(self):
+		return self.getName()
 
 class WppConstructor(WppFunc):
 	type = 'constructor'

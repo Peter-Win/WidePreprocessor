@@ -16,8 +16,15 @@ def forceThis(taxonNamed):
 		return False
 	# TODO: Пока не учитывается ситуция, где target явдяется статическим членом. Т.к. желательно в таких случаях явно указывать имя класса.
 	dot = taxonNamed.creator('dot')(taxonNamed.targetName)
-	this = taxonNamed.creator('this')()
-	this.setTarget(target.owner)
-	dot.addItem(this)
+	decl = taxonNamed.getTarget()
+	if decl.isStatic():
+		classTarget = decl.findOwnerByType('class')
+		classRef = taxonNamed.creator('named')(classTarget.getName())
+		classRef.setTarget(classTarget)
+		dot.addItem(classRef)
+	else:
+		txThis = taxonNamed.creator('this')()
+		txThis.setTarget(target.owner)
+		dot.addItem(txThis)
 	taxonNamed.replaceTaxon(dot)
 	return True

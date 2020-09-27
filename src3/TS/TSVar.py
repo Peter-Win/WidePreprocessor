@@ -12,7 +12,10 @@ def optimiseType(taxon):
 		taxon.hiddenType = t
 
 def exportVar(var, lexems, rules):
-	lexems.append(Lex.varName(var.getName()))
+	if var.type == 'field':
+		lexems.append(Lex.fieldName(var.getName()))
+	else:
+		lexems.append(Lex.varName(var.getName()))
 	# Возможна ситуация, когда тип не указывается при объявлении. Если он следует из выражения
 	txType = var.getTypeTaxon()
 	if txType:

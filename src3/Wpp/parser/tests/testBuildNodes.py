@@ -42,3 +42,4 @@ class TestBuildNodes(unittest.TestCase):
 		self.assertEqual(testCvt('a(x) + b(y)'), 'binop:+(call:call(named:a, named:x), call:call(named:b, named:y))')
 		self.assertEqual(testCvt('sqrt(sqr(x) + sqr(y))'), 'call:call(named:sqrt, binop:+(call:call(named:sqr, named:x), call:call(named:sqr, named:y)))')
 		self.assertEqual(testCvt('root.obj.fun(x, y)'), 'call:call(binop:.(binop:.(named:root, named:obj), named:fun), named:x, named:y)')
+		self.assertEqual(testCvt('One() + 20'), 'binop:+(call:call(named:One), const:20)')

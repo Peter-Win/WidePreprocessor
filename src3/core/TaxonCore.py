@@ -184,7 +184,7 @@ class TaxonCore(TaxonDict):
 		return QuasiType(self.findItem(words[-1]), set(words[0:-1]))
 
 	def createDeclBinOp(self, originalOpcode, modifiedOpcode, qtLeft, qtRight, qtResult):
-		return TaxonDeclBinOp(originalOpcode, modifiedOpcode, qtLeft, qtRight, qtResult)
+		return self.creator('declBinOp')(originalOpcode, modifiedOpcode, qtLeft, qtRight, qtResult)
 
 arithOps = ['+', '-', '*', '/', '%']
 arithAssigns = ['+=', '-=', '*=', '/=', '%=']

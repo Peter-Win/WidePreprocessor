@@ -1,13 +1,6 @@
 from core.TaxonExpression import TaxonConst, TaxonNamed, TaxonCall, TaxonNew, TaxonMemberAccess, TaxonBinOp, TaxonThis, TaxonSuper
 from out.lexems import Lex
-
-def exportLexemsPrior(taxon, lexems, rules):
-	isBrackets = taxon.isNeedBrackets()
-	if isBrackets: 
-		lexems.append(Lex.bracketBegin)
-	taxon.exportLexems(lexems, rules)
-	if isBrackets:
-		lexems.append(Lex.bracketEnd)
+from TS.exportLexemsPrior import exportLexemsPrior
 
 class TSConst(TaxonConst):
 
@@ -93,14 +86,13 @@ class TSMemberAccess(TaxonMemberAccess):
 
 class TSBinOp(TaxonBinOp):
 	def exportLexems(self, lexems, style):
-		line = []
-		exportLexemsPrior(self.getLeft(), line, style)
-		line.append(Lex.binop(self.getOpcode()))
-		exportLexemsPrior(self.getRight(), line, style)
+		from TS.TSOpDecl import TSDeclBinOp
+		decl = self.getDeclaration()
+		line = decl.exportBinOp(self, style) if decl else TSDeclBinOp.export(self, style)
 		lexems += line
 		if 'instruction' in self.attrs:
 			lexems.append(Lex.instrDiv)
-			
+
 class TSThis(TaxonThis):
 	def exportLexems(self, lexems, rules):
 		lexems.append(Lex.keyword('this'))

@@ -110,8 +110,9 @@ class WppNew(TaxonNew, WppExpression):
 	@staticmethod
 	def replaceExt(callTaxon, target, args):
 		owner = callTaxon.owner
+		ndx = owner.items.index(callTaxon)
 		owner.items.remove(callTaxon)
-		newTaxon = owner.addItem(WppNew())
+		newTaxon = owner.addItem(WppNew(), ndx)
 		newTaxon._location = callTaxon._location
 		newTaxon.addItem(TaxonRef.fromTaxon(target))
 		for arg in args:
@@ -206,6 +207,15 @@ class WppSuper(TaxonSuper, WppExpression):
 						self.taxon.throwError('Hidden constructor')
 			self.addTask(TaskFindConstructor(ext))
 
+def priorExport(subTaxon):
+	result = subTaxon.exportString()
+	if subTaxon.isNeedBrackets():
+		result = '(%s)' % result
+	return result
+
+def exportBinOp(decl, binop):
+	return '%s %s %s' % (priorExport(binop.getLeft()), decl.getOpcode(), priorExport(binop.getRight()))
+
 class WppBinOp(TaxonBinOp, WppExpression):
 	def readHead(self, context):
 		""" Бинарный оператор может использоваться, как самостоятельный элемент тела функции
@@ -215,13 +225,14 @@ class WppBinOp(TaxonBinOp, WppExpression):
 		pass
 
 	def exportString(self):
-		return self.getDeclaration().exportBinOp(self)
+		return exportBinOp(self.getDeclaration(), self)
 
 	def export(self, context):
 		""" Вариант, когда оператор используется как отдельная инструкция, н.р a = b + 1 """
 		context.writeln(self.exportString())
 
 	def onInit(self):
+		from core.operators import findBinOpExt
 		# Необходимо найти декларацию оператора
 		class TaskFindDecl:
 			def __init__(self):
@@ -235,7 +246,7 @@ class WppBinOp(TaxonBinOp, WppExpression):
 				return self.leftQType and self.righQType
 			def exec(self):
 				taxon = self.taxon
-				decl, errMsg = taxon.core.findBinOp(taxon.opcode, self.leftQType, self.righQType)
+				decl, errMsg = findBinOpExt(taxon)
 				if errMsg:
 					taxon.throwError(errMsg)
 				if not decl:

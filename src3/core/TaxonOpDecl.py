@@ -19,17 +19,11 @@ from core.QuasiType import QuasiType
 class TaxonDeclAssignBase(Taxon):
 	""" Базовый оператор присваивания """
 	type = 'declAssignBase'
-	opcode = '='
+	def getOpcode(self):
+		return '='
 
 	def exportBinOp(self, binop):
 		return '%s = %s' % (binop.getLeft().exportString(), binop.getRight().exportString())
-
-def priorExport(subTaxon):
-	result = subTaxon.exportString()
-	if subTaxon.isNeedBrackets():
-		result = '(%s)' % result
-	return result
-
 
 class TaxonDeclBinOp(Taxon):
 	type = 'declBinOp'
@@ -43,11 +37,11 @@ class TaxonDeclBinOp(Taxon):
 		self.rightType = rightType
 		self.resultType = resultType
 
+	def getOpcode(self):
+		return self.opcode
+
 	def buildQuasiType(self, binop):
 		return self.resultType.buildQuasiType()
-
-	def exportBinOp(self, binop):
-		return '%s %s %s' % (priorExport(binop.getLeft()), self.opcode, priorExport(binop.getRight()))
 
 	def matchTypes(self, leftQt, rightQt):
 		leftRes, leftErr = QuasiType.matchTaxons(self.leftType, leftQt)
