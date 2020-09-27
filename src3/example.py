@@ -42,6 +42,12 @@ def exportPy(module):
 	printCtx(outCtx)
 
 source = """
+func sum: int
+	param a: int
+	param b: int
+	return a + b
+"""
+source1 = """
 class simple Point
 	field public x: double
 	field public y: double

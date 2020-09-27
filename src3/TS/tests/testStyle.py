@@ -19,8 +19,8 @@ class TestTSStyle(unittest.TestCase):
 		]
 		outRows = []
 		formatLexems(outRows, lexems, 0, 0, style)
-		for row in outRows:
-			print(row.replace(' ', '_'))
+		# for row in outRows:
+		# 	print('<<<%s>>>' % row.replace(' ', '_'))
 		self.assertEqual(outRows, [
 			"function applyStyle(lexems: Lexem[], pos: number, isVertical: boolean, style: Styles): {value: string, pos: number} {", "}"
 		])

@@ -72,16 +72,23 @@ class TSOperator(TaxonOperator):
 		from core.TaxonAltName import TaxonAltName
 		name = TaxonAltName.getAltName(self)
 		if not name:
-			descr = opcodeMap[self.name]
+			opcode = self.name or self.owner.name # Если оператор перегружен, то имя у него пусто. Тогда используем имя владельца
+			descr = opcodeMap[opcode]
 			name = descr[1]
+			if 'right' in self.attrs:
+				name = 'r' + name
 		return name
 	def exportLexems(self, lexems, style):
 		exportMethod(self, lexems, style)
 	def exportBinOp(self, binOp, style):
+		obj = binOp.getLeft()
+		arg = binOp.getRight()
+		if 'right' in self.attrs:
+			obj, arg = arg, obj
 		lexems = []
-		binOp.getLeft().exportLexems(lexems, style)
+		obj.exportLexems(lexems, style)
 		lexems += [Lex.dot, Lex.funcName(self.getName()), Lex.bracketBegin]
-		binOp.getRight().exportLexems(lexems, style)
+		arg.exportLexems(lexems, style)
 		lexems.append(Lex.bracketEnd)
 		return lexems
 

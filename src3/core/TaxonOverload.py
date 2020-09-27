@@ -1,3 +1,4 @@
+from functools import reduce
 from Taxon import Taxon
 from core.QuasiType import QuasiType
 
@@ -28,6 +29,9 @@ class TaxonOverload(Taxon):
 				maxKey += 1
 				tx.overloadKey = maxKey
 		return item.overloadKey
+
+	def getCountOfName(self, name):
+		return reduce(lambda acc, taxon: acc + (1 if taxon.getName() == name else 0), self.items, 0)
 
 	@staticmethod
 	def findSuitablePure(qtArguments, functions):
