@@ -61,3 +61,27 @@ const ur = u >>> 2;
 		ctx = OutContextMemoryStream()
 		module.exportContext(ctx, style)
 		self.assertEqual(str(ctx), module.strPack(expected))
+
+	def testIntDiv(self):
+		source = """
+var const sA: int = 10
+var const sB: int = 3
+var const s1: int = sA / sB
+var const s2: int = sA / sB + 1
+var const s3: int = sA / 3
+var const s4: int = 1000 / sB
+"""
+		expected = """
+const sA = 10;
+const sB = 3;
+const s1 = sA / sB | 0;
+const s2 = (sA / sB | 0) + 1;
+const s3 = sA / 3 | 0;
+const s4 = 1000 / sB | 0;
+"""
+		# sA / sB  => sA / sB | 0   Необходимо использовать | 0, т.к. результат должен быть целым числом 10 // 3 = 3
+		# sA / sB + 1 => (sA / sB | 0) + 1  Применяются скобки, т.к. приоритет операции | ниже, чем +
+		module = TSCore.createModuleFromWpp(source, 'intDiv.wpp')
+		ctx = OutContextMemoryStream()
+		module.exportContext(ctx, style)
+		self.assertEqual(str(ctx), module.strPack(expected))

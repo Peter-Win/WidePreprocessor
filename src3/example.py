@@ -42,31 +42,32 @@ def exportPy(module):
 	printCtx(outCtx)
 
 source = """
-func sum: int
-	param a: int
-	param b: int
-	return a + b
-"""
-source1 = """
 class simple Point
-	field public x: double
-	field public y: double
-	field public static eps: double = 0.001
+	field x: double
+	field y: double
 	constructor
-		autoinit x = 0
-		autoinit y = 0
-	operator const +: Point
-		param right: const ref Point
-		return Point(x + right.x, y + right.y)
-	method static is0: bool
-		param value: double
-		return value < eps
-
-func init
-	var const a: Point = Point(11, 22)
-	var const b: Point = a + Point(0, -1)
-func main
-	init()
+		autoinit x
+		autoinit y
+	operator const overload +: Point
+		altName addPt
+		param p: Point
+		return Point(x + p.x, y + p.y)
+	operator const overload +: Point
+		altName addN
+		param k: double
+		return Point(x + k, y + k)
+	method const overload plus: Point
+		altName plusPt
+		param p: const ref Point
+		return Point(x + p.x, y + p.y)
+	method const overload plus: Point
+		altName plusN
+		param k: double
+		return Point(x + k, y + k)
+var const a: Point = Point(11, 22) + 3
+var const b: Point = a + Point(-1, -2)
+var const a1: Point = Point(11, 22).plus(3)
+var const b1: Point = a1.plus(Point(-1, -2))
 """
 
 print('-- Wpp')

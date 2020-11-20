@@ -1,4 +1,4 @@
-from core.TaxonFunc import TaxonFunc, TaxonMethod, TaxonConstructor
+from core.TaxonFunc import TaxonFunc, TaxonMethod, TaxonConstructor, TaxonOperator
 from out.lexems import Lex
 from Python.PyTaxon import PyTaxon
 from utils.makeStaticConstructor import makeStaticConstructor
@@ -38,6 +38,19 @@ class PyFunc(TaxonFunc, PyCommonFunc):
 
 class PyMethod(TaxonMethod, PyCommonFunc):
 	pass
+
+class PyOperator(TaxonOperator, PyCommonFunc):
+	def getName(self):
+		from core.operators import opcodeMap
+		if 'useAltName' in self.attrs:
+			return super().getName()
+
+		decl = opcodeMap[self.getOpcode()]
+		r = 'r' if 'right' in self.attrs else ''
+		name = decl[1]
+		if name == 'div':
+			name = 'truediv'
+		return '__%s%s__' % (r, name)
 
 class PyConstructor(TaxonConstructor, PyCommonFunc):
 	def isNeedRebuild(self):

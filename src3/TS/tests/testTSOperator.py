@@ -155,4 +155,60 @@ const b = new Point(0, -1).rmul(1.1);
 		module.exportContext(ctx, style)
 		self.assertEqual(str(ctx), module.strPack(expected))
 
+	def testEq(self):
+		source = """
+class simple Count
+	field value: unsigned long
+	constructor
+		autoinit value = 0
+	operator const ==: bool
+		param n: unsigned long
+		return value == n
 
+var const flag: bool = Count(1000) == 1000
+"""
+		expected = """
+class Count {
+    private value: number;
+    constructor(value = 0) {
+        this.value = value;
+    }
+    eq(n: number): boolean {
+        return this.value === n;
+    }
+}
+const flag = new Count(1000).eq(1000);
+"""
+		module = TSCore.createModuleFromWpp(source, 'eq.wpp')
+		ctx = OutContextMemoryStream()
+		module.exportContext(ctx, style)
+		self.assertEqual(str(ctx), module.strPack(expected))
+
+	def testIntDiv(self):
+		source = """
+class simple Count
+	field value: unsigned long
+	constructor
+		autoinit value = 0
+	operator const /: Count
+		param n: unsigned long
+		return Count(value / n)
+
+var const c1: Count = Count(1000) / 2
+"""
+		expected = """
+class Count {
+    private value: number;
+    constructor(value = 0) {
+        this.value = value;
+    }
+    div(n: number): Count {
+        return new Count(this.value / n | 0);
+    }
+}
+const c1 = new Count(1000).div(2);
+"""
+		module = TSCore.createModuleFromWpp(source, 'intDiv.wpp')
+		ctx = OutContextMemoryStream()
+		module.exportContext(ctx, style)
+		self.assertEqual(str(ctx), module.strPack(expected))

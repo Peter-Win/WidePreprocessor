@@ -22,9 +22,8 @@ class TestTSModule(unittest.TestCase):
 		self.assertEqual(len(tsModule.items), 1)
 		txVarDecl = tsModule.items[0]
 		self.assertEqual(txVarDecl.type, 'var')
+		self.assertIn('hiddenType', txVarDecl.attrs)
 		txTypeExpr = txVarDecl.getTypeTaxon()
-		self.assertIsNone(txTypeExpr)
-		txTypeExpr = txVarDecl.hiddenType
 		self.assertEqual(txTypeExpr.type, '@typeExprName')
 		txType = txTypeExpr.getTypeTaxon()
 		self.assertEqual(txType.type, 'scalar')

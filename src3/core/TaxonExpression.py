@@ -178,6 +178,13 @@ class TaxonBinOp(TaxonExpression):
 		ref = self.items[2].getTarget()
 		return ref
 
+	def setDeclaration(self, decl):
+		if len(self.items) < 3:
+			self.addItem(TaxonRef.fromTaxon(decl))
+		else:
+			self.items[2].setTarget(decl)
+
+
 	def getOpcode(self):
 		""" Для опертора присваивания декларация всегда None """
 		decl = self.getDeclaration()

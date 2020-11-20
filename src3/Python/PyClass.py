@@ -37,7 +37,7 @@ class PyClass(TaxonClass, PyTaxon):
 					staticFields.append(member)
 				else:
 					fields.append(member)
-			elif member.type == 'method':
+			elif member.type in ('method', 'operator', 'overload'):
 				methods.append(member)
 			# TODO: потом появятся конструктор, операторы и тп
 

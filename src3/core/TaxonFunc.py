@@ -81,7 +81,8 @@ class TaxonMethod(TaxonFunc):
 class TaxonOperator(TaxonFunc):
 	type = 'operator'
 	def getOpcode(self):
-		return self.name
+		return self.name if self.name else self.owner.name
+		# Для перегруженных операторов надо использовать имя владельца
 
 class TaxonConstructor(TaxonFunc):
 	type = 'constructor'

@@ -1,20 +1,21 @@
 {
+    "singleQuote": true,
+    "cvt": {
+        "instrDiv": "\u000b\n",
+        "bodyEnd": "\n\bD\u000b\n",
+        "binop": " \u000b ",
+        "paramsEnd": "\u000b",
+        "colon": "\u000b ",
+        "itemDiv": "\u000b ",
+        "binop+bodyBegin": " \u000b \u000b\n\bU",
+        "bodyBegin": " \u000b\n\bU",
+        "paramDiv": "\u000b ",
+        "bodyEnd+instrDiv": "\n\bD\u000b\u000b\n"
+    },
+    "printWidth": 120,
+    "tabSize": 4,
     "vertCvt": {
         "paramDivLast": ",\n"
     },
-    "cvt": {
-        "binop": " \u000b ",
-        "binop+bodyBegin": " \u000b \u000b\n\bU",
-        "instrDiv": "\u000b\n",
-        "paramDiv": "\u000b ",
-        "colon": "\u000b ",
-        "bodyEnd": "\n\bD\u000b\n",
-        "paramsEnd": "\u000b",
-        "bodyBegin": " \u000b\n\bU",
-        "bodyEnd+instrDiv": "\n\bD\u000b\u000b\n"
-    },
-    "tabSize": 4,
-    "printWidth": 120,
-    "useTabs": false,
-    "singleQuote": true
+    "useTabs": false
 }

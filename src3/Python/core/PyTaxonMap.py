@@ -10,7 +10,7 @@ from Python.body.PyIf import PyIf
 from Python.body.PyReturn import PyReturn
 from Python.PyClass import PyClass
 from Python.PyExpression import PyBinOp, PyConst, PyNamed, PyCall, PyNew, PyMemberAccess, PyThis, PySuper
-from Python.PyFunc import PyConstructor, PyFunc, PyMethod
+from Python.PyFunc import PyConstructor, PyFunc, PyMethod, PyOperator
 from Python.PyModule import PyModule
 from Python.PyOpDecl import PyDeclBinOp
 from Python.PyOverload import PyOverload
@@ -33,6 +33,7 @@ PyTaxonList = [
 	PyModule,
 	PyNamed,
 	PyNew,
+	PyOperator,
 	PyOverload,
 	PyParam,
 	PyReturn,

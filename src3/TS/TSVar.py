@@ -7,9 +7,7 @@ def optimiseType(taxon):
 	# Если тип переменной следует из выражения, его можно не указывать
 	val = taxon.getValueTaxon()
 	if val:
-		t = taxon.getTypeTaxon()
-		taxon.removeItem(t)
-		taxon.hiddenType = t
+		taxon.attrs.add('hiddenType')
 
 def exportVar(var, lexems, rules):
 	if var.type == 'field':
@@ -18,7 +16,7 @@ def exportVar(var, lexems, rules):
 		lexems.append(Lex.varName(var.getName()))
 	# Возможна ситуация, когда тип не указывается при объявлении. Если он следует из выражения
 	txType = var.getTypeTaxon()
-	if txType:
+	if 'hiddenType' not in var.attrs:
 		lexems.append(Lex.colon)
 		txType.exportLexems(lexems, rules)
 
@@ -31,7 +29,7 @@ def exportVar(var, lexems, rules):
 class TSVar(TaxonVar, TSTaxon):
 	def __init__(self, name = ''):
 		super().__init__(name)
-		self.hiddenType = None
+		# self.hiddenType = None
 
 	def onInit(self):
 		optimiseType(self)

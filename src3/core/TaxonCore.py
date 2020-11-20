@@ -189,13 +189,17 @@ class TaxonCore(TaxonDict):
 arithOps = ['+', '-', '*', '/', '%']
 arithAssigns = ['+=', '-=', '*=', '/=', '%=']
 cmpOps = ['==', '!=', '<', '>', '<=', '>=']
-arithTypes = ['int8', 'unsigned int8', 'short', 'unsigned short', 'int', 'unsigned int', 'long', 'unsigned long', 'float', 'double']
+logicalOps = ['|', '&', '^']
+intTypes = ['int8', 'unsigned int8', 'short', 'unsigned short', 'int', 'unsigned int', 'long', 'unsigned long']
+arithTypes = intTypes + [ 'float', 'double']
 def _arithOpList(opcode):
 	return [(opcode, t, t, t) for t in arithTypes] 
 def _cmpOpList(opcode):
 	return [(opcode, t, t, 'bool') for t in arithTypes]
 def _arithAssignsList(opcode):
 	return [(opcode, t, t, 'void') for t in arithTypes]
+def _logicalList(opcode):
+	return [(opcode, t, t, t) for t in intTypes]
 
 # opcode, left, right, result
 # сначала должны идти более специальные случаи, н.р. long + int8. т.к. иначе может сработать приведение типов, н.р. long + long
@@ -206,6 +210,10 @@ binOps = [
   ('<<', 'unsigned int', 'unsigned int', 'unsigned int'),
   ('>>', 'int', 'unsigned int', 'int'),
   ('>>', 'unsigned int', 'unsigned int', 'unsigned int'),
+  ('<<', 'long', 'unsigned long', 'long'),
+  ('<<', 'unsigned long', 'unsigned long', 'unsigned long'),
+  ('>>', 'long', 'unsigned long', 'long'),
+  ('>>', 'unsigned long', 'unsigned long', 'unsigned long'),
 ]
 for op in arithOps:
 	binOps += _arithOpList(op)
@@ -213,3 +221,5 @@ for op in cmpOps:
 	binOps += _cmpOpList(op)
 for op in arithAssigns:
 	binOps += _arithAssignsList(op)
+for op in logicalOps:
+	binOps += _logicalList(op)

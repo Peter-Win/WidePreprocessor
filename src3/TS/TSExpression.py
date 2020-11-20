@@ -92,6 +92,29 @@ class TSBinOp(TaxonBinOp):
 		lexems += line
 		if 'instruction' in self.attrs:
 			lexems.append(Lex.instrDiv)
+	def onInit(self):
+		from core.TaxonScalar import TaxonScalar
+		super().onInit()
+		# Целочисленное деление => x/y|0
+		if self.opcode == '/':
+			qtLeft = self.getLeft().buildQuasiType()
+			qtRight = self.getRight().buildQuasiType()
+			def isInt(qt):
+				tx = qt.taxon
+				return TaxonScalar.isInt(tx) or (tx.type == 'const' and tx.constType == 'int')
+			if isInt(qtLeft) and isInt(qtRight):
+				# Требуется подмена операции, т.к. JS не имеет целоцисленного деления
+				owner = self.owner
+				index = owner.items.index(self)
+				owner.removeItem(self)
+				binOr = owner.addItem(owner.creator('binop')('|'), index)
+				binOr.addItem(self)
+				zero = binOr.addItem(owner.creator('const')('int', 0, '0'))
+				binOrDecl, errMsg = owner.core.findBinOp(binOr.opcode, self, zero)
+				if errMsg:
+					self.throwError(errMsg)
+				binOr.setDeclaration(binOrDecl)
+
 
 class TSThis(TaxonThis):
 	def exportLexems(self, lexems, rules):
